@@ -1,8 +1,8 @@
-package ai.nami.sdk.sample.standard
+package ai.nami.sdk.sample.pairing.standard
 
 import ai.nami.sdk.pairing.registerNamiPairingEvent
 import ai.nami.sdk.sample.shared.HostScreen
-import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.sample.pairing.ui.theme.NamiSDKSampleTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

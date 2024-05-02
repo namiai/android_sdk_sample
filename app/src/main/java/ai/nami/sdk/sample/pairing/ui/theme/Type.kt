@@ -1,4 +1,4 @@
-package ai.nami.sdk.sample.ui.theme
+package ai.nami.sdk.sample.pairing.ui.theme
 
 
 import androidx.compose.material.Typography

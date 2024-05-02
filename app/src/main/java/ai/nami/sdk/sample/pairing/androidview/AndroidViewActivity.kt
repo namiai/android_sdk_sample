@@ -1,4 +1,4 @@
-package ai.nami.sdk.sample.androidview
+package ai.nami.sdk.sample.pairing.androidview
 
 import ai.nami.sdk.sample.R
 import android.os.Bundle

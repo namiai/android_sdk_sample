@@ -16,16 +16,16 @@
         android:theme="@style/Theme.NamiSDKSample"
         tools:targetApi="31">
         <activity
-            android:name=".androidview.AndroidViewActivity"
+            android:name=".pairing.androidview.AndroidViewActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.NamiSDKSample" />
         <activity
             android:theme="@style/Theme.NamiSDKSample"
-            android:name=".cusomize.CustomizeUIActivity"
+            android:name=".pairing.cusomize.CustomizeUIActivity"
             android:exported="false" />
         <activity
             android:theme="@style/Theme.NamiSDKSample"
-            android:name=".standard.StandardUIActivity"
+            android:name=".pairing.standard.StandardUIActivity"
             android:exported="false" />
         <activity
             android:name="ai.nami.sdk.sample.MainActivity"

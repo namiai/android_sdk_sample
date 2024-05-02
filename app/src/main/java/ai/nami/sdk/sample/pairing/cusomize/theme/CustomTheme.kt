@@ -1,4 +1,4 @@
-package ai.nami.sdk.sample.cusomize.theme
+package ai.nami.sdk.sample.pairing.cusomize.theme
 
 import ai.nami.sdk.pairing.ui.designsystem.theme.NamiSdkColors
 import ai.nami.sdk.pairing.ui.designsystem.theme.NamiSdkShapes

@@ -1,8 +1,8 @@
 package ai.nami.sdk.sample
 
-import ai.nami.sdk.sample.androidview.AndroidViewActivity
-import ai.nami.sdk.sample.cusomize.CustomizeUIActivity
-import ai.nami.sdk.sample.standard.StandardUIActivity
+import ai.nami.sdk.sample.pairing.androidview.AndroidViewActivity
+import ai.nami.sdk.sample.pairing.cusomize.CustomizeUIActivity
+import ai.nami.sdk.sample.pairing.standard.StandardUIActivity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.sample.pairing.ui.theme.NamiSDKSampleTheme
 
 import android.content.Intent
 import androidx.compose.foundation.background
