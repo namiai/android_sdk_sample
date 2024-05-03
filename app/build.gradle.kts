@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "ai.nami.sdk.sample"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "ai.nami.sdk.sample"
         minSdk =26
-        targetSdk = 33
+        targetSdk = 34
         versionCode= 1
         versionName ="1.0"
 
@@ -43,7 +43,7 @@ android {
         viewBinding = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.1"
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
 //    packagingOptions {
 //        resources {
@@ -53,12 +53,14 @@ android {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar","*.aar"))))
+//    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar","*.aar"))))
 
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation(files("libs/nami-pairing-sdk-1.5.4.aar","libs/A3LLocation-1.0.0.aar"))
+
+    implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
 
-    implementation(platform("androidx.compose:compose-bom:2023.04.01"))
+    implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -70,19 +72,13 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.0")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-
     implementation("androidx.navigation:navigation-common-ktx:2.5.3")
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 
-    // add for  Nami Paring SDK
+    // add more libraries
     implementation("com.google.protobuf:protobuf-javalite:3.14.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
@@ -99,4 +95,6 @@ dependencies {
 
     // google vision for scan qrcode
     implementation("com.google.mlkit:barcode-scanning:17.1.0")
+
+    implementation("com.google.android.gms:play-services-threadnetwork:16.0.0")
 }

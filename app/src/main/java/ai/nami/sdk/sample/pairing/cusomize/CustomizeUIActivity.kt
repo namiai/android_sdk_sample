@@ -4,6 +4,7 @@ import ai.nami.sdk.pairing.NamiPairingSdk
 import ai.nami.sdk.pairing.ui.designsystem.theme.NamiThemeData
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKColors
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKShapes
+import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKTypography
 import ai.nami.sdk.sample.shared.HostScreen
 import ai.nami.sdk.sample.pairing.ui.theme.NamiSDKSampleTheme
 import android.os.Bundle
@@ -21,7 +22,8 @@ class CustomizeUIActivity: ComponentActivity() {
         NamiPairingSdk.customizeTheme(
             NamiThemeData(
                 shapes = customNamiSDKShapes,
-                colors = customNamiSDKColors
+                colors = customNamiSDKColors,
+                typography = customNamiSDKTypography
             )
         )
 

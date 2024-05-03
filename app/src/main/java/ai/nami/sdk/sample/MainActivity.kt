@@ -1,6 +1,5 @@
 package ai.nami.sdk.sample
 
-import ai.nami.sdk.sample.pairing.androidview.AndroidViewActivity
 import ai.nami.sdk.sample.pairing.cusomize.CustomizeUIActivity
 import ai.nami.sdk.sample.pairing.standard.StandardUIActivity
 import android.os.Bundle
@@ -18,7 +17,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -37,61 +40,67 @@ class MainActivity: ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     MainScreen(
-                        onOpenStandardUI = {
-                            openStandardUI()
+                        onOpenPairingStandardUI = {
+                            onOpenPairingStandardUI()
                         },
-                        onOpenCustomizeUI = {
-                            openCustomizeUI()
+                        onOpenPairingCustomizeUI = {
+                            onOpenPairingCustomizeUI()
                         },
-                        onOpenAndroidView = {
-                            openAndroidView()
-                        }
                     )
                 }
             }
         }
     }
 
-    private fun openStandardUI() {
+    private fun onOpenPairingStandardUI() {
         val intent = Intent(this, StandardUIActivity::class.java)
         startActivity(intent)
     }
 
-    private fun openCustomizeUI() {
+    private fun onOpenPairingCustomizeUI() {
         val intent = Intent(this, CustomizeUIActivity::class.java)
         startActivity(intent)
     }
 
-    private fun openAndroidView() {
-        val intent = Intent(this, AndroidViewActivity::class.java)
-        startActivity(intent)
-    }
 }
 
 @Composable
 fun MainScreen(
-    onOpenStandardUI: () -> Unit,
-    onOpenCustomizeUI: () -> Unit,
-    onOpenAndroidView: () -> Unit
+    onOpenPairingStandardUI: () -> Unit,
+    onOpenPairingCustomizeUI: () -> Unit,
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colors.background),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(color = MaterialTheme.colors.background)
+            .padding(24.dp).verticalScroll(scrollState),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
     ) {
-        Button(onClick = onOpenStandardUI) {
+        Spacer(modifier = Modifier.height(48.dp))
+        Text(text = "Pairing", style = MaterialTheme.typography.h5)
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = onOpenPairingStandardUI) {
             Text("Standard UI Demo")
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = onOpenCustomizeUI) {
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = onOpenPairingCustomizeUI) {
             Text("Customize UI Demo")
         }
+        Spacer(modifier = Modifier.height(48.dp))
+        Divider()
+        Spacer(modifier = Modifier.height(48.dp))
+        Text(text = "Positioning", style = MaterialTheme.typography.h5)
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = onOpenAndroidView) {
-            Text("Android View - XML Layout Demo")
+        Button(onClick = onOpenPairingStandardUI) {
+            Text("Standard UI Demo")
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = onOpenPairingCustomizeUI) {
+            Text("Customize UI Demo")
+        }
+        Spacer(modifier = Modifier.height(48.dp))
     }
 }
 
@@ -99,8 +108,6 @@ fun MainScreen(
 @Composable
 fun MainScreenPreview() {
     NamiSDKSampleTheme {
-        MainScreen(onOpenStandardUI = { /*TODO*/ }, onOpenCustomizeUI = { /*TODO*/ }) {
-
-        }
+        MainScreen(onOpenPairingStandardUI = { /*TODO*/ }, onOpenPairingCustomizeUI = { /*TODO*/ })
     }
 }
