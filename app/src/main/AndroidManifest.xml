@@ -15,15 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NamiSDKSample"
         tools:targetApi="31">
-
+        <activity android:name=".positioning.standard.PositioningStandardActivity" />
+        <activity android:name=".positioning.customize.PositioningCustomizeActivity" />
         <activity
-            android:theme="@style/Theme.NamiSDKSample"
             android:name=".pairing.cusomize.CustomizeUIActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.NamiSDKSample" />
         <activity
-            android:theme="@style/Theme.NamiSDKSample"
             android:name=".pairing.standard.StandardUIActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.NamiSDKSample" />
         <activity
             android:name="ai.nami.sdk.sample.MainActivity"
             android:exported="true"

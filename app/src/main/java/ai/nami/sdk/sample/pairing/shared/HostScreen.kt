@@ -1,8 +1,7 @@
-package ai.nami.sdk.sample.shared
+package ai.nami.sdk.sample.pairing.shared
 
 import ai.nami.sdk.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.pairing.ui.navigation.namiPairingSdkGraph
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable

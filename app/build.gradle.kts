@@ -1,5 +1,5 @@
 plugins {
-    id ("com.android.application")
+    id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("com.google.protobuf") version "0.9.3"
@@ -11,12 +11,12 @@ android {
 
     defaultConfig {
         applicationId = "ai.nami.sdk.sample"
-        minSdk =26
+        minSdk = 26
         targetSdk = 34
-        versionCode= 1
-        versionName ="1.0"
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner ="androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -45,17 +45,21 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
-//    packagingOptions {
-//        resources {
-//            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-//        }
-//    }
+    packaging {
+        resources.excludes.add("META-INF/**/*")
+    }
 }
 
 dependencies {
 //    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar","*.aar"))))
 
-    implementation(files("libs/nami-pairing-sdk-1.5.4.aar","libs/A3LLocation-1.0.0.aar"))
+    implementation(
+        files(
+            "libs/nami-pairing-sdk-1.5.4.aar",
+            "libs/A3LLocation-1.0.0.aar",
+            "libs/nami-widar-sdk-1.0.7.aar"
+        )
+    )
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
@@ -78,7 +82,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 
-    // add more libraries
+    // libraries for pairing
     implementation("com.google.protobuf:protobuf-javalite:3.14.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
@@ -97,4 +101,14 @@ dependencies {
     implementation("com.google.mlkit:barcode-scanning:17.1.0")
 
     implementation("com.google.android.gms:play-services-threadnetwork:16.0.0")
+
+    // libraries for positioning (widar)
+    val coroutinesVersion = "1.7.0"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    val coapVersion = "3.7.0"
+    implementation("org.eclipse.californium:californium-core:$coapVersion")
+    implementation("org.eclipse.californium:scandium:$coapVersion")
+    implementation("com.google.protobuf:protobuf-javalite:3.14.0")
+    implementation("com.airbnb.android:lottie-compose:6.2.0")
+
 }

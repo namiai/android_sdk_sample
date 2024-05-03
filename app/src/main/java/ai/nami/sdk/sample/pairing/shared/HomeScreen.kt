@@ -1,4 +1,4 @@
-package ai.nami.sdk.sample.shared
+package ai.nami.sdk.sample.pairing.shared
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

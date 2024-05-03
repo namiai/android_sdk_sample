@@ -5,8 +5,8 @@ import ai.nami.sdk.pairing.ui.designsystem.theme.NamiThemeData
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKColors
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKShapes
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKTypography
-import ai.nami.sdk.sample.shared.HostScreen
-import ai.nami.sdk.sample.pairing.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.sample.pairing.shared.HostScreen
+import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

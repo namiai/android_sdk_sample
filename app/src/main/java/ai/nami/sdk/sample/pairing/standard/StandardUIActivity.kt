@@ -1,8 +1,8 @@
 package ai.nami.sdk.sample.pairing.standard
 
 import ai.nami.sdk.pairing.registerNamiPairingEvent
-import ai.nami.sdk.sample.shared.HostScreen
-import ai.nami.sdk.sample.pairing.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.sample.pairing.shared.HostScreen
+import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -28,13 +28,7 @@ class StandardUIActivity: ComponentActivity() {
 
 
         registerNamiPairingEvent {
-            onConnectWifiNetworkSuccess{ssid, password, bssid, key ->
 
-            }
-
-            onFinishPairing { listPairedDeviceInfo ->
-
-            }
 
             onRequestJoinThreadNetwork { request ->
                 Log.e("TAG", "StandardUIActivity registerOnRequestJoinThreadNetwork onRequest ")
