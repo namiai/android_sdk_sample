@@ -24,7 +24,10 @@ fun StandardPositioningHostScreen() {
         namiWidarSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiWidarSdkRoute, true)
         }, onPositionDone = {
-            navController.navigate("done_position")
+            navController.navigate("done_position") {
+                // make sure that you do this step in  your project
+                popUpTo(NamiWidarSdkRoute)
+            }
         })
 
         composable(route = "widar_info") {
@@ -32,7 +35,8 @@ fun StandardPositioningHostScreen() {
                 WidarSdkSession.init(sessionCode = sessionCode)
                 val widarRoute = WidarSdkNavigation.createRoute(
                     deviceUrn = deviceUrn,
-                    placeId = placeId
+                    placeId = placeId,
+                    deviceName = "WiDar device's name"
                 )
                 navController.navigate(widarRoute)
 

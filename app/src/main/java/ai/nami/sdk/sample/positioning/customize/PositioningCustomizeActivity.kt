@@ -104,7 +104,8 @@ fun CustomizeHostScreen() {
                 WidarSdkSession.init(sessionCode = sessionCode)
                 val widarRoute = WidarSdkNavigation.createRoute(
                     deviceUrn = deviceUrn,
-                    placeId = placeId
+                    placeId = placeId,
+                    deviceName = "WiDar device's name"
                 )
                 navController.navigate(widarRoute)
 
