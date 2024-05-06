@@ -95,7 +95,10 @@ fun CustomizeHostScreen() {
         namiWidarSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiWidarSdkRoute, true)
         }, onPositionDone = {
-            navController.navigate("done_position")
+            navController.navigate("done_position") {
+                // make sure that you do this step in  your project
+                popUpTo(NamiWidarSdkRoute)
+            }
         })
 
         composable(route = "widar_info") {
