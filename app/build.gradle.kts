@@ -22,6 +22,15 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file("namisdkkeystore")
+            storePassword = "namisdk@2024"
+            keyPassword = "namisdk@2024"
+            keyAlias = "namialias"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -29,14 +38,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         compose = true
@@ -56,10 +66,11 @@ dependencies {
     implementation(
         files(
             "libs/nami-pairing-sdk-1.5.4.aar",
-            "libs/A3LLocation-1.0.0.aar",
             "libs/nami-widar-sdk-1.0.8.1.aar"
         )
     )
+
+    compileOnly(files("libs/A3LLocation-1.0.0.aar"))
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
@@ -84,7 +95,7 @@ dependencies {
 
     // libraries for pairing
     implementation("com.google.protobuf:protobuf-javalite:3.14.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.10.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
@@ -101,6 +112,7 @@ dependencies {
     implementation("com.google.mlkit:barcode-scanning:17.1.0")
 
     implementation("com.google.android.gms:play-services-threadnetwork:16.0.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // libraries for positioning (widar)
     val coroutinesVersion = "1.7.0"

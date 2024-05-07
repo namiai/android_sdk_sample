@@ -1,5 +1,6 @@
 package ai.nami.sdk.sample.positioning.customize
 
+import ai.nami.sdk.sample.R
 import ai.nami.sdk.sample.data.NamiLocalStorage
 import ai.nami.sdk.sample.positioning.info.WidarNetworkInfoScreen
 import ai.nami.sdk.sample.positioning.info.WidarNetworkInfoViewModel
@@ -12,6 +13,7 @@ import ai.nami.sdk.widar.registerWidarEvent
 import ai.nami.sdk.widar.ui.designsystem.theme.NamiThemeData
 import ai.nami.sdk.widar.ui.designsystem.theme.WidarSdkColors
 import ai.nami.sdk.widar.ui.designsystem.theme.WidarSdkShapes
+import ai.nami.sdk.widar.ui.designsystem.theme.WidarSdkTypography
 import ai.nami.sdk.widar.ui.navigation.NamiWidarSdkRoute
 import ai.nami.sdk.widar.ui.navigation.WidarSdkNavigation
 import ai.nami.sdk.widar.ui.navigation.namiWidarSDKGraph
@@ -37,7 +39,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -68,7 +75,8 @@ class PositioningCustomizeActivity: ComponentActivity() {
         WiDARSdk.customTheme(
             NamiThemeData(
                 shapes = customNamiSDKShapes,
-                colors = customNamiSDKColors
+                colors = customNamiSDKColors,
+                typography = customNamiWidarSdkTypography
             )
         )
 
@@ -196,4 +204,67 @@ val customNamiSDKShapes = WidarSdkShapes(
     medium = RoundedCornerShape(4.dp),
 
     large = RoundedCornerShape(16.dp),
+)
+
+val YourFonts = FontFamily(
+    Font(R.font.lexend_regular, FontWeight.Normal),
+    Font(R.font.lexend_medium, FontWeight.Medium),
+    Font(R.font.lexend_semi_bold, FontWeight.SemiBold),
+    Font(R.font.lexend_bold, FontWeight.Bold),
+)
+
+val customNamiWidarSdkTypography = WidarSdkTypography(
+    h1 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 34.sp,
+        fontWeight = FontWeight.Medium
+    ),
+    h2 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 28.sp,
+        fontWeight = FontWeight.Medium,
+    ),
+    h3 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Medium,
+    ),
+    h4 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Medium,
+    ),
+    h5 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 17.sp,
+        fontWeight = FontWeight.Medium,
+    ),
+    h6 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Medium,
+    ),
+    p1 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 17.sp,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 18.sp
+    ),
+    p2 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 16.sp
+    ),
+    small1 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Normal,
+
+        ),
+    small2 = TextStyle(
+        fontFamily = YourFonts,
+        fontSize = 8.sp,
+        fontWeight = FontWeight.Normal,
+    )
 )
