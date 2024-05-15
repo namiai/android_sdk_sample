@@ -66,7 +66,7 @@ dependencies {
     implementation(
         files(
             "libs/nami-pairing-sdk-1.5.6.aar",
-            "libs/nami-widar-sdk-1.0.8.4.aar",
+            "libs/nami-widar-sdk-1.0.8.5.aar",
             "libs/A3LLocation-1.0.0.aar"
         )
     )
