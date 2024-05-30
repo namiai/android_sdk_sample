@@ -61,14 +61,7 @@ android {
 }
 
 dependencies {
-//    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar","*.aar"))))
-
-    implementation(
-        files(
-            "libs/nami-pairing-sdk-1.5.4.aar",
-            "libs/nami-widar-sdk-1.0.8.1.aar"
-        )
-    )
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar","*.aar"))))
 
     compileOnly(files("libs/A3LLocation-1.0.0.aar"))
 
@@ -122,5 +115,8 @@ dependencies {
     implementation("org.eclipse.californium:scandium:$coapVersion")
     implementation("com.google.protobuf:protobuf-javalite:3.14.0")
     implementation("com.airbnb.android:lottie-compose:6.2.0")
+
+    // libraries for contact sensor
+    implementation("androidx.browser:browser:1.4.0")
 
 }

@@ -1,6 +1,8 @@
 package ai.nami.sdk.sample.pairing.cusomize
 
 import ai.nami.sdk.pairing.NamiPairingSdk
+import ai.nami.sdk.pairing.ui.custom.CustomHyperLinkData
+import ai.nami.sdk.pairing.ui.custom.CustomHyperLinkType
 import ai.nami.sdk.pairing.ui.designsystem.theme.NamiThemeData
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKColors
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKShapes
@@ -27,6 +29,22 @@ class CustomizeUIActivity: ComponentActivity() {
             )
         )
 
+        // set custom hyper links
+        NamiPairingSdk.customizeHyperLinks(
+            listOf(
+                CustomHyperLinkData(
+                    link = "https://www.google.com/",
+                    text = "custom text 1",
+                    type = CustomHyperLinkType.SearchingForDevice
+                ),
+                CustomHyperLinkData(
+                    link = "https://www.facebook.com/",
+                    text = "custom text 2",
+                    type = CustomHyperLinkType.Faq
+                )
+            )
+        )
+
         setContent {
             NamiSDKSampleTheme {
                 // A surface container using the 'background' color from the theme
@@ -43,5 +61,6 @@ class CustomizeUIActivity: ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         NamiPairingSdk.customizeTheme(NamiThemeData())
+        NamiPairingSdk.customizeHyperLinks(listOf())
     }
 }
