@@ -35,3 +35,10 @@
 
 -keep class org.json.** { *; }
 -keepclassmembers class org.json.** { *; }
+
+-dontwarn com.amazon.A3L.location.A3LLocationServices
+-dontwarn com.amazon.A3L.location.A3LLocationSettingsRequest$Builder
+-dontwarn com.amazon.A3L.location.A3LLocationSettingsRequest
+-dontwarn com.amazon.A3L.location.A3LLocationSettingsResponse
+-dontwarn com.amazon.A3L.location.A3LLocationSettingsStates
+-dontwarn com.amazon.A3L.location.A3LSettingsClient
