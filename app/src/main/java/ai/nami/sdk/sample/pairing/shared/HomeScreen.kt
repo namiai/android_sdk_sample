@@ -1,5 +1,6 @@
 package ai.nami.sdk.sample.pairing.shared
 
+import ai.nami.sdk.pairing.ui.designsystem.theme.NamiSdkTheme
 import ai.nami.sdk.pairing.ui.navigation.DeviceCategory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,7 +46,7 @@ fun HomeScreen(showDeviceCategory: Boolean, onPairNamiDevice: (String, String, S
     }
 
     var roomId by remember {
-        mutableStateOf("a6283c03-d013-4342-8681-661f7a647a72")
+        mutableStateOf("")
     }
 
     var deviceCategory: String? by remember(showDeviceCategory) {
@@ -86,8 +87,7 @@ fun HomeScreen(showDeviceCategory: Boolean, onPairNamiDevice: (String, String, S
         if (showDeviceCategory) {
             Spacer(modifier = Modifier.height(24.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Device category: ")
                 DropDownListMenu(modifier = Modifier.padding(start = 16.dp, top = 10.dp),
@@ -142,8 +142,7 @@ fun DropDownListMenu(
 
             val (label, dropDownList) = createRefs()
 
-            Text(
-                text = if (selectedIndex > -1) menuItems[selectedIndex] else "",
+            Text(text = if (selectedIndex > -1) menuItems[selectedIndex] else "",
                 modifier = Modifier
                     .padding(bottom = 10.dp)
                     .wrapContentWidth()
@@ -153,8 +152,7 @@ fun DropDownListMenu(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                         end.linkTo(parent.end)
-                    },
-            )
+                    })
 
             Box(modifier = Modifier
                 .wrapContentWidth()
@@ -165,15 +163,13 @@ fun DropDownListMenu(
                 }) {
                 DropdownMenu(modifier = Modifier
                     .width(180.dp)
-                    .background(color = Color.White)
                     .wrapContentHeight(),
                     expanded = menuExpandedState,
                     onDismissRequest = { onDismissMenuView() }) {
                     menuItems.forEachIndexed { index, item ->
-                        DropdownMenuItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight(),
+                        DropdownMenuItem(modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
                             onClick = {
                                 onMenuItemClicked(index)
                             }) {
@@ -182,7 +178,7 @@ fun DropDownListMenu(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentHeight()
-                                    .padding(start = 10.dp),
+                                    .padding(start = 10.dp)
                             )
                         }
 

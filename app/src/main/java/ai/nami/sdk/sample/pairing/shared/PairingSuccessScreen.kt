@@ -15,6 +15,6 @@ fun PairingSuccessScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Pairing is successfully")
+        Text("Pairing is successful")
     }
 }
