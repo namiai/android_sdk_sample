@@ -20,31 +20,8 @@ import kotlinx.coroutines.withContext
 
 class StandardUIActivity: ComponentActivity() {
 
-    private lateinit var preferredCredentialsLauncher: ActivityResultLauncher<IntentSenderRequest>
-    private lateinit var deferred: CompletableDeferred<ActivityResult>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-        registerNamiPairingEvent {
-
-
-            onRequestJoinThreadNetwork { request ->
-                Log.e("TAG", "StandardUIActivity registerOnRequestJoinThreadNetwork onRequest ")
-                deferred = CompletableDeferred()
-                withContext(Dispatchers.Main) {
-                    Log.e(
-                        "TAG",
-                        "StandardUIActivity registerOnRequestJoinThreadNetwork launch request "
-                    )
-                    preferredCredentialsLauncher.launch(request)
-                }
-
-                deferred.await()
-            }
-        }
-
 
         setContent {
             NamiSDKSampleTheme {

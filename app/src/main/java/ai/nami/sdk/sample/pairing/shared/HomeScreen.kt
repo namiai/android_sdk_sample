@@ -49,7 +49,7 @@ fun HomeScreen(showDeviceCategory: Boolean, onPairNamiDevice: (String, String, S
         mutableStateOf("")
     }
 
-    var deviceCategory: String? by remember(showDeviceCategory) {
+    var deviceCategory: String? by rememberSaveable(showDeviceCategory) {
         mutableStateOf(null)
     }
 

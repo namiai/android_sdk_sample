@@ -119,6 +119,6 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.2.0")
 
     // libraries for contact sensor
-    implementation("androidx.browser:browser:1.4.0")
+    implementation("androidx.browser:browser:1.8.0")
 
 }
