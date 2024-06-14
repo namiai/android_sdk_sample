@@ -3,6 +3,7 @@ package ai.nami.sdk.sample
 import ai.nami.sdk.pairing.registerNamiPairingEvent
 import ai.nami.sdk.sample.data.NamiLocalStorage
 import ai.nami.sdk.sample.pairing.cusomize.CustomizeUIActivity
+import ai.nami.sdk.sample.pairing.fragments.DemoXmlActivity
 import ai.nami.sdk.sample.pairing.standard.StandardUIActivity
 import ai.nami.sdk.sample.positioning.customize.PositioningCustomizeActivity
 import ai.nami.sdk.sample.positioning.standard.PositioningStandardActivity
@@ -59,8 +60,6 @@ class MainActivity: ComponentActivity() {
         }
 
 
-
-
         setContent {
             NamiSDKSampleTheme {
                 // A surface container using the 'background' color from the theme
@@ -83,6 +82,9 @@ class MainActivity: ComponentActivity() {
                         },
                         onClear = {
                             namiLocalStorage.clearListPairedDeviceUrn()
+                        },
+                        onOpenDemoXML = {
+                            onOpenDemoXML()
                         }
                     )
                 }
@@ -110,6 +112,10 @@ class MainActivity: ComponentActivity() {
         startActivity(intent)
     }
 
+    private fun onOpenDemoXML(){
+        val intent = Intent(this, DemoXmlActivity::class.java)
+        startActivity(intent)
+    }
 }
 
 @Composable
@@ -118,7 +124,8 @@ fun MainScreen(
     onOpenPairingCustomizeUI: () -> Unit,
     onOpenPositioningStandardUI: () -> Unit,
     onOpenPositioningCustomizeUI: () -> Unit,
-    onClear: suspend () -> Unit
+    onClear: suspend () -> Unit,
+    onOpenDemoXML: () -> Unit
 ) {
 
     var isClearingList by remember {
@@ -167,6 +174,10 @@ fun MainScreen(
             Text("Customize UI Demo")
         }
         Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = onOpenDemoXML) {
+            Text("XML layout demo")
+        }
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "All urn of devices that are paired by this app will be saved in local (DataStore) for testing positioning purpose." +
                 "Click the below button if you want to clear it.",
@@ -189,7 +200,8 @@ fun MainScreenPreview() {
             onOpenPairingCustomizeUI = { },
             onOpenPositioningCustomizeUI = {},
             onOpenPositioningStandardUI = {},
-            onClear = {}
+            onClear = {},
+            onOpenDemoXML = {}
         )
     }
 }

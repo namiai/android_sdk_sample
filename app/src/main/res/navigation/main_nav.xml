@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="ai.nami.sdk.sample.pairing.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_namiPairingFragment"
+            app:destination="@id/namiPairingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/namiPairingFragment"
+        android:name="ai.nami.sdk.sample.pairing.fragments.NamiPairingFragment"
+        android:label="fragment_nami_pairing"
+        tools:layout="@layout/fragment_nami_pairing">
+        <action
+            android:id="@+id/action_namiPairingFragment_to_successFragment"
+            app:destination="@id/successFragment">
+        </action>
+        <argument
+            android:name="session_code"
+            app:argType="string"
+            />
+        <argument
+            android:name="room_id"
+            app:argType="string"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/successFragment"
+        android:name="ai.nami.sdk.sample.pairing.fragments.SuccessFragment"
+        android:label="fragment_success"
+        tools:layout="@layout/fragment_success" />
+</navigation>
