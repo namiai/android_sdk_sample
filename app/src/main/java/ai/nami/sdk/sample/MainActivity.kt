@@ -58,6 +58,9 @@ class MainActivity: ComponentActivity() {
             }
         }
 
+
+
+
         setContent {
             NamiSDKSampleTheme {
                 // A surface container using the 'background' color from the theme

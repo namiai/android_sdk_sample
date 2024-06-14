@@ -5,6 +5,7 @@ import ai.nami.sdk.pairing.customizeNamiPairingLayout
 import ai.nami.sdk.pairing.registerNamiPairingEvent
 import ai.nami.sdk.sample.pairing.shared.HostScreen
 import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.sample.xzing.ZXingScanQRCode
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -80,6 +81,10 @@ class StandardUIActivity: ComponentActivity() {
                     isWidarDevice,
                     isShowLoading
                 )
+            }
+
+            namiScanQRCodeLayout { modifier, onScanQRCodeSuccess ->
+                ZXingScanQRCode(onScanQRCodeSuccess = onScanQRCodeSuccess, modifier = modifier)
             }
         }
 

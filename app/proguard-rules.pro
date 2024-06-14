@@ -35,3 +35,5 @@
 
 -keep class org.json.** { *; }
 -keepclassmembers class org.json.** { *; }
+
+-dontwarn kotlinx.parcelize.Parcelize

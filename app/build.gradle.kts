@@ -14,7 +14,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.5.7-1.0.8.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -65,7 +65,7 @@ dependencies {
 
     implementation(
         files(
-            "libs/nami-pairing-sdk-1.5.6.aar",
+            "libs/nami-pairing-sdk-1.5.7.aar",
             "libs/nami-widar-sdk-1.0.8.7.aar",
             "libs/A3LLocation-1.0.0.aar"
         )
@@ -103,13 +103,10 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
-    // libraries for camera preview scan qr code
-    implementation("androidx.camera:camera-view:1.2.3")
-    implementation("androidx.camera:camera-lifecycle:1.2.3")
-    implementation("androidx.camera:camera-camera2:1.2.3")
 
-    // google vision for scan qrcode
-    implementation("com.google.mlkit:barcode-scanning:17.1.0")
+    // zxing
+    implementation("com.google.zxing:core:3.5.0")
+    implementation("com.journeyapps:zxing-android-embedded:4.1.0")
 
     implementation("com.google.android.gms:play-services-threadnetwork:16.0.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
