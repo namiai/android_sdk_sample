@@ -33,7 +33,7 @@ fun HostScreen(showDeviceCategory: Boolean = true) {
 
         namiPairingSdkGraph(
             navController = navController,
-            onPairSuccess = { listPairingDeviceInfo, parameters ->
+            onPairSuccess = { listPairingDeviceInfo, parameters, _ ->
 
                 navController.navigate("pair-success")
             }

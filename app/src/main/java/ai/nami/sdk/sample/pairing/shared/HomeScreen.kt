@@ -45,7 +45,7 @@ fun HomeScreen(showDeviceCategory: Boolean, onPairNamiDevice: (String, String, S
         mutableStateOf("")
     }
 
-    var roomId by remember {
+    var roomId by rememberSaveable {
         mutableStateOf("")
     }
 

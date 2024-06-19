@@ -64,7 +64,7 @@ dependencies {
 //    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar","*.aar"))))
 
     // no need to implementation/compileOnly for libs/A3LLocation-1.0.0.aar because we don't test for non-google-service phones
-    implementation(files("libs/nami-pairing-sdk-1.6.0.7.aar"))
+    implementation(files("libs/nami-pairing-sdk-1.6.0.9.aar"))
     implementation(files("libs/nami-widar-sdk-1.0.8.1.aar"))
 
     implementation("androidx.core:core-ktx:1.9.0")
