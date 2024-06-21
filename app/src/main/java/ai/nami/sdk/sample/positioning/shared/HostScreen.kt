@@ -1,12 +1,13 @@
 package ai.nami.sdk.sample.positioning.shared
 
+import ai.nami.sdk.common.NamiSdkSession
+import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
+import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
+import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
+import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
 import ai.nami.sdk.sample.data.NamiLocalStorage
 import ai.nami.sdk.sample.positioning.info.WidarNetworkInfoScreen
 import ai.nami.sdk.sample.positioning.info.WidarNetworkInfoViewModel
-import ai.nami.sdk.widar.core.WidarSdkSession
-import ai.nami.sdk.widar.ui.navigation.NamiWidarSdkRoute
-import ai.nami.sdk.widar.ui.navigation.WidarSdkNavigation
-import ai.nami.sdk.widar.ui.navigation.namiWidarSDKGraph
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,19 +22,21 @@ fun StandardPositioningHostScreen() {
         val widarNetworkInfoViewModel =
             WidarNetworkInfoViewModel(NamiLocalStorage.getInstance(context = navController.context))
 
-        namiWidarSDKGraph(navController = navController, onCancel = {
-            navController.popBackStack(NamiWidarSdkRoute, true)
+        namiPositioningSDKGraph(navController = navController, onCancel = {
+            navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
+            NamiPositioningViewModelModule.reset()
             navController.navigate("done_position") {
                 // make sure that you do this step in  your project
-                popUpTo(NamiWidarSdkRoute)
+                popUpTo(NamiPositioningSdkRoute)
             }
         })
 
         composable(route = "widar_info") {
             WidarNetworkInfoScreen(viewModel = widarNetworkInfoViewModel) { placeId, sessionCode, deviceUrn ->
-                WidarSdkSession.init(sessionCode = sessionCode)
-                val widarRoute = WidarSdkNavigation.createRoute(
+                NamiPositioningViewModelModule.init(context = navController.context)
+                NamiSdkSession.init(sessionCode = sessionCode)
+                val widarRoute = NamiPositionSdkNavigation.createRoute(
                     deviceUrn = deviceUrn,
                     placeId = placeId,
                     deviceName = "WiDar device's name"
@@ -46,7 +49,6 @@ fun StandardPositioningHostScreen() {
         composable(route = "done_position") {
             AfterPositioningScreen()
         }
-
 
     }
 }

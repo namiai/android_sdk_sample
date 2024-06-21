@@ -1,5 +1,6 @@
 package ai.nami.sdk.sample.positioning.standard
 
+import ai.nami.sdk.positioning.NamiPositioningUI
 import ai.nami.sdk.sample.positioning.shared.StandardPositioningHostScreen
 import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
 import android.os.Bundle
@@ -14,6 +15,8 @@ class PositioningStandardActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // important: you have to call this function
+        NamiPositioningUI.setup()
         setContent {
             NamiSDKSampleTheme {
                 Surface(

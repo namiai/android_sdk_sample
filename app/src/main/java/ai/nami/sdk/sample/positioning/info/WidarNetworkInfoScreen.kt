@@ -35,7 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @Composable
 fun WidarNetworkInfoScreen(
     viewModel: WidarNetworkInfoViewModel,
-    onConnect: (placeId: String, sessionCode: String, deviceUrn: String) -> Unit
+    onConnect: (placeId: Int, sessionCode: String, deviceUrn: String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isLoading by remember(uiState.isLoading) {
@@ -55,7 +55,7 @@ fun WidarNetworkInfoScreen(
 @Composable
 fun WidarNetworkInfoBodyScreen(
     modifier: Modifier = Modifier,
-    onConnect: (placeId: String, sessionCode: String, deviceUrn: String) -> Unit,
+    onConnect: (placeId: Int, sessionCode: String, deviceUrn: String) -> Unit,
     listPairedDeviceUrn: List<String>, // should use ImmutableList for production app
     isLoading: Boolean
 ) {
@@ -136,7 +136,9 @@ fun WidarNetworkInfoBodyScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(onClick = {
-                    onConnect(placeId, sessionCode, selectedDeviceUrn)
+                    val realPlaceId: Int =
+                        placeId.toIntOrNull() ?: throw Exception("Invalid Place ID")
+                    onConnect(realPlaceId, sessionCode, selectedDeviceUrn)
                 }, modifier = Modifier.fillMaxWidth(), enabled = selectedDeviceUrn.isNotEmpty()) {
                     Text("Start Positioning")
                 }
@@ -151,4 +153,3 @@ fun WidarNetworkInfoBodyScreen(
     }
 
 }
-

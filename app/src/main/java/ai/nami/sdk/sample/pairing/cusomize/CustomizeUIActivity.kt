@@ -1,7 +1,9 @@
 package ai.nami.sdk.sample.pairing.cusomize
 
-import ai.nami.sdk.pairing.NamiPairingSdk
-import ai.nami.sdk.pairing.ui.designsystem.theme.NamiThemeData
+import ai.nami.sdk.NamiSDKUI
+import ai.nami.sdk.designsystem.theme.NamiThemeData
+import ai.nami.sdk.pairing.NamiPairingUI
+import ai.nami.sdk.positioning.NamiPositioningUI
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKColors
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKShapes
 import ai.nami.sdk.sample.pairing.cusomize.theme.customNamiSDKTypography
@@ -18,14 +20,16 @@ import androidx.compose.ui.Modifier
 class CustomizeUIActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        NamiPairingSdk.customizeTheme(
+        NamiPairingUI.setup()
+        NamiPositioningUI.setup()
+        NamiSDKUI.customTheme(
             NamiThemeData(
                 shapes = customNamiSDKShapes,
                 colors = customNamiSDKColors,
                 typography = customNamiSDKTypography
             )
         )
+
 
         setContent {
             NamiSDKSampleTheme {
@@ -42,6 +46,6 @@ class CustomizeUIActivity: ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        NamiPairingSdk.customizeTheme(NamiThemeData())
+        NamiSDKUI.customTheme(NamiThemeData())
     }
 }

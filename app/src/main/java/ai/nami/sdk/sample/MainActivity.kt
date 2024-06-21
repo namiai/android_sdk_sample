@@ -1,13 +1,14 @@
 package ai.nami.sdk.sample
 
-import ai.nami.sdk.pairing.registerNamiPairingEvent
+
+import ai.nami.sdk.registerNamiPairingEvent
 import ai.nami.sdk.sample.data.NamiLocalStorage
 import ai.nami.sdk.sample.pairing.cusomize.CustomizeUIActivity
 import ai.nami.sdk.sample.pairing.standard.StandardUIActivity
 import ai.nami.sdk.sample.positioning.customize.PositioningCustomizeActivity
 import ai.nami.sdk.sample.positioning.standard.PositioningStandardActivity
 import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
-import ai.nami.sdk.sample.utils.formatDeviceUrn
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -41,21 +42,15 @@ import kotlinx.coroutines.launch
 class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val namiLocalStorage = NamiLocalStorage.getInstance(this)
-
         registerNamiPairingEvent {
-            onConnectWifiNetworkSuccess { ssid, password, bssid, key ->
-
-            }
 
             onFinishPairing { listPairedDeviceInfo ->
-                listPairedDeviceInfo.forEach { pairingDeviceInfo ->
-                    val formattedUrn =
-                        formatDeviceUrn(pairingDeviceInfo.deviceUrn, isLowerCase = true)
-                    namiLocalStorage.saveDeviceUrn(formattedUrn)
+                listPairedDeviceInfo.forEach {
+                    namiLocalStorage.saveDeviceUrn(it.deviceUrn)
                 }
             }
+
         }
 
         setContent {
@@ -86,7 +81,6 @@ class MainActivity: ComponentActivity() {
             }
         }
     }
-
     private fun onOpenPairingStandardUI() {
         val intent = Intent(this, StandardUIActivity::class.java)
         startActivity(intent)
@@ -106,8 +100,8 @@ class MainActivity: ComponentActivity() {
         val intent = Intent(this, PositioningCustomizeActivity::class.java)
         startActivity(intent)
     }
-
 }
+
 
 @Composable
 fun MainScreen(
@@ -159,10 +153,10 @@ fun MainScreen(
         Button(onClick = onOpenPositioningStandardUI) {
             Text("Standard UI Demo")
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onOpenPositioningCustomizeUI) {
-            Text("Customize UI Demo")
-        }
+//        Spacer(modifier = Modifier.height(12.dp))
+//        Button(onClick = onOpenPositioningCustomizeUI) {
+//            Text("Customize UI Demo")
+//        }
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "All urn of devices that are paired by this app will be saved in local (DataStore) for testing positioning purpose." +

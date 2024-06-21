@@ -1,8 +1,9 @@
 package ai.nami.sdk.sample.pairing.cusomize.theme
 
-import ai.nami.sdk.pairing.ui.designsystem.theme.NamiSdkColors
-import ai.nami.sdk.pairing.ui.designsystem.theme.NamiSdkShapes
-import ai.nami.sdk.pairing.ui.designsystem.theme.NamiSdkTypography
+
+import ai.nami.sdk.designsystem.theme.NamiSdkColors
+import ai.nami.sdk.designsystem.theme.NamiSdkShapes
+import ai.nami.sdk.designsystem.theme.NamiSdkTypography
 import ai.nami.sdk.sample.R
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
@@ -27,7 +28,7 @@ val customNamiSDKColors = NamiSdkColors(
 )
 
 val customNamiSDKShapes = NamiSdkShapes(
-    ButtonShape = RoundedCornerShape(16.dp),
+    buttonShape = RoundedCornerShape(16.dp),
     MessageShape = RoundedCornerShape(16.dp),
     TextFieldShape = RoundedCornerShape(4.dp)
 )
