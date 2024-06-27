@@ -63,7 +63,7 @@ android {
 
 dependencies {
 
-    implementation("ai.nami:sdk-ui:2.0.7")
+    implementation("ai.nami:sdk-ui:2.0.9")
     implementation(files("libs/A3LLocation-1.0.0.aar"))
 
     implementation("androidx.core:core-ktx:1.9.0")

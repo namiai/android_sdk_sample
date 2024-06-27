@@ -21,6 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 
+
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 -dontwarn org.slf4j.impl.StaticMDCBinder
 
@@ -29,6 +30,8 @@
 -keep class nami.coap_proxy.v1.** { *; }
 -keep class nami.localmsgs.v1.** { *; }
 -keep class nami.platform_core.v1.** { *; }
+-keep class pairing.** { *; }
+-keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
 
 -keep class androidx.camera.** { *; }
 -keep class android.bluetooth.** { *; }
