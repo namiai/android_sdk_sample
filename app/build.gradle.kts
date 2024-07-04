@@ -64,16 +64,14 @@ android {
 }
 
 dependencies {
-//    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar","*.aar"))))
-
     implementation(
         files(
-            "libs/nami-pairing-sdk-1.5.7.aar",
             "libs/nami-widar-sdk-1.0.8.7.aar",
             "libs/A3LLocation-1.0.0.aar"
         )
     )
 
+    implementation("ai.nami:pairing-sdk:1.5.7")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
