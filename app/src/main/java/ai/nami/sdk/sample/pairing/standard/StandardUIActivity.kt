@@ -1,13 +1,12 @@
 package ai.nami.sdk.sample.pairing.standard
 
+import ai.nami.sdk.customizePairingLayout
 import ai.nami.sdk.pairing.common.Utils
-import ai.nami.sdk.pairing.customizeNamiPairingLayout
-import ai.nami.sdk.pairing.registerNamiPairingEvent
+import ai.nami.sdk.registerNamiPairingEvent
 import ai.nami.sdk.sample.pairing.shared.HostScreen
 import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
 import ai.nami.sdk.sample.xzing.ZXingScanQRCode
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -50,15 +49,9 @@ class StandardUIActivity: ComponentActivity() {
 
         registerNamiPairingEvent {
 
-
             onRequestJoinThreadNetwork { request ->
-                Log.e("TAG", "StandardUIActivity registerOnRequestJoinThreadNetwork onRequest ")
                 deferred = CompletableDeferred()
                 withContext(Dispatchers.Main) {
-                    Log.e(
-                        "TAG",
-                        "StandardUIActivity registerOnRequestJoinThreadNetwork launch request "
-                    )
                     preferredCredentialsLauncher.launch(request)
                 }
 
@@ -66,26 +59,17 @@ class StandardUIActivity: ComponentActivity() {
             }
         }
 
-        customizeNamiPairingLayout {
-            pairingSuccessLayout { productId: Int, deviceName: String, zoneName: String,
-                                   onPairAnotherDevice: () -> Unit,
-                                   onDonePairing: (extraData: Map<String, String>?) -> Unit,
-                                   id: Long, isWidarDevice: Boolean, isShowLoading: Boolean ->
-                CustomPairingSuccessScreen(
-                    productId,
-                    deviceName,
-                    zoneName,
-                    onPairAnotherDevice,
-                    onDonePairing,
-                    id,
-                    isWidarDevice,
-                    isShowLoading
+        customizePairingLayout {
+            pairingSuccessScreen { productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading ->
+                CustomizePairingSuccessScreen(
+                    productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading
                 )
             }
 
-            namiScanQRCodeLayout { modifier, onScanQRCodeSuccess ->
+            namiScanQRCodeCameraLayout { modifier, onScanQRCodeSuccess ->
                 ZXingScanQRCode(onScanQRCodeSuccess = onScanQRCodeSuccess, modifier = modifier)
             }
+
         }
 
         setContent {
@@ -101,29 +85,29 @@ class StandardUIActivity: ComponentActivity() {
         }
     }
 }
-
 @Composable
-fun CustomPairingSuccessScreen(
-    productId: Int, deviceName: String, zoneName: String,
+fun CustomizePairingSuccessScreen(
+    productId: Int,
+    zoneName: String,
+    deviceName: String,
     onPairAnotherDevice: () -> Unit,
-    onDonePairing: (extraData: Map<String, String>?) -> Unit,
-    id: Long, isWidarDevice: Boolean,
+    onDonePairing: () -> Unit,
+    isWidar: Boolean,
     isShowLoading: Boolean
 ) {
-
-    LaunchedEffect(key1 = isShowLoading, key2 = isWidarDevice) {
-        if (!isShowLoading && isWidarDevice) {
-            onDonePairing(null)
+    LaunchedEffect(key1 = isShowLoading, key2 = isWidar) {
+        if (!isShowLoading && isWidar) {
+            onDonePairing()
         }
     }
 
-    val isShowPairAnotherDevice by remember(isShowLoading, isWidarDevice) {
-        derivedStateOf { !isShowLoading && !isWidarDevice }
+    val isShowPairAnotherDevice by remember(isShowLoading, isWidar) {
+        derivedStateOf { !isShowLoading && !isWidar }
     }
 
-    val mainButtonText by remember(isShowLoading, isWidarDevice) {
+    val mainButtonText by remember(isShowLoading, isWidar) {
         derivedStateOf {
-            if (isShowLoading || isWidarDevice) {
+            if (isShowLoading || isWidar) {
                 "Next"
             } else {
                 "Done"
@@ -149,7 +133,7 @@ fun CustomPairingSuccessScreen(
         Spacer(modifier = Modifier.height(48.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { onDonePairing(null) },
+            onClick = { onDonePairing() },
             enabled = !isShowLoading
         ) {
             Text(text = mainButtonText)
@@ -164,6 +148,6 @@ fun CustomPairingSuccessScreen(
     }
 
     BackHandler(onBack = {
-        onDonePairing(null)
+        onDonePairing()
     })
 }

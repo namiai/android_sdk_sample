@@ -1,6 +1,6 @@
 package ai.nami.sdk.sample
 
-import ai.nami.sdk.pairing.registerNamiPairingEvent
+import ai.nami.sdk.registerNamiPairingEvent
 import ai.nami.sdk.sample.data.NamiLocalStorage
 import ai.nami.sdk.sample.pairing.cusomize.CustomizeUIActivity
 import ai.nami.sdk.sample.pairing.fragments.DemoXmlActivity
@@ -8,7 +8,6 @@ import ai.nami.sdk.sample.pairing.standard.StandardUIActivity
 import ai.nami.sdk.sample.positioning.customize.PositioningCustomizeActivity
 import ai.nami.sdk.sample.positioning.standard.PositioningStandardActivity
 import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
-import ai.nami.sdk.sample.utils.formatDeviceUrn
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -46,15 +45,9 @@ class MainActivity: ComponentActivity() {
         val namiLocalStorage = NamiLocalStorage.getInstance(this)
 
         registerNamiPairingEvent {
-            onConnectWifiNetworkSuccess { ssid, password, bssid, key ->
-
-            }
-
             onFinishPairing { listPairedDeviceInfo ->
-                listPairedDeviceInfo.forEach { pairingDeviceInfo ->
-                    val formattedUrn =
-                        formatDeviceUrn(pairingDeviceInfo.deviceUrn, isLowerCase = true)
-                    namiLocalStorage.saveDeviceUrn(formattedUrn)
+                listPairedDeviceInfo.forEach {
+                    namiLocalStorage.saveDeviceUrn(it.deviceUrn)
                 }
             }
         }

@@ -64,15 +64,6 @@ android {
 }
 
 dependencies {
-    implementation(
-        files(
-            "libs/nami-widar-sdk-1.0.8.7.aar",
-            "libs/A3LLocation-1.0.0.aar"
-        )
-    )
-
-    implementation("ai.nami:pairing-sdk:1.5.7")
-
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
 
@@ -91,23 +82,18 @@ dependencies {
     implementation ("androidx.navigation:navigation-ui-ktx:2.5.0")
     implementation( "androidx.fragment:fragment-ktx:1.4.1")
 
-
     implementation("androidx.navigation:navigation-common-ktx:2.5.3")
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 
-    // libraries for pairing
-    implementation("com.google.protobuf:protobuf-javalite:3.14.0")
-    implementation("com.squareup.retrofit2:retrofit:2.10.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
-    implementation("com.google.accompanist:accompanist-permissions:0.30.0")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+
+    // dependencies for Nami SDK
+    implementation("ai.nami:sdk-ui:2.0.10")
+
+    // if you do not publish your app to Amazon store, do not need to add this
+    implementation(files("libs/A3LLocation-1.0.0.aar"))
 
     // zxing
     implementation("com.google.zxing:core:3.5.0")
@@ -116,13 +102,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-threadnetwork:16.0.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
-    // libraries for positioning (widar)
-    val coroutinesVersion = "1.7.0"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
-    val coapVersion = "3.7.0"
-    implementation("org.eclipse.californium:californium-core:$coapVersion")
-    implementation("org.eclipse.californium:scandium:$coapVersion")
-    implementation("com.google.protobuf:protobuf-javalite:3.14.0")
-    implementation("com.airbnb.android:lottie-compose:6.2.0")
 
 }

@@ -1,14 +1,11 @@
 package ai.nami.sdk.sample.pairing.fragments
 
-import ai.nami.sdk.pairing.customizeNamiPairingLayout
-import ai.nami.sdk.pairing.registerNamiPairingEvent
+import ai.nami.sdk.customizePairingLayout
+import ai.nami.sdk.registerNamiPairingEvent
 import ai.nami.sdk.sample.R
-import ai.nami.sdk.sample.pairing.standard.CustomPairingSuccessScreen
+import ai.nami.sdk.sample.pairing.standard.CustomizePairingSuccessScreen
 import ai.nami.sdk.sample.xzing.ZXingScanQRCode
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
@@ -35,26 +32,17 @@ class DemoXmlActivity : AppCompatActivity()  {
             }
         }
 
-        customizeNamiPairingLayout {
-            pairingSuccessLayout { productId: Int, deviceName: String, zoneName: String,
-                                   onPairAnotherDevice: () -> Unit,
-                                   onDonePairing: (extraData: Map<String, String>?) -> Unit,
-                                   id: Long, isWidarDevice: Boolean, isShowLoading: Boolean ->
-                CustomPairingSuccessScreen(
-                    productId,
-                    deviceName,
-                    zoneName,
-                    onPairAnotherDevice,
-                    onDonePairing,
-                    id,
-                    isWidarDevice,
-                    isShowLoading
+        customizePairingLayout {
+            pairingSuccessScreen { productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading ->
+                CustomizePairingSuccessScreen(
+                    productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading
                 )
             }
 
-            namiScanQRCodeLayout { modifier, onScanQRCodeSuccess ->
+            namiScanQRCodeCameraLayout { modifier, onScanQRCodeSuccess ->
                 ZXingScanQRCode(onScanQRCodeSuccess = onScanQRCodeSuccess, modifier = modifier)
             }
+
         }
         setContentView(R.layout.activity_demo_xml)
     }

@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:padding="6dp"
+            android:text="cba2eefc-f19a-4e5a-b154-d7f27cd4e6a2"
             android:hint="RoomId"
             android:textSize="16sp" />
 

@@ -1,5 +1,6 @@
 package ai.nami.sdk.sample.pairing.fragments
 
+import ai.nami.sdk.NamiSDKUI
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ class HomeFragment: Fragment() {
             val sessionCode = homeBinding.edtSessionCode.text.toString()
             val roomId = homeBinding.edtRoomId.text.toString()
             if(sessionCode.isNotEmpty() && roomId.isNotEmpty()){
+                NamiSDKUI.initPairing(context = requireContext())
                 navigateToNamiPairing(sessionCode = sessionCode, roomId = roomId)
             }
         }
