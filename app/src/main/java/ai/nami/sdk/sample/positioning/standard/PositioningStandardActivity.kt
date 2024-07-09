@@ -15,8 +15,7 @@ class PositioningStandardActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // important: you have to call this function
-        NamiPositioningUI.setup()
+
         setContent {
             NamiSDKSampleTheme {
                 Surface(

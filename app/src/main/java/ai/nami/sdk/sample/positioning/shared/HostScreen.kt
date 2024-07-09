@@ -1,5 +1,6 @@
 package ai.nami.sdk.sample.positioning.shared
 
+import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.common.NamiSdkSession
 import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
@@ -25,7 +26,7 @@ fun StandardPositioningHostScreen() {
         namiPositioningSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
-            NamiPositioningViewModelModule.reset()
+            NamiSDKUI.resetPositioningSession()
             navController.navigate("done_position") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)
@@ -34,7 +35,7 @@ fun StandardPositioningHostScreen() {
 
         composable(route = "widar_info") {
             WidarNetworkInfoScreen(viewModel = widarNetworkInfoViewModel) { placeId, sessionCode, deviceUrn ->
-                NamiPositioningViewModelModule.init(context = navController.context)
+                NamiSDKUI.initPositioning(context = navController.context)
                 NamiSdkSession.init(sessionCode = sessionCode)
                 val widarRoute = NamiPositionSdkNavigation.createRoute(
                     deviceUrn = deviceUrn,
@@ -47,7 +48,9 @@ fun StandardPositioningHostScreen() {
         }
 
         composable(route = "done_position") {
-            AfterPositioningScreen()
+            AfterPositioningScreen() {
+                navController.popBackStack("widar_info", false)
+            }
         }
 
     }

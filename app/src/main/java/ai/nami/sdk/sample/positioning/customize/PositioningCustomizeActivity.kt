@@ -20,8 +20,6 @@ class PositioningCustomizeActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        NamiPairingUI.setup()
-        NamiPositioningUI.setup()
 
         NamiSDKUI.customTheme(
             NamiThemeData(

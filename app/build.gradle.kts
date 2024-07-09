@@ -63,12 +63,6 @@ android {
 
 dependencies {
 
-    implementation("ai.nami:sdk-ui:2.0.9")
-    implementation(files("libs/A3LLocation-1.0.0.aar"))
-
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-
     implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation("androidx.compose.ui:ui-tooling")
@@ -86,5 +80,25 @@ dependencies {
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
+
+    // dependencies for Nami SDK
+    implementation("ai.nami:sdk-ui:2.0.10")
+
+    // if you do not publish your app to Amazon store, do not need to add this
+    implementation(files("libs/A3LLocation-1.0.0.aar"))
+
+    // libraries for camera preview scan qr code
+    // if you custom NamiQRScanView, you do not need to add these libraries
+    implementation("androidx.camera:camera-view:1.2.3")
+    implementation("androidx.camera:camera-lifecycle:1.2.3")
+    implementation("androidx.camera:camera-camera2:1.2.3")
+
+    // google vision for scan qrcode
+    // if you custom NamiQRScanView, you do not need to add this library
+    implementation("com.google.mlkit:barcode-scanning:17.1.0")
+
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
 
 }

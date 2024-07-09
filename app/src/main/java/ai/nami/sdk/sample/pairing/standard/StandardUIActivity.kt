@@ -66,10 +66,6 @@ class StandardUIActivity: ComponentActivity() {
             }
         }
 
-        // important: you have to call this function
-        NamiPairingUI.setup()
-        NamiPositioningUI.setup()
-
         customizePairingLayout {
             pairingSuccessScreen { productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading ->
                 CustomizePairingSuccessScreen(

@@ -1,6 +1,7 @@
 package ai.nami.sdk.sample.pairing.shared
 
 
+import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
 import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
@@ -23,7 +24,9 @@ fun HostScreen() {
             HomeScreen { sessionCode, roomId ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
-                NamiPairingViewModelModule.init(navController.context)
+
+                NamiSDKUI.initPairing(context = navController.context)
+
                 navController.navigate(
                     NamiPairingSdkNavigation.createRoute(
                         sessionCode = sessionCode,
@@ -44,7 +47,7 @@ fun HostScreen() {
                 val deviceName = output.deviceName
                 val deviceUrn = listPairingDeviceInfo.firstOrNull()?.deviceUrn
                 if (isWidarDevice && deviceUrn != null) {
-                    NamiPositioningViewModelModule.init(context = navController.context)
+                    NamiSDKUI.initPositioning(context = navController.context)
                     val widarRoute = NamiPositionSdkNavigation.createRoute(
                         deviceUrn = deviceUrn,
                         placeId = placeId,
@@ -52,6 +55,7 @@ fun HostScreen() {
                     )
                     navController.navigate(widarRoute)
                 } else {
+                    NamiSDKUI.resetPairingSession()
                     navController.navigate("pair-success")
                 }
             },
@@ -59,13 +63,16 @@ fun HostScreen() {
         )
 
         composable("pair-success") {
-            PairingSuccessScreen()
+            PairingSuccessScreen(onBack = {
+                navController.popBackStack("home", false)
+            })
         }
 
         namiPositioningSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
-            NamiPositioningViewModelModule.reset()
+            NamiSDKUI.resetPairingSession()
+            NamiSDKUI.resetPositioningSession()
             navController.navigate("pair-success") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)
