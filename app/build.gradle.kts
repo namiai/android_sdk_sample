@@ -83,7 +83,7 @@ dependencies {
 
 
     // dependencies for Nami SDK
-    implementation("ai.nami:sdk-ui:2.0.10")
+    implementation("ai.nami:sdk-ui:2.1.1")
 
     // if you do not publish your app to Amazon store, do not need to add this
     implementation(files("libs/A3LLocation-1.0.0.aar"))
