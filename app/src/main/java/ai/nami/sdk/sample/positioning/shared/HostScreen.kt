@@ -2,11 +2,11 @@ package ai.nami.sdk.sample.positioning.shared
 
 import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.common.NamiSdkSession
-import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
+import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
-import ai.nami.sdk.sample.data.NamiLocalStorage
+import ai.nami.demo.common.NamiLocalStorage
 import ai.nami.sdk.sample.positioning.info.WidarNetworkInfoScreen
 import ai.nami.sdk.sample.positioning.info.WidarNetworkInfoViewModel
 import androidx.compose.runtime.Composable
@@ -38,9 +38,12 @@ fun StandardPositioningHostScreen() {
                 NamiSDKUI.initPositioning(context = navController.context)
                 NamiSdkSession.init(sessionCode = sessionCode)
                 val widarRoute = NamiPositionSdkNavigation.createRoute(
-                    deviceUrn = deviceUrn,
-                    placeId = placeId,
-                    deviceName = "WiDar device's name"
+                    input = NamiPositioningInput(
+                        deviceUrn = deviceUrn,
+                        placeId = placeId,
+                        deviceName = "WiDar device's name"
+                    )
+
                 )
                 navController.navigate(widarRoute)
 

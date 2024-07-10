@@ -18,3 +18,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "NamiSDKSample"
 include(":app")
+include(":demo-sdk-ui")
+include(":demo-sdk-routing")
+include(":demo-core-sdk")
+include(":demo-common")

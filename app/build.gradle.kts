@@ -63,42 +63,43 @@ android {
 
 dependencies {
 
-    implementation(platform("androidx.compose:compose-bom:2024.02.02"))
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material:material")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.5.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
-    implementation("androidx.navigation:navigation-common-ktx:2.5.3")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation(project(":demo-sdk-ui"))
+    implementation(project(":demo-sdk-routing"))
+    implementation(project(":demo-core-sdk"))
+    implementation(project(":demo-common"))
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+    implementation(libs.android.core.ktx)
+    implementation(libs.android.lifecycle.runtime)
+    implementation(libs.google.android.material)
+
+    implementation(platform(libs.android.compose.bom))
+    implementation(libs.bundles.androidComposeLibs)
+
+
+//    implementation("androidx.appcompat:appcompat:1.4.1")
+    //   implementation("com.google.android.material:material:1.5.0")
+//    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
+
+//    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
+
+
+    implementation(libs.androidx.datastore)
 
 
     // dependencies for Nami SDK
-    implementation("ai.nami:sdk-ui:2.1.1")
+    implementation(libs.nami.sdk.ui)
 
     // if you do not publish your app to Amazon store, do not need to add this
     implementation(files("libs/A3LLocation-1.0.0.aar"))
 
     // libraries for camera preview scan qr code
     // if you custom NamiQRScanView, you do not need to add these libraries
-    implementation("androidx.camera:camera-view:1.2.3")
-    implementation("androidx.camera:camera-lifecycle:1.2.3")
-    implementation("androidx.camera:camera-camera2:1.2.3")
+    implementation(libs.bundles.androidCameraLibs)
 
     // google vision for scan qrcode
     // if you custom NamiQRScanView, you do not need to add this library
-    implementation("com.google.mlkit:barcode-scanning:17.1.0")
+    implementation(libs.google.barcode.scanning)
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
 
 }

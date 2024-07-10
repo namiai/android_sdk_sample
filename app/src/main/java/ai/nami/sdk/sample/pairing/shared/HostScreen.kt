@@ -4,6 +4,8 @@ package ai.nami.sdk.sample.pairing.shared
 import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
 import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
+import ai.nami.sdk.routing.common.NamiPairingInput
+import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
@@ -29,9 +31,12 @@ fun HostScreen() {
 
                 navController.navigate(
                     NamiPairingSdkNavigation.createRoute(
-                        sessionCode = sessionCode,
-                        roomId = roomId,
-                        parameters = params
+                        input = NamiPairingInput(
+                            sessionCode = sessionCode,
+                            roomId = roomId,
+                            parameters = params
+                        )
+
                     )
                 )
             }
@@ -49,9 +54,12 @@ fun HostScreen() {
                 if (isWidarDevice && deviceUrn != null) {
                     NamiSDKUI.initPositioning(context = navController.context)
                     val widarRoute = NamiPositionSdkNavigation.createRoute(
-                        deviceUrn = deviceUrn,
-                        placeId = placeId,
-                        deviceName = deviceName
+                        input = NamiPositioningInput(
+                            deviceUrn = deviceUrn,
+                            placeId = placeId,
+                            deviceName = deviceName
+                        )
+
                     )
                     navController.navigate(widarRoute)
                 } else {

@@ -1,6 +1,6 @@
 package ai.nami.sdk.sample.positioning.info
 
-import ai.nami.sdk.sample.data.NamiLocalStorage
+import ai.nami.demo.common.NamiLocalStorage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted

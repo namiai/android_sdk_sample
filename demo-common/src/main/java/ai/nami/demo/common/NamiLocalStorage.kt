@@ -1,4 +1,4 @@
-package ai.nami.sdk.sample.data
+package ai.nami.demo.common
 
 import android.annotation.SuppressLint
 import android.content.Context

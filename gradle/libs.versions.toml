@@ -1,0 +1,71 @@
+[versions]
+namiCoreSDK = "2.1.1"
+namiSDKRouting = "2.1.2"
+namiSDKUI = "2.1.2"
+
+androidXCamera = "1.2.3"
+googleBarcodeScanning = "17.1.0"
+googleAndroidMaterial = "1.5.0"
+
+androidXDataStore = "1.0.0"
+
+composeBom = "2024.02.02"
+androidXNavigation = "2.5.3"
+androidXConstraintLayout = "1.0.1"
+androidxLifecycleRuntimeCompose = "2.7.0"
+
+androidxLifecycleRuntime = "2.3.1"
+androidXCoreKtx = "1.9.0"
+activityCompose = "1.7.2"
+agp = "8.2.2"
+kotlin = "1.8.10"
+junit = "4.13.2"
+androidx-test-ext-junit = "1.2.1"
+espresso-core = "3.6.1"
+appcompat = "1.7.0"
+
+
+[libraries]
+
+nami-sdk-ui = { module = "ai.nami:sdk-ui", version.ref = "namiSDKUI"}
+nami-sdk-routing = { module = "ai.nami:sdk-routing", version.ref = "namiSDKRouting"}
+nami-core-sdk = { module = "ai.nami:core-sdk", version.ref = "namiCoreSDK"}
+
+
+android-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidXCoreKtx" }
+android-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycleRuntime" }
+
+androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "androidXDataStore"}
+
+google-barcode-scanning = {module = "com.google.mlkit:barcode-scanning", version.ref = "googleBarcodeScanning"}
+google-android-material = {module = "com.google.android.material:material",version.ref = "googleAndroidMaterial" }
+
+andorid-camera-view = { module = "androidx.camera:camera-view", version.ref = "androidXCamera"}
+android-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "androidXCamera"}
+android-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "androidXCamera"}
+
+android-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+android-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+android-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+android-compose-ui = { module = "androidx.compose.ui:ui" }
+android-compose-material = { module = "androidx.compose.material:material" }
+
+android-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidXConstraintLayout" }
+android-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidXNavigation" }
+android-navigation-compose-ktx = { module = "androidx.navigation:navigation-common-ktx", version.ref = "androidXNavigation" }
+android-lifecycle-runtime-compose = {module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycleRuntimeCompose"}
+android-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+
+[bundles]
+androidComposeLibs = [ "android-compose-ui-tooling", "android-compose-ui-tooling-preview", "android-compose-ui", "android-compose-material",
+"android-constraintlayout-compose", "android-navigation-compose", "android-navigation-compose-ktx", "android-lifecycle-runtime-compose","android-activity-compose"
+]
+
+androidCameraLibs = ["andorid-camera-view", "android-camera-lifecycle", "android-camera2"]
+[plugins]
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

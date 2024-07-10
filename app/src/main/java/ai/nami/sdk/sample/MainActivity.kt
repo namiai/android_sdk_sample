@@ -2,7 +2,7 @@ package ai.nami.sdk.sample
 
 
 import ai.nami.sdk.registerNamiPairingEvent
-import ai.nami.sdk.sample.data.NamiLocalStorage
+import ai.nami.demo.common.NamiLocalStorage
 import ai.nami.sdk.sample.pairing.cusomize.CustomizeUIActivity
 import ai.nami.sdk.sample.pairing.standard.StandardUIActivity
 import ai.nami.sdk.sample.positioning.customize.PositioningCustomizeActivity
@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val namiLocalStorage = NamiLocalStorage.getInstance(this)
+        val namiLocalStorage = ai.nami.demo.common.NamiLocalStorage.getInstance(this)
         registerNamiPairingEvent {
 
             onFinishPairing { listPairedDeviceInfo ->
