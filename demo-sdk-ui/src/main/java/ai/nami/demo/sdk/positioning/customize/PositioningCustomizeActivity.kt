@@ -1,8 +1,8 @@
 package ai.nami.demo.sdk.positioning.customize
 
-import ai.nami.demo.sdk.pairing.cusomize.theme.customNamiSDKColors
-import ai.nami.demo.sdk.pairing.cusomize.theme.customNamiSDKShapes
-import ai.nami.demo.sdk.pairing.cusomize.theme.customNamiSDKTypography
+import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKColors
+import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKShapes
+import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKTypography
 import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.designsystem.theme.NamiThemeData
 import ai.nami.demo.sdk.positioning.shared.StandardPositioningHostScreen

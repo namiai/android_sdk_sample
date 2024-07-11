@@ -1,12 +1,10 @@
-package ai.nami.demo.sdk.pairing.cusomize
+package ai.nami.demo.sdk.pairing.cusomizeTheme
 
 import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.designsystem.theme.NamiThemeData
-import ai.nami.sdk.pairing.NamiPairingUI
-import ai.nami.sdk.positioning.NamiPositioningUI
-import ai.nami.demo.sdk.pairing.cusomize.theme.customNamiSDKColors
-import ai.nami.demo.sdk.pairing.cusomize.theme.customNamiSDKShapes
-import ai.nami.demo.sdk.pairing.cusomize.theme.customNamiSDKTypography
+import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKColors
+import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKShapes
+import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKTypography
 import ai.nami.demo.sdk.pairing.shared.HostScreen
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
 import android.os.Bundle
@@ -17,7 +15,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 
-class CustomizeUIActivity: ComponentActivity() {
+class CustomThemeActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

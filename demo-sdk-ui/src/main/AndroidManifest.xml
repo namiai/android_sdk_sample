@@ -6,12 +6,14 @@
         <activity android:name="ai.nami.demo.sdk.positioning.standard.PositioningStandardActivity" />
         <activity android:name="ai.nami.demo.sdk.positioning.customize.PositioningCustomizeActivity" />
         <activity
-            android:name="ai.nami.demo.sdk.pairing.cusomize.CustomizeUIActivity"
+            android:name="ai.nami.demo.sdk.pairing.cusomizeTheme.CustomThemeActivity"
             android:exported="false"
             />
         <activity
             android:name="ai.nami.demo.sdk.pairing.standard.StandardUIActivity"
             android:exported="false"
             />
+        <activity android:name="ai.nami.demo.sdk.DemoUIMainActivity"/>
+        <activity android:name="ai.nami.demo.sdk.pairing.customizeUI.CustomizeUIActivity"/>
     </application>
 </manifest>

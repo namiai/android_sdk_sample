@@ -1,7 +1,8 @@
 package ai.nami.demo.sdk
 
 
-import ai.nami.demo.sdk.pairing.cusomize.CustomizeUIActivity
+import ai.nami.demo.sdk.pairing.cusomizeTheme.CustomThemeActivity
+import ai.nami.demo.sdk.pairing.customizeUI.CustomizeUIActivity
 import ai.nami.demo.sdk.pairing.standard.StandardUIActivity
 import ai.nami.demo.sdk.positioning.customize.PositioningCustomizeActivity
 import ai.nami.demo.sdk.positioning.standard.PositioningStandardActivity
@@ -73,6 +74,9 @@ class DemoUIMainActivity: ComponentActivity() {
                         },
                         onClear = {
                             namiLocalStorage.clearListPairedDeviceUrn()
+                        },
+                        onOpenPairingCustomizeTheme = {
+                            onOpenPairingCustomizeTheme()
                         }
                     )
                 }
@@ -86,6 +90,11 @@ class DemoUIMainActivity: ComponentActivity() {
 
     private fun onOpenPairingCustomizeUI() {
         val intent = Intent(this, CustomizeUIActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun onOpenPairingCustomizeTheme() {
+        val intent = Intent(this, CustomThemeActivity::class.java)
         startActivity(intent)
     }
 
@@ -105,6 +114,7 @@ class DemoUIMainActivity: ComponentActivity() {
 fun MainScreen(
     onOpenPairingStandardUI: () -> Unit,
     onOpenPairingCustomizeUI: () -> Unit,
+    onOpenPairingCustomizeTheme: () -> Unit,
     onOpenPositioningStandardUI: () -> Unit,
     onOpenPositioningCustomizeUI: () -> Unit,
     onClear: suspend () -> Unit
@@ -137,11 +147,15 @@ fun MainScreen(
         Text(text = "Pairing", style = MaterialTheme.typography.h5)
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = onOpenPairingStandardUI) {
-            Text("Standard UI Demo")
+            Text("Standard UI ")
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = onOpenPairingCustomizeTheme) {
+            Text("Customize Theme ")
         }
         Spacer(modifier = Modifier.height(12.dp))
         Button(onClick = onOpenPairingCustomizeUI) {
-            Text("Customize UI Demo")
+            Text("Customize UI ")
         }
         Spacer(modifier = Modifier.height(48.dp))
         Divider()
@@ -149,7 +163,7 @@ fun MainScreen(
         Text(text = "Positioning", style = MaterialTheme.typography.h5)
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = onOpenPositioningStandardUI) {
-            Text("Standard UI Demo")
+            Text("Standard UI ")
         }
 //        Spacer(modifier = Modifier.height(12.dp))
 //        Button(onClick = onOpenPositioningCustomizeUI) {
@@ -178,7 +192,8 @@ fun MainScreenPreview() {
             onOpenPairingCustomizeUI = { },
             onOpenPositioningCustomizeUI = {},
             onOpenPositioningStandardUI = {},
-            onClear = {}
+            onClear = {},
+            onOpenPairingCustomizeTheme = {}
         )
     }
 }

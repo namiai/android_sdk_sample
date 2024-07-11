@@ -1,4 +1,4 @@
-package ai.nami.demo.sdk.pairing.cusomize.theme
+package ai.nami.demo.sdk.pairing.cusomizeTheme.theme
 
 
 import ai.nami.demo.sdk.ui.R
