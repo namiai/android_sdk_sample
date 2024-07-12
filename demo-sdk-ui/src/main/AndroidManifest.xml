@@ -4,7 +4,7 @@
 
     <application>
         <activity android:name="ai.nami.demo.sdk.positioning.standard.PositioningStandardActivity" />
-        <activity android:name="ai.nami.demo.sdk.positioning.customize.PositioningCustomizeActivity" />
+        <activity android:name="ai.nami.demo.sdk.positioning.customizeTheme.PositioningCustomizeThemeActivity" />
         <activity
             android:name="ai.nami.demo.sdk.pairing.cusomizeTheme.CustomThemeActivity"
             android:exported="false"
@@ -15,5 +15,6 @@
             />
         <activity android:name="ai.nami.demo.sdk.DemoUIMainActivity"/>
         <activity android:name="ai.nami.demo.sdk.pairing.customizeUI.CustomizeUIActivity"/>
+        <activity android:name="ai.nami.demo.sdk.positioning.customizeUI.CustomizePositioningUIActivity"/>
     </application>
 </manifest>

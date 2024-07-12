@@ -1,4 +1,4 @@
-package ai.nami.demo.sdk.positioning.customize
+package ai.nami.demo.sdk.positioning.customizeTheme
 
 import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKColors
 import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKShapes
@@ -16,7 +16,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 
 
-class PositioningCustomizeActivity: ComponentActivity() {
+class PositioningCustomizeThemeActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

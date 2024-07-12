@@ -4,7 +4,8 @@ package ai.nami.demo.sdk
 import ai.nami.demo.sdk.pairing.cusomizeTheme.CustomThemeActivity
 import ai.nami.demo.sdk.pairing.customizeUI.CustomizeUIActivity
 import ai.nami.demo.sdk.pairing.standard.StandardUIActivity
-import ai.nami.demo.sdk.positioning.customize.PositioningCustomizeActivity
+import ai.nami.demo.sdk.positioning.customizeTheme.PositioningCustomizeThemeActivity
+import ai.nami.demo.sdk.positioning.customizeUI.CustomizePositioningUIActivity
 import ai.nami.demo.sdk.positioning.standard.PositioningStandardActivity
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
 import ai.nami.sdk.registerNamiPairingEvent
@@ -49,7 +50,6 @@ class DemoUIMainActivity: ComponentActivity() {
                     namiLocalStorage.saveDeviceUrn(it.deviceUrn)
                 }
             }
-
         }
 
         setContent {
@@ -69,20 +69,24 @@ class DemoUIMainActivity: ComponentActivity() {
                         onOpenPositioningStandardUI = {
                             onOpenPositioningStandardUI()
                         },
-                        onOpenPositioningCustomizeUI = {
-                            onOpenPositioningCustomizeUI()
+                        onOpenPositioningCustomizeTheme = {
+                            onOpenPositioningCustomizeTheme()
                         },
                         onClear = {
                             namiLocalStorage.clearListPairedDeviceUrn()
                         },
                         onOpenPairingCustomizeTheme = {
                             onOpenPairingCustomizeTheme()
+                        },
+                        onOpenPositioningCustomizeUI = {
+                            onOpenPositioningCustomizeUI()
                         }
                     )
                 }
             }
         }
     }
+
     private fun onOpenPairingStandardUI() {
         val intent = Intent(this, StandardUIActivity::class.java)
         startActivity(intent)
@@ -103,8 +107,13 @@ class DemoUIMainActivity: ComponentActivity() {
         startActivity(intent)
     }
 
+    private fun onOpenPositioningCustomizeTheme() {
+        val intent = Intent(this, PositioningCustomizeThemeActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun onOpenPositioningCustomizeUI() {
-        val intent = Intent(this, PositioningCustomizeActivity::class.java)
+        val intent = Intent(this, CustomizePositioningUIActivity::class.java)
         startActivity(intent)
     }
 }
@@ -116,8 +125,9 @@ fun MainScreen(
     onOpenPairingCustomizeUI: () -> Unit,
     onOpenPairingCustomizeTheme: () -> Unit,
     onOpenPositioningStandardUI: () -> Unit,
-    onOpenPositioningCustomizeUI: () -> Unit,
-    onClear: suspend () -> Unit
+    onOpenPositioningCustomizeTheme: () -> Unit,
+    onClear: suspend () -> Unit,
+    onOpenPositioningCustomizeUI: () -> Unit
 ) {
 
     var isClearingList by remember {
@@ -165,10 +175,15 @@ fun MainScreen(
         Button(onClick = onOpenPositioningStandardUI) {
             Text("Standard UI ")
         }
-//        Spacer(modifier = Modifier.height(12.dp))
-//        Button(onClick = onOpenPositioningCustomizeUI) {
-//            Text("Customize UI Demo")
-//        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = onOpenPositioningCustomizeTheme) {
+            Text("Customize Theme Demo")
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = onOpenPositioningCustomizeUI) {
+            Text("Customize UI Demo")
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "All urn of devices that are paired by this app will be saved in local (DataStore) for testing positioning purpose." +
@@ -190,10 +205,11 @@ fun MainScreenPreview() {
         MainScreen(
             onOpenPairingStandardUI = { },
             onOpenPairingCustomizeUI = { },
-            onOpenPositioningCustomizeUI = {},
+            onOpenPositioningCustomizeTheme = {},
             onOpenPositioningStandardUI = {},
             onClear = {},
-            onOpenPairingCustomizeTheme = {}
+            onOpenPairingCustomizeTheme = {},
+            onOpenPositioningCustomizeUI = {}
         )
     }
 }
