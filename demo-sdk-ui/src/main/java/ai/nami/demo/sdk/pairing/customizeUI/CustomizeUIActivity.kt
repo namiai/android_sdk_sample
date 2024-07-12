@@ -32,8 +32,22 @@ class CustomizeUIActivity: ComponentActivity() {
 
             pairingSuccessScreen { productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading ->
                 CustomizePairingSuccessScreen(
-                    productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading
+                    productId,
+                    zoneName,
+                    deviceName,
+                    onPairAnotherDevice,
+                    onDonePairing,
+                    isWidar,
+                    isShowLoading
                 )
+            }
+
+            scanDeviceScreen { productId, deviceName, onBack ->
+                SkyNetScanDevice(productId = productId, deviceName = deviceName, onBack = onBack)
+            }
+
+            renamingDeviceScreen { productId, deviceName ->
+                SkyNetRenamingDevice(productId = productId, deviceName = deviceName)
             }
         }
 
