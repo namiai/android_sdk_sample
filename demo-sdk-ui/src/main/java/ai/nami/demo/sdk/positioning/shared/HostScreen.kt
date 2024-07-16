@@ -35,8 +35,7 @@ fun StandardPositioningHostScreen() {
 
         composable(route = "widar_info") {
             WidarNetworkInfoScreen(viewModel = widarNetworkInfoViewModel) { placeId, sessionCode, deviceUrn ->
-                NamiSDKUI.initPositioning(context = navController.context)
-                NamiSdkSession.init(sessionCode = sessionCode)
+                NamiSDKUI.initPositioning(context = navController.context,sessionCode = sessionCode)
                 val widarRoute = NamiPositionSdkNavigation.createRoute(
                     input = NamiPositioningInput(
                         deviceUrn = deviceUrn,

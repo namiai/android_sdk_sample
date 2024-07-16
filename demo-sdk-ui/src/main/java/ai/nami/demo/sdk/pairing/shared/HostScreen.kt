@@ -45,12 +45,11 @@ fun HostScreen() {
 
         namiPairingSdkGraph(
             navController = navController,
-            onPairSuccess = { listPairingDeviceInfo, parameters, output ->
-
+            onPairSuccess = { output ->
                 val isWidarDevice = output.isWidarDevice
                 val placeId = output.placeId
                 val deviceName = output.deviceName
-                val deviceUrn = listPairingDeviceInfo.firstOrNull()?.deviceUrn
+                val deviceUrn = output.listPairedDevices.firstOrNull()?.deviceUrn
                 if (isWidarDevice && deviceUrn != null) {
                     NamiSDKUI.initPositioning(context = navController.context)
                     val widarRoute = NamiPositionSdkNavigation.createRoute(
