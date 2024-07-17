@@ -4,6 +4,11 @@ import ai.nami.demo.sdk.pairing.shared.HostScreen
 import ai.nami.demo.sdk.pairing.standard.CustomizePairingSuccessScreen
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
 import ai.nami.sdk.customizePairingLayout
+import ai.nami.sdk.routing.onPairingRouteChangeListener
+import ai.nami.sdk.routing.onPositioningRouteChangeListener
+import ai.nami.sdk.routing.pairing.ui.screens.fetchpairingplace.FetchPairingPlaceNavigation
+import ai.nami.sdk.routing.pairing.ui.screens.scandevice.ScanDeviceNavigation
+import ai.nami.sdk.routing.pairing.ui.screens.scanqrcode.ScanQRCodeNavigation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -51,13 +56,26 @@ class CustomizeUIActivity: ComponentActivity() {
             }
         }
 
+        onPairingRouteChangeListener { data, parameter ->
+            if (data.currentDestination == ScanQRCodeNavigation.destination && data.nextDestination == ScanDeviceNavigation.destination) {
+                val startedScreenName = parameter?.get("from")
+                SkyNetPairingGuideNavigation.createRoute(startedScreenName)
+            } else {
+                null
+            }
+        }
+
+        onPositioningRouteChangeListener { data, parameter ->
+            null
+        }
+
         setContent {
             NamiSDKSampleTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    HostScreen()
+                    SkyNetHostScreen()
                 }
             }
         }
