@@ -94,12 +94,20 @@ fun SkyNetHostScreen() {
                 onNext = {
 
                 NamiPairingSdkNavigation.resumeRoute()?.let {route ->
-                    navController.navigate(route)
+                    navController.navigate(route){
+                        popUpTo(SkyNetPairingGuideNavigation.route){
+                            inclusive = true
+                        }
+                    }
                 }
             },
                 onCancel = {
                     NamiPairingSdkNavigation.resumeRoute(shouldCancelPairing = true)?.let {route ->
-                        navController.navigate(route)
+                        navController.navigate(route){
+                            popUpTo(SkyNetPairingGuideNavigation.route){
+                                inclusive = true
+                            }
+                        }
                     }
                 }
             )

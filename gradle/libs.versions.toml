@@ -1,7 +1,7 @@
 [versions]
-namiCoreSDK = "2.1.1"
-namiSDKRouting = "2.1.3"
-namiSDKUI = "2.1.4"
+namiCoreSDK = "2.1.2"
+namiSDKRouting = "2.1.4"
+namiSDKUI = "2.1.5"
 
 androidXCamera = "1.2.3"
 googleBarcodeScanning = "17.1.0"
