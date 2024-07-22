@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -24,20 +25,37 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
 }
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    implementation(project(":demo-common"))
+
+    implementation(libs.appcompat)
+    implementation(libs.android.core.ktx)
+    implementation(libs.android.lifecycle.runtime)
+    implementation(libs.google.android.material)
+
+    implementation(platform(libs.android.compose.bom))
+    implementation(libs.bundles.androidComposeLibs)
+
+    implementation(libs.androidx.datastore)
+
+    implementation(libs.nami.core.sdk)
+
+    implementation("com.fatherofapps:jnav:1.0.2")
+    ksp("com.fatherofapps:jnav:1.0.2")
 }
