@@ -1,5 +1,6 @@
 package ai.nami.sdk.sample
 
+import ai.nami.demo.coreSdk.DemoCoreSDKActivity
 import ai.nami.demo.sdk.DemoUIMainActivity
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
 import android.app.Activity
@@ -12,7 +13,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -41,10 +44,17 @@ class MainActivity: ComponentActivity() {
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.Start
                     ) {
+                        Spacer(modifier = Modifier.height(48.dp))
                         Button(onClick = {
                             openDemoUIActivity(DemoUIMainActivity::class.java)
                         }) {
                             Text("Demo SDK-UI")
+                        }
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Button(onClick = {
+                            openDemoUIActivity(DemoCoreSDKActivity::class.java)
+                        }) {
+                            Text("Demo Core-SDK")
                         }
                     }
                 }
