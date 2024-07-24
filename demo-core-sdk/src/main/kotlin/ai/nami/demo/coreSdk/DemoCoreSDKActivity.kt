@@ -9,6 +9,8 @@ import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetEnterWifiPasswordNavigatio
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetEnterWifiPasswordRoute
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkNavigation
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkRoute
+import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameNavigation
+import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameRoute
 import ai.nami.demo.coreSdk.pairing.fetchPairingInfo.SkyNetFetchPairingInfoNavigation
 import ai.nami.demo.coreSdk.pairing.fetchPairingInfo.SkyNetFetchPairingInfoRoute
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongNavigation
@@ -123,11 +125,40 @@ fun SkyNetHostScreen(
                     onBack = { onExitPairing() },
                     onScanDeviceSuccess = { productId, deviceName, zoneName ->
                         onNavigateTo(
-                            SkyNetScanWifiNetworkNavigation,
-                            SkyNetScanWifiNetworkNavigation.createRoute(deviceName)
+                            SkyNetDeviceNameNavigation,
+                            SkyNetDeviceNameNavigation.createRoute(
+                                defaultName = deviceName,
+                                productId = productId,
+                                zoneName = zoneName
+                            )
                         )
                     },
                     onNavigateBluetoothDisconnectedScreen = {}
+                )
+            }
+        }
+
+        composable(
+            route = SkyNetDeviceNameNavigation.route,
+            arguments = SkyNetDeviceNameNavigation.arguments()
+        ) {
+            if (it.lifecycleIsResumed()) {
+                val defaultName = SkyNetDeviceNameNavigation.defaultName(it)
+                val productId = SkyNetDeviceNameNavigation.productId(it)
+                val viewModel = NamiPairingViewModelModule.provideRenameDeviceViewModel()
+                SkyNetDeviceNameRoute(
+                    viewModel = viewModel,
+                    defaultName = defaultName,
+                    productId = productId,
+                    onBack = {
+                        onExitPairing()
+                    },
+                    onNavigateSetupThreadBorderRouterScreen = {},
+                    onNavigateSetupThreadEndDeviceScreen = {},
+                    onNavigateConnectWifiScreen = { isJoinThread, deviceName ->
+
+                    },
+                    onNavigateToErrorScreen = { isBluetoothDisconnected, pairingErrorCode, errorMessage -> }
                 )
             }
         }
