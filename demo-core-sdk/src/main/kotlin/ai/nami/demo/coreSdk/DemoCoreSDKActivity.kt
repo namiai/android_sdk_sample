@@ -28,12 +28,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.fatherofapps.jnav.JNavigation
 
 class DemoCoreSDKActivity: ComponentActivity() {
@@ -123,7 +120,7 @@ fun SkyNetHostScreen(
                 val viewModel = NamiPairingViewModelModule.provideScanDeviceViewModel()
                 SkyNetScanDeviceRoute(
                     viewModel = viewModel,
-                    onBack = { /*TODO*/ },
+                    onBack = { onExitPairing() },
                     onScanDeviceSuccess = { productId, deviceName, zoneName ->
                         onNavigateTo(
                             SkyNetScanWifiNetworkNavigation,

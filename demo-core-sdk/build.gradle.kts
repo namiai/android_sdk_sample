@@ -56,6 +56,11 @@ dependencies {
 
     implementation(libs.nami.core.sdk)
 
-    implementation("com.fatherofapps:jnav:1.0.2")
-    ksp("com.fatherofapps:jnav:1.0.2")
+    implementation(libs.jnav)
+    ksp(libs.jnav)
+
+    implementation(libs.jetpack.compose.permission)
+
+    //  check location service for Android 11 and below
+    implementation(libs.play.services.location)
 }
