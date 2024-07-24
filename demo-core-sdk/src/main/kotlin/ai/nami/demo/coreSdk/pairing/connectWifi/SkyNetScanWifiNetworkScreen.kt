@@ -6,6 +6,7 @@ import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.model.PairingWifiInfo
 import ai.nami.sdk.pairing.viewmodels.connectwifi.scanning.ScanWifiNetworkViewIntent
 import ai.nami.sdk.pairing.viewmodels.connectwifi.scanning.ScanWifiNetworkViewModel
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -107,6 +109,12 @@ fun SkyNetScanWifiNetworkRoute(
         }
     }
 
+    LaunchedEffect(key1 = uiState.isEnterWifiPassword) {
+        if (uiState.isEnterWifiPassword) {
+            onNavigateEnterWifiPasswordScreen(uiState.wifiName)
+        }
+    }
+
     var isShowPasswordConfirmDialog by remember(uiState.isShowConfirmUseSavedWifiPassword) {
         mutableStateOf(uiState.isShowConfirmUseSavedWifiPassword)
     }
@@ -163,6 +171,13 @@ private fun SkyNetScanWifiNetworkScreen(
     onBack: () -> Unit,
     errorMessage: String?
 ) {
+
+    SideEffect {
+        Log.e(
+            "debug_core_sdk",
+            "listWifiNetworks: ${listWifiNetworks.size} -- errorMessage: $errorMessage --- isScanning: $isScanning --- isShowAnother: $isShowAddAnotherWifiNetworkButton"
+        )
+    }
 
     SkyNetScaffold(title = "Scan Wifi Network", onBack = onBack, errorMessage = errorMessage) {
         LazyColumn(

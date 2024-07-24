@@ -10,8 +10,10 @@ import ai.nami.sdk.pairing.viewmodels.scandevice.ScanDeviceViewModel
 import android.Manifest
 import android.os.Build
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -22,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -199,16 +202,23 @@ private fun SkyNetScanDeviceScreen(
 }
 
 @Composable
-private fun ColumnScope.MissingPermission(onOpenSettings: () -> Unit) {
-    Spacer(modifier = Modifier.height(48.dp))
-    Text(text = "⚠\uFE0F Missing permissions. Can not scan the device")
-    Spacer(modifier = Modifier.height(24.dp))
-    SkyNetButton(text = "Open Settings", onClick = onOpenSettings, enabled = true)
+private fun MissingPermission(onOpenSettings: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Spacer(modifier = Modifier.height(48.dp))
+        Text(text = "⚠\uFE0F Missing permissions. Can not scan the device")
+        Spacer(modifier = Modifier.height(24.dp))
+        SkyNetButton(text = "Open Settings", onClick = onOpenSettings, enabled = true)
+    }
 }
 
 
 @Composable
-fun ColumnScope.ScanningDevice(
+fun ScanningDevice(
     productId: Int?,
     deviceName: String?,
 ) {
@@ -227,13 +237,20 @@ fun ColumnScope.ScanningDevice(
             if (foundDevice) "Connecting to this device" else "Please hold"
         }
     }
-    Spacer(modifier = Modifier.height(48.dp))
-    Text(
-        text = headerText,
-        style = MaterialTheme.typography.h5
-    )
-    Spacer(modifier = Modifier.height(12.dp))
-    Text(text = messageText, style = MaterialTheme.typography.body1)
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Spacer(modifier = Modifier.height(48.dp))
+        Text(
+            text = headerText,
+            style = MaterialTheme.typography.h5
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = messageText, style = MaterialTheme.typography.body1)
+    }
 }
 
 
