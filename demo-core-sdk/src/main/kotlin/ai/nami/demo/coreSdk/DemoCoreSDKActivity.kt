@@ -155,8 +155,14 @@ fun SkyNetHostScreen(
                     },
                     onNavigateSetupThreadBorderRouterScreen = {},
                     onNavigateSetupThreadEndDeviceScreen = {},
-                    onNavigateConnectWifiScreen = { isJoinThread, deviceName ->
-
+                    onNavigateConnectWifiScreen = { isFirstDevice, deviceName ->
+                        onNavigateTo(
+                            SkyNetScanWifiNetworkNavigation,
+                            SkyNetScanWifiNetworkNavigation.createRoute(
+                                deviceName,
+                                isJoinThreadNetwork = false
+                            )
+                        )
                     },
                     onNavigateToErrorScreen = { isBluetoothDisconnected, pairingErrorCode, errorMessage -> }
                 )
@@ -170,25 +176,33 @@ fun SkyNetHostScreen(
             if (it.lifecycleIsResumed()) {
                 val viewModel = NamiPairingViewModelModule.provideScanWifiNetworkViewModel()
                 val deviceName = SkyNetScanWifiNetworkNavigation.deviceName(it)
+                val isJoinThreadNetwork = SkyNetScanWifiNetworkNavigation.isJoinThreadNetwork(it)
                 SkyNetScanWifiNetworkRoute(
                     viewModel = viewModel,
-                    onBack = { /*TODO*/ },
+                    onBack = { onExitPairing() },
                     onNavigateEnterWifiPasswordScreen = { wifiName ->
                         onNavigateTo(
                             SkyNetEnterWifiPasswordNavigation,
-                            SkyNetEnterWifiPasswordNavigation.createRoute(wifiName, deviceName)
+                            SkyNetEnterWifiPasswordNavigation.createRoute(
+                                wifiName,
+                                deviceName,
+                                isJoinThreadNetwork
+                            )
                         )
                     },
                     onNavigateAddAnotherWifiNetworkScreen = {
                         onNavigateTo(
                             SkyNetAddWifiNetworkNavigation,
-                            SkyNetAddWifiNetworkNavigation.createRoute(deviceName)
+                            SkyNetAddWifiNetworkNavigation.createRoute(
+                                deviceName,
+                                isJoinThreadNetwork
+                            )
                         )
                     },
-                    onNavigateConnectWifiNetwork = { isJoinThread ->
+                    onNavigateConnectWifiNetwork = {
                         onNavigateTo(
                             SkyNetPingPongNavigation,
-                            SkyNetPingPongNavigation.createRoute(isJoinThread, deviceName)
+                            SkyNetPingPongNavigation.createRoute(isJoinThreadNetwork, deviceName)
                         )
                     },
                     onNavigateWifiNetworkErrorScreen = {
@@ -208,11 +222,14 @@ fun SkyNetHostScreen(
                 val wifiName = SkyNetEnterWifiPasswordNavigation.wifiName(it)
                 val viewModel = NamiPairingViewModelModule.provideEnterWifiPasswordViewModel()
                 val deviceName = SkyNetEnterWifiPasswordNavigation.deviceName(it)
+                val isJoinThread = SkyNetEnterWifiPasswordNavigation.isJoinThreadNetwork(it)
                 SkyNetEnterWifiPasswordRoute(
                     viewModel = viewModel,
                     wifiName = wifiName,
-                    onBack = { /*TODO*/ },
-                    onNavigateConnectWifiNetwork = { isJoinThread ->
+                    onBack = {
+                        onBack(null, false)
+                    },
+                    onNavigateConnectWifiNetwork = {
                         onNavigateTo(
                             SkyNetPingPongNavigation,
                             SkyNetPingPongNavigation.createRoute(isJoinThread, deviceName)
@@ -229,10 +246,11 @@ fun SkyNetHostScreen(
             if (it.lifecycleIsResumed()) {
                 val viewModel = NamiPairingViewModelModule.provideAddAnotherWifiNetworkViewModel()
                 val deviceName = SkyNetAddWifiNetworkNavigation.deviceName(it)
+                val isJoinThread = SkyNetAddWifiNetworkNavigation.isJoinThreadNetwork(it)
                 SkyNetAddWifiNetworkRoute(
                     viewModel = viewModel,
-                    onBack = { /*TODO*/ },
-                    onNavigateConnectWifiNetwork = { isJoinThread ->
+                    onBack = { onBack(null, false) },
+                    onNavigateConnectWifiNetwork = {
                         onNavigateTo(
                             SkyNetPingPongNavigation,
                             SkyNetPingPongNavigation.createRoute(isJoinThread, deviceName)
@@ -252,7 +270,9 @@ fun SkyNetHostScreen(
                 SkyNetPingPongRoute(
                     viewModel = viewModel,
                     isJoinThreadNetwork = isJoinThreadNetwork,
-                    onBack = { /*TODO*/ },
+                    onBack = {
+                        onExitPairing()
+                    },
                     onNavigatePairingSuccessScreen = { productId: Int, zoneName: String, isWidar: Boolean, placeId: Int ->
                         onNavigateTo(
                             SkyNetSuccessNavigation, SkyNetSuccessNavigation.createRoute(
@@ -285,9 +305,12 @@ fun SkyNetHostScreen(
                     zoneName = SkyNetSuccessNavigation.zoneName(it),
                     isWidar = SkyNetSuccessNavigation.isWidar(it),
                     placeId = SkyNetSuccessNavigation.placeId(it),
-                    onPairAnotherDevice = { /*TODO*/ },
+                    onPairAnotherDevice = {
+                        onBack(SkyNetQRCodeNavigation, false)
+                    },
                     onPairSuccess = { listPairedDevices ->
-
+                        // isWidar : navigate to positioning flow
+                        onExitPairing()
                     }
                 )
             }
