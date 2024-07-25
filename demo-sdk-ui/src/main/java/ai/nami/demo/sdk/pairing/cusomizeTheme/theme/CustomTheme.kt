@@ -27,6 +27,20 @@ val customNamiSDKColors = NamiSdkColors(
     toolbarColor = Color(0xffffd8e7)
 )
 
+val customNamiSDKColorsDarkMode = NamiSdkColors(
+    primary = Color(0xffa03671),
+    secondary = Color(0xff725762),
+    tertiary = Color(0xff7f5539),
+    error = Color(0xffba1a1a),
+    onError = Color(0xFFffffff),
+    background = Color(0xff1f1a1c),
+    primaryText = Color(0xfffffbff),
+    line = Color(0xff827378),
+    statusBarColor = Color(0xfffdd9e7),
+    toolbarColor = Color(0xffffd8e7),
+    onPrimary = Color(0xff1f1a1c)
+)
+
 val customNamiSDKShapes = NamiSdkShapes(
     buttonShape = RoundedCornerShape(16.dp),
     MessageShape = RoundedCornerShape(16.dp),

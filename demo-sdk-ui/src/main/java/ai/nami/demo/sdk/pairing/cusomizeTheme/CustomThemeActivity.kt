@@ -1,12 +1,14 @@
 package ai.nami.demo.sdk.pairing.cusomizeTheme
 
-import ai.nami.sdk.NamiSDKUI
-import ai.nami.sdk.designsystem.theme.NamiThemeData
 import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKColors
+import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKColorsDarkMode
 import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKShapes
 import ai.nami.demo.sdk.pairing.cusomizeTheme.theme.customNamiSDKTypography
 import ai.nami.demo.sdk.pairing.shared.HostScreen
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.NamiSDKUI
+import ai.nami.sdk.designsystem.theme.NamiThemeData
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,10 +21,14 @@ class CustomThemeActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val darkModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+        val isDarkMode = darkModeFlags == Configuration.UI_MODE_NIGHT_YES
+
         NamiSDKUI.customTheme(
             NamiThemeData(
                 shapes = customNamiSDKShapes,
-                colors = customNamiSDKColors,
+                colors = if (isDarkMode) customNamiSDKColorsDarkMode else customNamiSDKColors,
                 typography = customNamiSDKTypography
             )
         )
