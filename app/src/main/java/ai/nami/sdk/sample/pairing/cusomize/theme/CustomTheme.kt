@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-val customNamiSDKColors = NamiSdkColors(
+val customNamiSDKColors = NamiSdkColors().copy(
     primary = Color(0xffa03671),
     secondary = Color(0xff725762),
     tertiary = Color(0xff7f5539),
@@ -24,6 +24,26 @@ val customNamiSDKColors = NamiSdkColors(
     line = Color(0xff827378),
     statusBarColor = Color(0xfffdd9e7),
     toolbarColor = Color(0xffffd8e7)
+)
+
+val customNamiSDKColorsDarkMode = NamiSdkColors().copy(
+    primary = Color(0xffa03671),
+    secondary = Color(0xff725762),
+    tertiary = Color(0xff7f5539),
+    error = Color(0xffba1a1a),
+    onError = Color(0xFFffffff),
+    background = Color(0xff1f1a1c),
+    primaryText = Color(0xfffffbff),
+    line = Color(0xff827378),
+    statusBarColor = Color(0xfffdd9e7),
+    toolbarColor = Color(0xff1f1a1c),
+    onPrimary = Color(0xff1f1a1c),
+    inputTextColor = Color.White,
+    inputBackgroundColor = Color.Black,
+    inputFocusBorderColor = Color.White,
+    inputUnFocusBorderColor = Color.White,
+    inputCursorColor = Color.White,
+    buttonTextColor = Color.White
 )
 
 val customNamiSDKShapes = NamiSdkShapes(
