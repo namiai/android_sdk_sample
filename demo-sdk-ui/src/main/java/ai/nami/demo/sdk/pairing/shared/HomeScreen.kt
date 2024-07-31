@@ -1,5 +1,7 @@
 package ai.nami.demo.sdk.pairing.shared
 
+import ai.nami.demo.sdk.ui.components.NamiDropdown
+import ai.nami.sdk.model.DeviceCategory
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,14 +22,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(onPairNamiDevice: (String, String) -> Unit) {
+fun HomeScreen(onPairNamiDevice: (String, String, DeviceCategory) -> Unit) {
 
     var sessionCode by remember {
         mutableStateOf("")
     }
 
     var roomId by remember {
-        mutableStateOf("cba2eefc-f19a-4e5a-b154-d7f27cd4e6a2")
+        mutableStateOf("e81c075e-f5c0-4104-b814-62d12cfaa368")
+    }
+
+    val listDeviceCategories =
+        DeviceCategory.values().toList().filter { it != DeviceCategory.OTHERS }
+
+    var currentCategory by remember {
+        mutableStateOf(listDeviceCategories.first())
     }
 
     Column(
@@ -49,9 +58,18 @@ fun HomeScreen(onPairNamiDevice: (String, String) -> Unit) {
         }, modifier = Modifier.fillMaxWidth(), label = {
             Text(text = "Room ID")
         })
+        Spacer(modifier = Modifier.height(24.dp))
+        NamiDropdown(
+            currentValue = currentCategory.categoryName,
+            listTitles = listDeviceCategories.map { it.categoryName },
+            onSelectItem = {
+                currentCategory = listDeviceCategories[it]
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(48.dp))
         Button(onClick = {
-            onPairNamiDevice(sessionCode, roomId)
+            onPairNamiDevice(sessionCode, roomId, currentCategory)
         }) {
             Text("Pair Device")
         }

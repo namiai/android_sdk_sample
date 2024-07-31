@@ -2,10 +2,8 @@ package ai.nami.demo.coreSdk.pairing.fetchPairingInfo
 
 import ai.nami.demo.core.sdk.R
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
-import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.pairing.viewmodels.fetchpairingplace.FetchPairingPlaceViewIntent
 import ai.nami.sdk.pairing.viewmodels.fetchpairingplace.FetchPairingPlaceViewModel
-import ai.nami.sdk.pairing.viewmodels.fetchpairingplace.FetchPairingPlaceViewModelImpl
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +40,11 @@ import kotlinx.coroutines.withContext
             name = "roomId",
             type = String::class,
             isNullable = false
+        ),
+        JNavArg(
+            name = "deviceCategory",
+            type = String::class,
+            isNullable = false
         )
     ]
 )
@@ -56,7 +59,7 @@ fun SkyNetFetchPairingInfoRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     SideEffect {
-        Log.e("name_sample_app","SkyNetFetchPairingInfoRoute uiState: $uiState")
+        Log.e("name_sample_app", "SkyNetFetchPairingInfoRoute uiState: $uiState")
     }
 
     val viewIntentChannel = remember {

@@ -2,8 +2,6 @@ package ai.nami.demo.sdk.pairing.shared
 
 
 import ai.nami.sdk.NamiSDKUI
-import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
-import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
@@ -11,7 +9,6 @@ import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,7 +20,7 @@ fun HostScreen() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
         composable(route = "home") {
-            HomeScreen { sessionCode, roomId ->
+            HomeScreen { sessionCode, roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
 
@@ -34,7 +31,8 @@ fun HostScreen() {
                         input = NamiPairingInput(
                             sessionCode = sessionCode,
                             roomId = roomId,
-                            parameters = params
+                            parameters = params,
+                            deviceCategory = deviceCategory
                         )
 
                     )

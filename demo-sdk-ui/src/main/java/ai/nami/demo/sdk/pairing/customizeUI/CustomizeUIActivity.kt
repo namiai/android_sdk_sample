@@ -1,12 +1,10 @@
 package ai.nami.demo.sdk.pairing.customizeUI
 
-import ai.nami.demo.sdk.pairing.shared.HostScreen
 import ai.nami.demo.sdk.pairing.standard.CustomizePairingSuccessScreen
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
 import ai.nami.sdk.customizePairingLayout
 import ai.nami.sdk.routing.onPairingRouteChangeListener
 import ai.nami.sdk.routing.onPositioningRouteChangeListener
-import ai.nami.sdk.routing.pairing.ui.screens.fetchpairingplace.FetchPairingPlaceNavigation
 import ai.nami.sdk.routing.pairing.ui.screens.scandevice.ScanDeviceNavigation
 import ai.nami.sdk.routing.pairing.ui.screens.scanqrcode.ScanQRCodeNavigation
 import android.os.Bundle
@@ -47,7 +45,7 @@ class CustomizeUIActivity: ComponentActivity() {
                 )
             }
 
-            scanDeviceScreen { productId, deviceName, onBack ->
+            scanDeviceScreen { productId, deviceName, onBack, _ ->
                 SkyNetScanDevice(productId = productId, deviceName = deviceName, onBack = onBack)
             }
 

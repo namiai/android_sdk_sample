@@ -8,7 +8,6 @@ import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
-import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningNavigation
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
 import androidx.compose.runtime.Composable
@@ -22,7 +21,7 @@ fun SkyNetHostScreen() {
 
     NavHost(navController = navController, startDestination = "home") {
         composable(route = "home") {
-            HomeScreen { sessionCode, roomId ->
+            HomeScreen { sessionCode, roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
 
@@ -33,7 +32,8 @@ fun SkyNetHostScreen() {
                         input = NamiPairingInput(
                             sessionCode = sessionCode,
                             roomId = roomId,
-                            parameters = params
+                            parameters = params,
+                            deviceCategory = deviceCategory
                         )
 
                     )

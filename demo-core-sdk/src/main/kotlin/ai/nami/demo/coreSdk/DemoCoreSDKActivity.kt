@@ -23,6 +23,7 @@ import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessNavigation
 import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
+import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.NamiPairingSdk
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
 import android.os.Bundle
@@ -74,8 +75,12 @@ fun SkyNetHostScreen(
     NavHost(navController = navHostController, startDestination = SkyNetInfoNavigation.route) {
 
         composable(route = SkyNetInfoNavigation.route) {
-            SkyNetInfoRoute(onNext = { sessionCode, roomId ->
-                val route = SkyNetFetchPairingInfoNavigation.createRoute(sessionCode, roomId)
+            SkyNetInfoRoute(onNext = { sessionCode, roomId, deviceCategory ->
+                val route = SkyNetFetchPairingInfoNavigation.createRoute(
+                    sessionCode,
+                    roomId,
+                    deviceCategory = deviceCategory.categoryName
+                )
                 onNavigateTo(SkyNetFetchPairingInfoNavigation, route)
             }, onBack = {
                 onBack(null, false)
@@ -91,12 +96,18 @@ fun SkyNetHostScreen(
                 val sessionCode = SkyNetFetchPairingInfoNavigation.sessionCode(it)
                 val roomId = SkyNetFetchPairingInfoNavigation.roomId(it)
                 val viewModel = NamiPairingViewModelModule.provideFetchPairingPlaceViewModel()
+                val categoryName = SkyNetFetchPairingInfoNavigation.deviceCategory(it)
                 SkyNetFetchPairingInfoRoute(
                     sessionCode = sessionCode,
                     roomId = roomId,
                     viewModel = viewModel,
                     onNext = {
-                        onNavigateTo(SkyNetQRCodeNavigation, SkyNetQRCodeNavigation.createRoute())
+                        onNavigateTo(
+                            SkyNetQRCodeNavigation,
+                            SkyNetQRCodeNavigation.createRoute(
+                                deviceCategory = categoryName
+                            )
+                        )
                     }, onBack = {
                         onBack(null, false)
                     })
@@ -106,6 +117,7 @@ fun SkyNetHostScreen(
         composable(route = SkyNetQRCodeNavigation.route) {
             if (it.lifecycleIsResumed()) {
                 val viewModel = NamiPairingViewModelModule.provideScanQRCodeViewModel()
+                val categoryName = SkyNetQRCodeNavigation.deviceCategory(it)
                 SkyNetQRCodeRoute(viewModel = viewModel, onNext = {
                     onNavigateTo(
                         SkyNetScanDeviceNavigation,
@@ -113,7 +125,7 @@ fun SkyNetHostScreen(
                     )
                 }, onBack = {
                     onExitPairing()
-                })
+                }, deviceCategory = DeviceCategory.from(categoryName))
             }
         }
 
