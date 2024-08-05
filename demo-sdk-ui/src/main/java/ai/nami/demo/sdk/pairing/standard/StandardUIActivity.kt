@@ -1,21 +1,15 @@
 package ai.nami.demo.sdk.pairing.standard
 
-import ai.nami.sdk.customizePairingLayout
-import ai.nami.sdk.pairing.NamiPairingUI
-import ai.nami.sdk.pairing.common.Utils
-import ai.nami.sdk.positioning.NamiPositioningUI
-import ai.nami.sdk.registerNamiPairingEvent
 import ai.nami.demo.sdk.pairing.shared.HostScreen
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.customizePairingLayout
+import ai.nami.sdk.model.NamiSavedThreadNetworkInfo
+import ai.nami.sdk.pairing.common.Utils
+import ai.nami.sdk.registerNamiPairingEvent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -37,39 +31,68 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.firstOrNull
+import org.json.JSONObject
+import java.util.Base64
+
+
+fun NamiSavedThreadNetworkInfo.toStringFormat(): String {
+    val credentialsBase64String = Base64.getEncoder().encodeToString(credentialsDataset)
+
+    val json = JSONObject()
+    json.put("name", name)
+    json.put("panId", panId)
+    json.put("credentials", credentialsBase64String)
+
+    return json.toString()
+}
+
+fun String.toNamiSavedThreadNetworkInfo(): NamiSavedThreadNetworkInfo {
+    val json = JSONObject(this)
+    val name = json.optString("name")
+    val panId = json.optInt("panId")
+    val credentials = json.optString("credentials")
+    val decodeCredentials = Base64.getDecoder().decode(credentials)
+    return NamiSavedThreadNetworkInfo(
+        name = name,
+        panId = panId.toInt(),
+        credentialsDataset = decodeCredentials
+    )
+}
 
 class StandardUIActivity: ComponentActivity() {
 
-    private lateinit var preferredCredentialsLauncher: ActivityResultLauncher<IntentSenderRequest>
-    private lateinit var deferred: CompletableDeferred<ActivityResult>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        preferredCredentialsLauncher = registerForActivityResult(
-            ActivityResultContracts.StartIntentSenderForResult()
-        ) { result: ActivityResult ->
-            deferred.complete(result)
-        }
+        val namiLocalStorage = ai.nami.demo.common.NamiLocalStorage.getInstance(this)
+
 
         registerNamiPairingEvent {
-            onRequestJoinThreadNetwork { request ->
-                deferred = CompletableDeferred()
-                withContext(Dispatchers.Main) {
-                    preferredCredentialsLauncher.launch(request)
-                }
+            onConnectThreadNetworkSuccess { threadNetworkCredentials, key ->
+                namiLocalStorage.saveThreadNetworkCredential(
+                    key,
+                    threadNetworkCredentials.toStringFormat()
+                )
+            }
 
-                deferred.await()
+            onGetSavedThreadCredentials { key1, key2, key3 ->
+                val list = namiLocalStorage.listThreadCredentials.firstOrNull()?.toList()
+                list?.firstOrNull { it.first == key2 }?.second?.toNamiSavedThreadNetworkInfo()
             }
         }
 
         customizePairingLayout {
             pairingSuccessScreen { productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading ->
                 CustomizePairingSuccessScreen(
-                    productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading
+                    productId,
+                    zoneName,
+                    deviceName,
+                    onPairAnotherDevice,
+                    onDonePairing,
+                    isWidar,
+                    isShowLoading
                 )
             }
         }
