@@ -60,15 +60,45 @@ fun HostScreen() {
                     )
                     navController.navigate(widarRoute)
                 } else {
-                    NamiSDKUI.resetPairingSession()
-                    navController.navigate("pair-success")
+                    navController.navigate(
+                        PairingSuccessNavigation.createRoute(
+                            placeId = placeId,
+                            zoneId = output.zoneId,
+                            zoneName = output.zoneName,
+                            roomId = output.roomId,
+                            deviceName = output.deviceName,
+                            deviceCategory = output.deviceCategory
+                        )
+                    )
                 }
             },
-            onPairAnotherDevice = null
-        )
 
-        composable("pair-success") {
-            PairingSuccessScreen(onBack = {
+            )
+
+        composable(
+            route = PairingSuccessNavigation.route,
+            arguments = PairingSuccessNavigation.arguments()
+        ) {
+
+            val placeId = PairingSuccessNavigation.placeId(it)
+            val zoneId = PairingSuccessNavigation.zoneId(it)
+            val zoneName = PairingSuccessNavigation.getZoneName(it)
+            val roomId = PairingSuccessNavigation.roomId(it)
+            val deviceName = PairingSuccessNavigation.getDeviceName(it)
+            val deviceCategory = PairingSuccessNavigation.deviceCategory(it)
+
+            PairingSuccessScreen(onPairAnotherDevice = {
+                val route = NamiPairingSdkNavigation.createRoute(
+                    input = NamiPairingInput(
+                        roomId = roomId.toString(),
+                        deviceCategory = deviceCategory,
+                        placeId = placeId,
+                        zoneId = zoneId,
+                        zoneName = zoneName,
+                    ),
+                )
+                navController.navigate(route)
+            }, onFinishPairing = {
                 navController.popBackStack("home", false)
             })
         }

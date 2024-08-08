@@ -27,6 +27,8 @@ class NamiLocalStorage private constructor(private val context: Context) {
         val LIST_PAIRED_DEVICES = stringSetPreferencesKey("demo_nami_sdk_list_paired_devices")
         val LIST_THREAD_NETWORK_CREDENTIALS =
             stringSetPreferencesKey("demo_nami_sdk_list_thread_network_credentials")
+        val LIST_PAIRING_SAVED_WIFI =
+            stringSetPreferencesKey("demo_nami_sdk_list_saved_wifi_network")
 
         @SuppressLint("StaticFieldLeak")
         // just for demo purpose
@@ -98,4 +100,9 @@ class NamiLocalStorage private constructor(private val context: Context) {
             }.toSet()
         }
 
+    suspend fun savePairingSavedWifiNetwork(wifiInfo: String) {
+
+    }
+
 }
+

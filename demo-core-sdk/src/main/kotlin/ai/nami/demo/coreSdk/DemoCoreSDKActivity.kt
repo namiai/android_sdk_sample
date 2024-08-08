@@ -20,7 +20,6 @@ import ai.nami.demo.coreSdk.pairing.qrCode.SkyNetQRCodeRoute
 import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceNavigation
 import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceRoute
 import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessNavigation
-import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
 import ai.nami.sdk.model.DeviceCategory
@@ -303,30 +302,30 @@ fun SkyNetHostScreen(
             }
         }
 
-
-        composable(
-            route = SkyNetSuccessNavigation.route,
-            arguments = SkyNetSuccessNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.providePairingSuccessViewModel()
-                SkyNetSuccessRoute(
-                    viewModel = viewModel,
-                    productId = SkyNetSuccessNavigation.productId(it),
-                    deviceName = SkyNetSuccessNavigation.deviceName(it),
-                    zoneName = SkyNetSuccessNavigation.zoneName(it),
-                    isWidar = SkyNetSuccessNavigation.isWidar(it),
-                    placeId = SkyNetSuccessNavigation.placeId(it),
-                    onPairAnotherDevice = {
-                        onBack(SkyNetQRCodeNavigation, false)
-                    },
-                    onPairSuccess = { listPairedDevices ->
-                        // isWidar : navigate to positioning flow
-                        onExitPairing()
-                    }
-                )
-            }
-        }
+// this screen is removed in version 2.2.0
+//        composable(
+//            route = SkyNetSuccessNavigation.route,
+//            arguments = SkyNetSuccessNavigation.arguments()
+//        ) {
+//            if (it.lifecycleIsResumed()) {
+//                val viewModel = NamiPairingViewModelModule.providePairingSuccessViewModel()
+//                SkyNetSuccessRoute(
+//                    viewModel = viewModel,
+//                    productId = SkyNetSuccessNavigation.productId(it),
+//                    deviceName = SkyNetSuccessNavigation.deviceName(it),
+//                    zoneName = SkyNetSuccessNavigation.zoneName(it),
+//                    isWidar = SkyNetSuccessNavigation.isWidar(it),
+//                    placeId = SkyNetSuccessNavigation.placeId(it),
+//                    onPairAnotherDevice = {
+//                        onBack(SkyNetQRCodeNavigation, false)
+//                    },
+//                    onPairSuccess = { listPairedDevices ->
+//                        // isWidar : navigate to positioning flow
+//                        onExitPairing()
+//                    }
+//                )
+//            }
+//        }
 
     }
 }
