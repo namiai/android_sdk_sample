@@ -1,12 +1,12 @@
 package ai.nami.demo.sdk.pairing.standard
 
-import ai.nami.sdk.customizePairingLayout
-import ai.nami.sdk.pairing.NamiPairingUI
-import ai.nami.sdk.pairing.common.Utils
-import ai.nami.sdk.positioning.NamiPositioningUI
-import ai.nami.sdk.registerNamiPairingEvent
 import ai.nami.demo.sdk.pairing.shared.HostScreen
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.customizePairingLayout
+import ai.nami.sdk.pairing.NamiPairingSdk
+import ai.nami.sdk.pairing.common.Utils
+import ai.nami.sdk.pairing.model.PairingSavedWifiInfo
+import ai.nami.sdk.registerNamiPairingEvent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -37,9 +37,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
+
+
+fun String.toPairingSavedWifiInfo(): PairingSavedWifiInfo {
+    val json = JSONObject(this)
+    val password = json.optString("password")
+    val ssid = json.optString("ssid")
+    return PairingSavedWifiInfo(password = password, ssid = ssid)
+}
+
 
 class StandardUIActivity: ComponentActivity() {
 
@@ -48,6 +61,15 @@ class StandardUIActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val namiLocalStorage = ai.nami.demo.common.NamiLocalStorage.getInstance(this)
+
+        lifecycleScope.launch {
+            val listSavedWifiInfo = namiLocalStorage.listSavedWifiNetwork.firstOrNull()
+                ?.map { it.toPairingSavedWifiInfo() } ?: emptyList()
+            Log.e("debug_nami_sample", "listSavedWifiInfo: $listSavedWifiInfo")
+            NamiPairingSdk.addPairingSavedWifiInfo(listSavedWifiInfo)
+        }
 
         preferredCredentialsLauncher = registerForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()
@@ -64,12 +86,29 @@ class StandardUIActivity: ComponentActivity() {
 
                 deferred.await()
             }
+
+            onConnectWifiNetworkSuccess { ssid, password, bssid, key ->
+                namiLocalStorage.saveWifiNetwork(ssid = ssid, password = password)
+                bssid?.let {
+                    namiLocalStorage.saveBSSIDWithKey(bssid = bssid, key = key)
+                }
+            }
+
+            onGetSavedBSSID { _, key2, _ ->
+                namiLocalStorage.getBSSID(key = key2)
+            }
         }
 
         customizePairingLayout {
             pairingSuccessScreen { productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading ->
                 CustomizePairingSuccessScreen(
-                    productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading
+                    productId,
+                    zoneName,
+                    deviceName,
+                    onPairAnotherDevice,
+                    onDonePairing,
+                    isWidar,
+                    isShowLoading
                 )
             }
         }

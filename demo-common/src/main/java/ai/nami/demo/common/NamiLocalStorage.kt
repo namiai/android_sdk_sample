@@ -9,8 +9,11 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import org.json.JSONObject
 import java.io.IOException
+import java.util.Base64
 
 
 class NamiLocalStorage private constructor(private val context: Context) {
@@ -24,6 +27,10 @@ class NamiLocalStorage private constructor(private val context: Context) {
 
 
         val LIST_PAIRED_DEVICES = stringSetPreferencesKey("demo_nami_sdk_list_paired_devices")
+        val LIST_SAVED_WIFI_NETWORK =
+            stringSetPreferencesKey("demo_nami_sdk_list_saved_wifi_network")
+        val LIST_BSSID_WIFI_NETWORK =
+            stringSetPreferencesKey("demo_nami_sdk_list_bssid_wifi_network")
 
         @SuppressLint("StaticFieldLeak")
         // just for demo purpose
@@ -66,5 +73,65 @@ class NamiLocalStorage private constructor(private val context: Context) {
         preferences[LIST_PAIRED_DEVICES] ?: emptySet()
     }
 
+    suspend fun saveWifiNetwork(ssid: String, password: String) {
+        val json = JSONObject()
+        json.put("ssid", ssid)
+        json.put("password", password)
+        val wifiInfo = json.toString()
+        context.dataStore.edit { preferences ->
+            val currentSet = preferences[LIST_SAVED_WIFI_NETWORK]?.toMutableSet() ?: mutableSetOf()
+            if (!currentSet.contains(wifiInfo)) {
+                currentSet.add(wifiInfo)
+                preferences[LIST_SAVED_WIFI_NETWORK] = currentSet.toSet()
+            }
+        }
+    }
+
+    val listSavedWifiNetwork: Flow<Set<String>> = context.dataStore.data.catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map { preferences ->
+        preferences[LIST_SAVED_WIFI_NETWORK] ?: emptySet()
+    }
+
+    suspend fun saveBSSIDWithKey(bssid: ByteArray, key: Int) {
+        val bssidInString = Base64.getEncoder().encodeToString(bssid)
+        val jsonObject = JSONObject()
+        jsonObject.put("bssid", bssidInString)
+        jsonObject.put("key", key)
+        val data = jsonObject.toString()
+        context.dataStore.edit { preferences ->
+            val currentSet = preferences[LIST_BSSID_WIFI_NETWORK]?.toMutableSet() ?: mutableSetOf()
+            if (!currentSet.contains(data)) {
+                currentSet.add(data)
+                preferences[LIST_BSSID_WIFI_NETWORK] = currentSet.toSet()
+            }
+        }
+    }
+
+    suspend fun getBSSID(key: Int): ByteArray? {
+        val list = context.dataStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.map { preferences ->
+            preferences[LIST_BSSID_WIFI_NETWORK] ?: emptySet()
+        }.firstOrNull()?.map {
+            Log.e("debug_nami_sample", "bssid-key: $it")
+            val json = JSONObject(it)
+            val bssidInString = json.optString("bssid")
+            val savedKey = json.optInt("key")
+            val bssid = Base64.getDecoder().decode(bssidInString)
+            Pair(savedKey, bssid)
+        }
+
+        return list?.firstOrNull { it.first == key }?.second
+
+    }
 
 }

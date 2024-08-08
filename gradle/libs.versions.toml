@@ -1,7 +1,7 @@
 [versions]
 jetpackComposePermission = "0.30.0"
 jnav = "1.0.2"
-namiCoreSDK = "2.1.4"
+namiCoreSDK = "2.1.3"
 namiSDKRouting = "2.1.4"
 namiSDKUI = "2.1.5"
 
