@@ -22,13 +22,13 @@ fun HostScreen() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
 
-        Log.e("debug_sample_nami", "HostScreen")
+        Log.e("Pairing-SDK", "HostScreen")
 
         composable(route = "home") {
             HomeScreen { sessionCode, roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
-                Log.e("debug_sample_nami", "Home Screen : sessionCode $sessionCode ")
+                Log.e("Pairing-SDK", "Home Screen : sessionCode $sessionCode ")
                 val realSessionCode = if (sessionCode?.isEmpty() == true) null else sessionCode
                 NamiSDKUI.initPairing(navController.context)
                 val route = NamiPairingSdkNavigation.createRoute(
@@ -39,9 +39,9 @@ fun HostScreen() {
                         deviceCategory = deviceCategory
                     ),
                 )
-                Log.e("debug_sample_nami", "Home Screen start : $route ")
+                Log.e("Pairing-SDK", "Home Screen start : $route ")
                 Log.e(
-                    "debug_sample_nami",
+                    "Pairing-SDK",
                     "token : ${NamiSdkSession.getCustomerAccessToken()} -- refresh token: ${NamiSdkSession.getRefreshToken()} ${NamiSdkSession.sessionCode}",
                 )
                 navController.navigate(
