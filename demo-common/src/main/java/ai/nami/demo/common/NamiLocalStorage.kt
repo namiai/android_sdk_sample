@@ -96,13 +96,11 @@ class NamiLocalStorage private constructor(private val context: Context) {
                 val json = JSONObject(it)
                 val key = json.optInt("key")
                 val credentials = json.optString("data")
+                Log.e("debug_sample_nami", "NamiLocalStorage key: $key")
                 Pair(key, credentials)
             }.toSet()
         }
 
-    suspend fun savePairingSavedWifiNetwork(wifiInfo: String) {
-
-    }
 
 }
 

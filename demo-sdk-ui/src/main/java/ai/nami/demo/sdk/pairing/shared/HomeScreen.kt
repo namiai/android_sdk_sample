@@ -1,6 +1,7 @@
 package ai.nami.demo.sdk.pairing.shared
 
 import ai.nami.demo.sdk.ui.components.NamiDropdown
+import ai.nami.sdk.common.NamiSdkSession
 import ai.nami.sdk.model.DeviceCategory
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,12 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(onPairNamiDevice: (String, String, DeviceCategory) -> Unit) {
+fun HomeScreen(onPairNamiDevice: (String?, String, DeviceCategory) -> Unit) {
 
     var sessionCode by remember {
         mutableStateOf("")
     }
-
+    val isNeedASessionCode by remember {
+        mutableStateOf(!NamiSdkSession.isAuthorized())
+    }
     var roomId by remember {
         mutableStateOf("e81c075e-f5c0-4104-b814-62d12cfaa368")
     }
@@ -52,6 +55,10 @@ fun HomeScreen(onPairNamiDevice: (String, String, DeviceCategory) -> Unit) {
         }, modifier = Modifier.fillMaxWidth(), label = {
             Text(text = "Session code")
         })
+        if (!isNeedASessionCode) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(text = "No need a new session code. You can leave this field empty")
+        }
         Spacer(modifier = Modifier.height(24.dp))
         OutlinedTextField(value = roomId, onValueChange = {
             roomId = it

@@ -1,6 +1,6 @@
 package ai.nami.demo.sdk.pairing.customizeUI
 
-import ai.nami.demo.sdk.pairing.standard.CustomizePairingSuccessScreen
+
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
 import ai.nami.sdk.customizePairingLayout
 import ai.nami.sdk.routing.onPairingRouteChangeListener
@@ -33,17 +33,6 @@ class CustomizeUIActivity: ComponentActivity() {
                 )
             }
 
-            pairingSuccessScreen { productId, zoneName, deviceName, onPairAnotherDevice, onDonePairing, isWidar, isShowLoading ->
-                CustomizePairingSuccessScreen(
-                    productId,
-                    zoneName,
-                    deviceName,
-                    onPairAnotherDevice,
-                    onDonePairing,
-                    isWidar,
-                    isShowLoading
-                )
-            }
 
             scanDeviceScreen { productId, deviceName, onBack, _ ->
                 SkyNetScanDevice(productId = productId, deviceName = deviceName, onBack = onBack)

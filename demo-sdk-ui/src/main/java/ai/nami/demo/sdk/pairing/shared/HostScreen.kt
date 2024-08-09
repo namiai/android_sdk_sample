@@ -2,6 +2,7 @@ package ai.nami.demo.sdk.pairing.shared
 
 
 import ai.nami.sdk.NamiSDKUI
+import ai.nami.sdk.common.NamiSdkSession
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
@@ -9,6 +10,7 @@ import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,24 +21,34 @@ import androidx.navigation.compose.rememberNavController
 fun HostScreen() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
+
+        Log.e("debug_sample_nami", "HostScreen")
+
         composable(route = "home") {
             HomeScreen { sessionCode, roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
-
-                NamiSDKUI.initPairing(context = navController.context)
-
-                navController.navigate(
-                    NamiPairingSdkNavigation.createRoute(
-                        input = NamiPairingInput(
-                            sessionCode = sessionCode,
-                            roomId = roomId,
-                            parameters = params,
-                            deviceCategory = deviceCategory
-                        )
-
-                    )
+                Log.e("debug_sample_nami", "Home Screen : sessionCode $sessionCode ")
+                val realSessionCode = if (sessionCode?.isEmpty() == true) null else sessionCode
+                NamiSDKUI.initPairing(navController.context)
+                val route = NamiPairingSdkNavigation.createRoute(
+                    input = NamiPairingInput(
+                        sessionCode = realSessionCode,
+                        roomId = roomId,
+                        parameters = params,
+                        deviceCategory = deviceCategory
+                    ),
                 )
+                Log.e("debug_sample_nami", "Home Screen start : $route ")
+                Log.e(
+                    "debug_sample_nami",
+                    "token : ${NamiSdkSession.getCustomerAccessToken()} -- refresh token: ${NamiSdkSession.getRefreshToken()} ${NamiSdkSession.sessionCode}",
+                )
+                navController.navigate(
+                    route
+                )
+
+
             }
         }
 
