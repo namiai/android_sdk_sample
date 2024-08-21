@@ -3,6 +3,7 @@ package ai.nami.demo.sdk.pairing.shared
 
 import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.common.NamiSdkSession
+import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
@@ -103,7 +104,7 @@ fun HostScreen() {
                 val route = NamiPairingSdkNavigation.createRoute(
                     input = NamiPairingInput(
                         roomId = roomId.toString(),
-                        deviceCategory = deviceCategory,
+                        deviceCategory = DeviceCategory.UN_SPECIFIED,
                         placeId = placeId,
                         zoneId = zoneId,
                         zoneName = zoneName,
@@ -120,7 +121,7 @@ fun HostScreen() {
         }, onPositionDone = {
             NamiSDKUI.resetPairingSession()
             NamiSDKUI.resetPositioningSession()
-            navController.navigate("pair-success") {
+            navController.navigate("home") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)
             }

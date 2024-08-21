@@ -17,7 +17,7 @@ import java.io.IOException
 class NamiLocalStorage private constructor(private val context: Context) {
 
     companion object {
-        private val namiPreferenceName = "demo_nami_sdk_sample_data_store_preference"
+        private val namiPreferenceName = "nami_sdk_sample_data_store_preference"
 
         val Context.dataStore by preferencesDataStore(
             name = namiPreferenceName

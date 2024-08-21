@@ -3,6 +3,7 @@ package ai.nami.demo.sdk.pairing.shared
 import ai.nami.demo.sdk.ui.components.NamiDropdown
 import ai.nami.sdk.common.NamiSdkSession
 import ai.nami.sdk.model.DeviceCategory
+import ai.nami.sdk.ui.BuildConfig
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,14 +33,16 @@ fun HomeScreen(onPairNamiDevice: (String?, String, DeviceCategory) -> Unit) {
         mutableStateOf(!NamiSdkSession.isAuthorized())
     }
     var roomId by remember {
-        mutableStateOf("e81c075e-f5c0-4104-b814-62d12cfaa368")
+        val id = if (BuildConfig.DEBUG) "e81c075e-f5c0-4104-b814-62d12cfaa368" else ""
+        mutableStateOf(id)
     }
 
     val listDeviceCategories =
         DeviceCategory.values().toList().filter { it != DeviceCategory.OTHERS }
 
     var currentCategory by remember {
-        mutableStateOf(listDeviceCategories.first())
+        mutableStateOf(listDeviceCategories.firstOrNull { it == DeviceCategory.UN_SPECIFIED }
+            ?: listDeviceCategories.first())
     }
 
     Column(
