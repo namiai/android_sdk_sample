@@ -3,6 +3,8 @@ package ai.nami.demo.sdk.pairing.standard
 import ai.nami.demo.sdk.pairing.shared.HostScreen
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
 import ai.nami.sdk.model.NamiSavedThreadNetworkInfo
+import ai.nami.sdk.pairing.NamiPairingSdk
+import ai.nami.sdk.pairing.model.PairingSavedWifiInfo
 import ai.nami.sdk.registerNamiPairingEvent
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import org.json.JSONObject
+
 import java.util.Base64
 
 
@@ -50,6 +55,14 @@ fun String.toNamiSavedThreadNetworkInfo(): NamiSavedThreadNetworkInfo {
     )
 }
 
+fun String.toPairingSavedWifiInfo(): PairingSavedWifiInfo {
+    val json = JSONObject(this)
+    val password = json.optString("password")
+    val ssid = json.optString("ssid")
+    return PairingSavedWifiInfo(password = password, ssid = ssid)
+}
+
+
 class StandardUIActivity: ComponentActivity() {
 
 
@@ -57,6 +70,14 @@ class StandardUIActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val namiLocalStorage = ai.nami.demo.common.NamiLocalStorage.getInstance(this)
+
+        lifecycleScope.launch {
+            val listSavedWifiInfo = namiLocalStorage.listSavedWifiNetwork.firstOrNull()
+                ?.map { it.toPairingSavedWifiInfo() } ?: emptyList()
+            Log.e("debug_nami_sample", "listSavedWifiInfo: $listSavedWifiInfo")
+            NamiPairingSdk.addPairingSavedWifiInfo(listSavedWifiInfo)
+        }
+
 
 
         registerNamiPairingEvent {
@@ -70,8 +91,21 @@ class StandardUIActivity: ComponentActivity() {
             onGetSavedThreadCredentials { key1, key2, key3 ->
                 val list = namiLocalStorage.listThreadCredentials.firstOrNull()?.toList()
                 list?.firstOrNull { it.first == key2 }?.second?.toNamiSavedThreadNetworkInfo()
+
+            }
+
+            onConnectWifiNetworkSuccess { ssid, password, bssid, key ->
+                namiLocalStorage.saveWifiNetwork(ssid = ssid, password = password)
+                bssid?.let {
+                    namiLocalStorage.saveBSSIDWithKey(bssid = bssid, key = key)
+                }
+            }
+
+            onGetSavedBSSID { _, key2, _ ->
+                namiLocalStorage.getBSSID(key = key2)
             }
         }
+
 
 
 
