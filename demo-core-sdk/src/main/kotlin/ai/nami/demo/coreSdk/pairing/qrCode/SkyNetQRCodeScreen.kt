@@ -7,14 +7,12 @@ import ai.nami.sdk.common.DEFAULT_PLACE_ID
 import ai.nami.sdk.common.DEFAULT_ROOM_ID
 import ai.nami.sdk.common.DEFAULT_ZONE_ID
 import ai.nami.sdk.common.DEFAULT_ZONE_NAME
+import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.viewmodels.scanqrcode.ScanQRCodeViewIntent
 import ai.nami.sdk.pairing.viewmodels.scanqrcode.ScanQRCodeViewModel
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -32,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fatherofapps.jnav.annotations.JNav
+import com.fatherofapps.jnav.annotations.JNavArg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
@@ -42,14 +41,22 @@ import kotlinx.coroutines.withContext
 @JNav(
     baseRoute = "sky_net_qr_code_route",
     destination = "sky_net_qr_code_destination",
-    name = "SkyNetQRCodeNavigation"
+    name = "SkyNetQRCodeNavigation",
+    arguments = [
+        JNavArg(
+            name = "deviceCategory",
+            type = String::class,
+            isNullable = false
+        )
+    ]
 )
 
 @Composable
 fun SkyNetQRCodeRoute(
     viewModel: ScanQRCodeViewModel,
     onNext: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    deviceCategory: DeviceCategory
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -105,7 +112,8 @@ fun SkyNetQRCodeRoute(
                     roomId = DEFAULT_ROOM_ID,
                     placeId = DEFAULT_PLACE_ID,
                     zoneId = DEFAULT_ZONE_ID,
-                    zoneName = DEFAULT_ZONE_NAME
+                    zoneName = DEFAULT_ZONE_NAME,
+                    deviceCategory = deviceCategory
                 )
             )
         },

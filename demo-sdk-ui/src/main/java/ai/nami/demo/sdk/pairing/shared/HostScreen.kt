@@ -2,8 +2,8 @@ package ai.nami.demo.sdk.pairing.shared
 
 
 import ai.nami.sdk.NamiSDKUI
-import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
-import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
+import ai.nami.sdk.common.NamiSdkSession
+import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
@@ -22,23 +22,34 @@ import androidx.navigation.compose.rememberNavController
 fun HostScreen() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
+
+        Log.e("Pairing-SDK", "HostScreen")
+
         composable(route = "home") {
-            HomeScreen { sessionCode, roomId ->
+            HomeScreen { sessionCode, roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
-
-                NamiSDKUI.initPairing(context = navController.context)
-
-                navController.navigate(
-                    NamiPairingSdkNavigation.createRoute(
-                        input = NamiPairingInput(
-                            sessionCode = sessionCode,
-                            roomId = roomId,
-                            parameters = params
-                        )
-
-                    )
+                Log.e("Pairing-SDK", "Home Screen : sessionCode $sessionCode ")
+                val realSessionCode = if (sessionCode?.isEmpty() == true) null else sessionCode
+                NamiSDKUI.initPairing(navController.context)
+                val route = NamiPairingSdkNavigation.createRoute(
+                    input = NamiPairingInput(
+                        sessionCode = realSessionCode,
+                        roomId = roomId,
+                        parameters = params,
+                        deviceCategory = deviceCategory
+                    ),
                 )
+                Log.e("Pairing-SDK", "Home Screen start : $route ")
+                Log.e(
+                    "Pairing-SDK",
+                    "token : ${NamiSdkSession.getCustomerAccessToken()} -- refresh token: ${NamiSdkSession.getRefreshToken()} ${NamiSdkSession.sessionCode}",
+                )
+                navController.navigate(
+                    route
+                )
+
+
             }
         }
 
@@ -62,15 +73,45 @@ fun HostScreen() {
                     )
                     navController.navigate(widarRoute)
                 } else {
-                    NamiSDKUI.resetPairingSession()
-                    navController.navigate("pair-success")
+                    navController.navigate(
+                        PairingSuccessNavigation.createRoute(
+                            placeId = placeId,
+                            zoneId = output.zoneId,
+                            zoneName = output.zoneName,
+                            roomId = output.roomId,
+                            deviceName = output.deviceName,
+                            deviceCategory = output.deviceCategory
+                        )
+                    )
                 }
             },
-            onPairAnotherDevice = null
-        )
 
-        composable("pair-success") {
-            PairingSuccessScreen(onBack = {
+            )
+
+        composable(
+            route = PairingSuccessNavigation.route,
+            arguments = PairingSuccessNavigation.arguments()
+        ) {
+
+            val placeId = PairingSuccessNavigation.placeId(it)
+            val zoneId = PairingSuccessNavigation.zoneId(it)
+            val zoneName = PairingSuccessNavigation.getZoneName(it)
+            val roomId = PairingSuccessNavigation.roomId(it)
+            val deviceName = PairingSuccessNavigation.getDeviceName(it)
+            val deviceCategory = PairingSuccessNavigation.deviceCategory(it)
+
+            PairingSuccessScreen(onPairAnotherDevice = {
+                val route = NamiPairingSdkNavigation.createRoute(
+                    input = NamiPairingInput(
+                        roomId = roomId.toString(),
+                        deviceCategory = DeviceCategory.UN_SPECIFIED,
+                        placeId = placeId,
+                        zoneId = zoneId,
+                        zoneName = zoneName,
+                    ),
+                )
+                navController.navigate(route)
+            }, onFinishPairing = {
                 navController.popBackStack("home", false)
             })
         }
@@ -80,7 +121,7 @@ fun HostScreen() {
         }, onPositionDone = {
             NamiSDKUI.resetPairingSession()
             NamiSDKUI.resetPositioningSession()
-            navController.navigate("pair-success") {
+            navController.navigate("home") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)
             }

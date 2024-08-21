@@ -1,5 +1,9 @@
 package ai.nami.demo.sdk.pairing.shared
 
+import ai.nami.demo.sdk.ui.components.NamiDropdown
+import ai.nami.sdk.common.NamiSdkSession
+import ai.nami.sdk.model.DeviceCategory
+import ai.nami.sdk.ui.BuildConfig
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,14 +24,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(onPairNamiDevice: (String, String) -> Unit) {
+fun HomeScreen(onPairNamiDevice: (String?, String, DeviceCategory) -> Unit) {
 
     var sessionCode by remember {
         mutableStateOf("")
     }
-
+    val isNeedASessionCode by remember {
+        mutableStateOf(!NamiSdkSession.isAuthorized())
+    }
     var roomId by remember {
-        mutableStateOf("cba2eefc-f19a-4e5a-b154-d7f27cd4e6a2")
+        val id = if (BuildConfig.DEBUG) "e81c075e-f5c0-4104-b814-62d12cfaa368" else ""
+        mutableStateOf(id)
+    }
+
+    val listDeviceCategories =
+        DeviceCategory.values().toList().filter { it != DeviceCategory.OTHERS }
+
+    var currentCategory by remember {
+        mutableStateOf(listDeviceCategories.firstOrNull { it == DeviceCategory.UN_SPECIFIED }
+            ?: listDeviceCategories.first())
     }
 
     Column(
@@ -43,15 +58,28 @@ fun HomeScreen(onPairNamiDevice: (String, String) -> Unit) {
         }, modifier = Modifier.fillMaxWidth(), label = {
             Text(text = "Session code")
         })
+        if (!isNeedASessionCode) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(text = "No need a new session code. You can leave this field empty")
+        }
         Spacer(modifier = Modifier.height(24.dp))
         OutlinedTextField(value = roomId, onValueChange = {
             roomId = it
         }, modifier = Modifier.fillMaxWidth(), label = {
             Text(text = "Room ID")
         })
+        Spacer(modifier = Modifier.height(24.dp))
+        NamiDropdown(
+            currentValue = currentCategory.categoryName,
+            listTitles = listDeviceCategories.map { it.categoryName },
+            onSelectItem = {
+                currentCategory = listDeviceCategories[it]
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(48.dp))
         Button(onClick = {
-            onPairNamiDevice(sessionCode, roomId)
+            onPairNamiDevice(sessionCode, roomId, currentCategory)
         }) {
             Text("Pair Device")
         }
