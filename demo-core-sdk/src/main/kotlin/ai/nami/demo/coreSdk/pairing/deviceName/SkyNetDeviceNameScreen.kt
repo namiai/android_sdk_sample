@@ -59,8 +59,7 @@ fun SkyNetDeviceNameRoute(
     defaultName: String,
     productId: Int,
     onBack: () -> Unit,
-    onNavigateSetupThreadBorderRouterScreen: (String) -> Unit,
-    onNavigateSetupThreadEndDeviceScreen: (String) -> Unit,
+    onNavigateToPingPongScreen: (deviceName: String) -> Unit,
     onNavigateConnectWifiScreen: (Boolean, String) -> Unit,
     onNavigateToErrorScreen: (isBluetoothDisconnected: Boolean, pairingErrorCode: PairingErrorCode?, errorMessage: String?) -> Unit
 ) {
@@ -117,11 +116,11 @@ fun SkyNetDeviceNameRoute(
         if (!uiState.isLoading && uiState.namiDeviceType != null) {
             when (uiState.namiDeviceType) {
                 NamiDeviceType.Thread_End_Device -> {
-                    onNavigateSetupThreadEndDeviceScreen(deviceName)
+                    onNavigateToPingPongScreen(deviceName)
                 }
 
                 NamiDeviceType.Thread_Border_Router_Device -> {
-                    onNavigateSetupThreadBorderRouterScreen(deviceName)
+                    onNavigateConnectWifiScreen(uiState.isFirstDevice, deviceName)
                 }
 
                 else -> onNavigateConnectWifiScreen(uiState.isFirstDevice, deviceName)

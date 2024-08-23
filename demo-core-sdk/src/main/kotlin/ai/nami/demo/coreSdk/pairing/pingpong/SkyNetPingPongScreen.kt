@@ -56,7 +56,7 @@ fun SkyNetPingPongRoute(
     viewModel: PairingPingPongViewModel,
     isJoinThreadNetwork: Boolean,
     onBack: () -> Unit,
-    onNavigatePairingSuccessScreen: (productId: Int, zoneName: String, isWidar: Boolean, placeId: Int) -> Unit,
+    onNavigatePairingSuccessScreen: (productId: Int, zoneName: String, isWidar: Boolean, placeId: Int, zoneId: Int, roomId: Int) -> Unit,
     onNavigateConnectWifiFailScreen: (errorCode: PairingError?) -> Unit,
     onNavigateJoinThreadNetworkFailScreen: () -> Unit,
     onNavigateBluetoothDisconnectedScreen: () -> Unit
@@ -109,7 +109,9 @@ fun SkyNetPingPongRoute(
                         productId,
                         zoneName,
                         uiState.isWidar,
-                        uiState.placeId
+                        uiState.placeId,
+                        uiState.zoneId,
+                        uiState.roomId
                     )
                 }
             } else if (uiState.isSuccess == false) {

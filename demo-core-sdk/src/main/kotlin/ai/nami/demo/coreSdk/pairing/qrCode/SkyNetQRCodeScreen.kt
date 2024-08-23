@@ -47,7 +47,27 @@ import kotlinx.coroutines.withContext
             name = "deviceCategory",
             type = String::class,
             isNullable = false
-        )
+        ),
+        JNavArg(
+            name = "placeId",
+            type = Int::class,
+            isNullable = false,
+        ),
+        JNavArg(
+            name = "zoneId",
+            type = Int::class,
+            isNullable = false
+        ),
+        JNavArg(
+            name = "roomId",
+            type = Int::class,
+            isNullable = false
+        ),
+        JNavArg(
+            name = "zoneName",
+            type = String::class,
+            isNullable = false
+        ),
     ]
 )
 

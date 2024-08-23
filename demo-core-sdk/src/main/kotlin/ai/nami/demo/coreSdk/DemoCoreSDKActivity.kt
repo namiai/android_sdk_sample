@@ -20,8 +20,13 @@ import ai.nami.demo.coreSdk.pairing.qrCode.SkyNetQRCodeRoute
 import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceNavigation
 import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceRoute
 import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessNavigation
+import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
+import ai.nami.sdk.common.DEFAULT_PLACE_ID
+import ai.nami.sdk.common.DEFAULT_ROOM_ID
+import ai.nami.sdk.common.DEFAULT_ZONE_ID
+import ai.nami.sdk.common.DEFAULT_ZONE_NAME
 import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.NamiPairingSdk
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
@@ -104,7 +109,11 @@ fun SkyNetHostScreen(
                         onNavigateTo(
                             SkyNetQRCodeNavigation,
                             SkyNetQRCodeNavigation.createRoute(
-                                deviceCategory = categoryName
+                                deviceCategory = categoryName,
+                                placeId = DEFAULT_PLACE_ID,
+                                zoneId = DEFAULT_ZONE_ID,
+                                roomId = DEFAULT_ROOM_ID,
+                                zoneName = DEFAULT_ZONE_NAME
                             )
                         )
                     }, onBack = {
@@ -164,8 +173,12 @@ fun SkyNetHostScreen(
                     onBack = {
                         onExitPairing()
                     },
-                    onNavigateSetupThreadBorderRouterScreen = {},
-                    onNavigateSetupThreadEndDeviceScreen = {},
+                    onNavigateToPingPongScreen = { deviceName ->
+                        onNavigateTo(
+                            SkyNetPingPongNavigation,
+                            SkyNetPingPongNavigation.createRoute(true, deviceName)
+                        )
+                    },
                     onNavigateConnectWifiScreen = { isFirstDevice, deviceName ->
                         onNavigateTo(
                             SkyNetScanWifiNetworkNavigation,
@@ -284,14 +297,16 @@ fun SkyNetHostScreen(
                     onBack = {
                         onExitPairing()
                     },
-                    onNavigatePairingSuccessScreen = { productId: Int, zoneName: String, isWidar: Boolean, placeId: Int ->
+                    onNavigatePairingSuccessScreen = { productId: Int, zoneName: String, isWidar: Boolean, placeId: Int, zoneId: Int, roomId: Int ->
                         onNavigateTo(
                             SkyNetSuccessNavigation, SkyNetSuccessNavigation.createRoute(
                                 productId = productId,
                                 zoneName = zoneName,
                                 isWidar = isWidar,
                                 placeId = placeId,
-                                deviceName = deviceName
+                                deviceName = deviceName,
+                                zoneId = zoneId,
+                                roomId = roomId
                             )
                         )
                     },
@@ -302,30 +317,42 @@ fun SkyNetHostScreen(
             }
         }
 
-// this screen is removed in version 2.2.0
-//        composable(
-//            route = SkyNetSuccessNavigation.route,
-//            arguments = SkyNetSuccessNavigation.arguments()
-//        ) {
-//            if (it.lifecycleIsResumed()) {
-//                val viewModel = NamiPairingViewModelModule.providePairingSuccessViewModel()
-//                SkyNetSuccessRoute(
-//                    viewModel = viewModel,
-//                    productId = SkyNetSuccessNavigation.productId(it),
-//                    deviceName = SkyNetSuccessNavigation.deviceName(it),
-//                    zoneName = SkyNetSuccessNavigation.zoneName(it),
-//                    isWidar = SkyNetSuccessNavigation.isWidar(it),
-//                    placeId = SkyNetSuccessNavigation.placeId(it),
-//                    onPairAnotherDevice = {
-//                        onBack(SkyNetQRCodeNavigation, false)
-//                    },
-//                    onPairSuccess = { listPairedDevices ->
-//                        // isWidar : navigate to positioning flow
-//                        onExitPairing()
-//                    }
-//                )
-//            }
-//        }
+
+        composable(
+            route = SkyNetSuccessNavigation.route,
+            arguments = SkyNetSuccessNavigation.arguments()
+        ) {
+            if (it.lifecycleIsResumed()) {
+                val placeId = SkyNetSuccessNavigation.placeId(it)
+                val zoneId = SkyNetSuccessNavigation.zoneId(it)
+                val roomId = SkyNetSuccessNavigation.roomId(it)
+                val zoneName = SkyNetSuccessNavigation.zoneName(it)
+                SkyNetSuccessRoute(
+                    productId = SkyNetSuccessNavigation.productId(it),
+                    deviceName = SkyNetSuccessNavigation.deviceName(it),
+                    zoneName = zoneName,
+                    isWidar = SkyNetSuccessNavigation.isWidar(it),
+                    placeId = placeId,
+                    onPairAnotherDevice = {
+                        onBack(SkyNetQRCodeNavigation, true)
+                        onNavigateTo(
+                            SkyNetQRCodeNavigation,
+                            SkyNetQRCodeNavigation.createRoute(
+                                deviceCategory = DeviceCategory.UN_SPECIFIED.categoryName,
+                                placeId = placeId,
+                                zoneId = zoneId,
+                                roomId = roomId,
+                                zoneName = zoneName
+                            )
+                        )
+                    },
+                    onPairSuccess = {
+                        // isWidar : navigate to positioning flow
+                        onExitPairing()
+                    }
+                )
+            }
+        }
 
     }
 }
