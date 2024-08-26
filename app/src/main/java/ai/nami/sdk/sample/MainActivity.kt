@@ -8,6 +8,7 @@ import ai.nami.sdk.sample.positioning.customize.PositioningCustomizeActivity
 import ai.nami.sdk.sample.positioning.standard.PositioningStandardActivity
 import ai.nami.sdk.sample.ui.theme.NamiSDKSampleTheme
 import ai.nami.sdk.sample.utils.formatDeviceUrn
+import ai.nami.sdk.widar.WiDARSdk
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -41,6 +42,8 @@ import kotlinx.coroutines.launch
 class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WiDARSdk.showGraph(true)
 
         val namiLocalStorage = NamiLocalStorage.getInstance(this)
 
