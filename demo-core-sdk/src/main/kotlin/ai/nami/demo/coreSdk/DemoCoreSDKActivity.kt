@@ -11,6 +11,7 @@ import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkNavigation
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkRoute
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameNavigation
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameRoute
+import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedNavigation
 import ai.nami.demo.coreSdk.pairing.fetchPairingInfo.SkyNetFetchPairingInfoNavigation
 import ai.nami.demo.coreSdk.pairing.fetchPairingInfo.SkyNetFetchPairingInfoRoute
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongNavigation
@@ -153,7 +154,12 @@ fun SkyNetHostScreen(
                             )
                         )
                     },
-                    onNavigateBluetoothDisconnectedScreen = {}
+                    onNavigateBluetoothDisconnectedScreen = {
+                        onNavigateTo(
+                            SkyNetBluetoothDisconnectedNavigation,
+                            SkyNetBluetoothDisconnectedNavigation.createRoute()
+                        )
+                    }
                 )
             }
         }
@@ -188,7 +194,16 @@ fun SkyNetHostScreen(
                             )
                         )
                     },
-                    onNavigateToErrorScreen = { isBluetoothDisconnected, pairingErrorCode, errorMessage -> }
+                    onNavigateToErrorScreen = { isBluetoothDisconnected, pairingErrorCode, errorMessage ->
+                        if (isBluetoothDisconnected) {
+                            onNavigateTo(
+                                SkyNetBluetoothDisconnectedNavigation,
+                                SkyNetBluetoothDisconnectedNavigation.createRoute()
+                            )
+                        } else {
+
+                        }
+                    }
                 )
             }
         }
@@ -232,7 +247,12 @@ fun SkyNetHostScreen(
                     onNavigateWifiNetworkErrorScreen = {
 
                     },
-                    onNavigateBluetoothDisconnectedScreen = {}
+                    onNavigateBluetoothDisconnectedScreen = {
+                        onNavigateTo(
+                            SkyNetBluetoothDisconnectedNavigation,
+                            SkyNetBluetoothDisconnectedNavigation.createRoute()
+                        )
+                    }
                 )
             }
         }
@@ -312,7 +332,12 @@ fun SkyNetHostScreen(
                     },
                     onNavigateConnectWifiFailScreen = {},
                     onNavigateJoinThreadNetworkFailScreen = { /*TODO*/ },
-                    onNavigateBluetoothDisconnectedScreen = {}
+                    onNavigateBluetoothDisconnectedScreen = {
+                        onNavigateTo(
+                            SkyNetBluetoothDisconnectedNavigation,
+                            SkyNetBluetoothDisconnectedNavigation.createRoute()
+                        )
+                    }
                 )
             }
         }
