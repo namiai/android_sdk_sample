@@ -11,8 +11,6 @@ import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkNavigation
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkRoute
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameNavigation
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameRoute
-import ai.nami.demo.coreSdk.pairing.fetchPairingInfo.SkyNetFetchPairingInfoNavigation
-import ai.nami.demo.coreSdk.pairing.fetchPairingInfo.SkyNetFetchPairingInfoRoute
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongNavigation
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongRoute
 import ai.nami.demo.coreSdk.pairing.qrCode.SkyNetQRCodeNavigation
@@ -21,9 +19,8 @@ import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceNavigation
 import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceRoute
 import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
-import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
+import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.model.DeviceCategory
-import ai.nami.sdk.pairing.NamiPairingSdk
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -68,50 +65,50 @@ fun SkyNetHostScreen(
 ) {
 
     val onExitPairing: () -> Unit = {
-        NamiPairingSdk.clear()
+        NamiSDK.clear()
         onBack(SkyNetInfoNavigation, true)
     }
     NavHost(navController = navHostController, startDestination = SkyNetInfoNavigation.route) {
 
-        composable(route = SkyNetInfoNavigation.route) {
-            SkyNetInfoRoute(onNext = { sessionCode, roomId, deviceCategory ->
-                val route = SkyNetFetchPairingInfoNavigation.createRoute(
-                    sessionCode,
-                    roomId,
-                    deviceCategory = deviceCategory.categoryName
-                )
-                onNavigateTo(SkyNetFetchPairingInfoNavigation, route)
-            }, onBack = {
-                onBack(null, false)
-            })
+//        composable(route = SkyNetInfoNavigation.route) {
+//            SkyNetInfoRoute(onNext = { sessionCode, roomId, deviceCategory ->
+//                val route = SkyNetFetchPairingInfoNavigation.createRoute(
+//                    sessionCode,
+//                    roomId,
+//                    deviceCategory = deviceCategory.categoryName
+//                )
+//                onNavigateTo(SkyNetFetchPairingInfoNavigation, route)
+//            }, onBack = {
+//                onBack(null, false)
+//            })
+//
+//        }
 
-        }
-
-        composable(
-            route = SkyNetFetchPairingInfoNavigation.route,
-            arguments = SkyNetFetchPairingInfoNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val sessionCode = SkyNetFetchPairingInfoNavigation.sessionCode(it)
-                val roomId = SkyNetFetchPairingInfoNavigation.roomId(it)
-                val viewModel = NamiPairingViewModelModule.provideFetchPairingPlaceViewModel()
-                val categoryName = SkyNetFetchPairingInfoNavigation.deviceCategory(it)
-                SkyNetFetchPairingInfoRoute(
-                    sessionCode = sessionCode,
-                    roomId = roomId,
-                    viewModel = viewModel,
-                    onNext = {
-                        onNavigateTo(
-                            SkyNetQRCodeNavigation,
-                            SkyNetQRCodeNavigation.createRoute(
-                                deviceCategory = categoryName
-                            )
-                        )
-                    }, onBack = {
-                        onBack(null, false)
-                    })
-            }
-        }
+//        composable(
+//            route = SkyNetFetchPairingInfoNavigation.route,
+//            arguments = SkyNetFetchPairingInfoNavigation.arguments()
+//        ) {
+//            if (it.lifecycleIsResumed()) {
+//                val sessionCode = SkyNetFetchPairingInfoNavigation.sessionCode(it)
+//                val roomId = SkyNetFetchPairingInfoNavigation.roomId(it)
+//                val viewModel = NamiPairingViewModelModule.provideFetchPairingPlaceViewModel()
+//                val categoryName = SkyNetFetchPairingInfoNavigation.deviceCategory(it)
+//                SkyNetFetchPairingInfoRoute(
+//                    sessionCode = sessionCode,
+//                    roomId = roomId,
+//                    viewModel = viewModel,
+//                    onNext = {
+//                        onNavigateTo(
+//                            SkyNetQRCodeNavigation,
+//                            SkyNetQRCodeNavigation.createRoute(
+//                                deviceCategory = categoryName
+//                            )
+//                        )
+//                    }, onBack = {
+//                        onBack(null, false)
+//                    })
+//            }
+//        }
 
         composable(route = SkyNetQRCodeNavigation.route) {
             if (it.lifecycleIsResumed()) {
