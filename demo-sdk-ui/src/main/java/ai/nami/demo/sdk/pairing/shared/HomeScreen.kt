@@ -1,10 +1,10 @@
 package ai.nami.demo.sdk.pairing.shared
 
+import ai.nami.demo.sdk.ui.BuildConfig
 import ai.nami.demo.sdk.ui.components.NamiDropdown
 import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.model.DeviceCategory
-import ai.nami.sdk.ui.BuildConfig
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
