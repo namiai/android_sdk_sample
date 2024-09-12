@@ -24,6 +24,7 @@ import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessNavigation
 import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
+import ai.nami.demo.coreSdk.shared.SkyNetInfoViewModel
 import ai.nami.sdk.common.DEFAULT_PLACE_ID
 import ai.nami.sdk.common.DEFAULT_ROOM_ID
 import ai.nami.sdk.common.DEFAULT_ZONE_ID
@@ -80,16 +81,19 @@ fun SkyNetHostScreen(
     NavHost(navController = navHostController, startDestination = SkyNetInfoNavigation.route) {
 
         composable(route = SkyNetInfoNavigation.route) {
-            SkyNetInfoRoute(onNext = { sessionCode, roomId, deviceCategory ->
-                val route = SkyNetFetchPairingInfoNavigation.createRoute(
-                    sessionCode,
-                    roomId,
-                    deviceCategory = deviceCategory.categoryName
+            SkyNetInfoRoute(onNext = { roomId, deviceCategory ->
+                val route = SkyNetQRCodeNavigation.createRoute(
+                    deviceCategory = deviceCategory.categoryName,
+                    roomId = roomId,
+                    placeId = DEFAULT_PLACE_ID,
+                    zoneId = DEFAULT_ZONE_ID,
+                    zoneName = DEFAULT_ZONE_NAME
                 )
+
                 onNavigateTo(SkyNetFetchPairingInfoNavigation, route)
             }, onBack = {
                 onBack(null, false)
-            })
+            }, viewModel = SkyNetInfoViewModel())
 
         }
 

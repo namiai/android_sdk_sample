@@ -3,14 +3,19 @@ package ai.nami.demo.coreSdk.shared
 import ai.nami.demo.coreSdk.common.NamiDropdown
 import ai.nami.demo.coreSdk.common.SkyNetButton
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
+import ai.nami.sdk.NamiSDK
+import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.model.DeviceCategory
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +24,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fatherofapps.jnav.annotations.JNav
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 
 
 @JNav(
@@ -29,21 +41,58 @@ import com.fatherofapps.jnav.annotations.JNav
 )
 @Composable
 fun SkyNetInfoRoute(
-    onNext: (sessionCode: String, roomId: String, DeviceCategory) -> Unit,
-    onBack: () -> Unit
+    onNext: (roomId: String, DeviceCategory) -> Unit,
+    onBack: () -> Unit,
+    viewModel: SkyNetInfoViewModel
 ) {
 
-    // you can implement ViewModel to get session code and room id, then pass it to SkyNetInfoScreen
 
-    SkyeNetInfoScreen(onNext = onNext, onBack = onBack)
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val viewIntentChannel = remember {
+        Channel<SkyNetInfoViewIntent>(Channel.UNLIMITED)
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        withContext(Dispatchers.Main.immediate) {
+            viewIntentChannel.consumeAsFlow().onEach(viewModel::handleViewIntent).collect()
+        }
+    }
+
+    val sendViewIntent: (SkyNetInfoViewIntent) -> Unit = remember {
+        { viewIntent -> viewIntentChannel.trySend(viewIntent) }
+    }
+
+
+    val isLoading by remember(uiState.isLoading) {
+        derivedStateOf { uiState.isLoading }
+    }
+
+    val errorMessage by remember(uiState.errorMessage) {
+        derivedStateOf { uiState.errorMessage }
+    }
+
+    SkyeNetInfoScreen(
+        onNext = onNext,
+        onBack = onBack,
+        sendViewIntent = sendViewIntent,
+        initSDKSuccess = uiState.initSDKSuccess,
+        errorMessage = errorMessage,
+        isLoading = isLoading
+    )
 }
 
 
 @Composable
 private fun SkyeNetInfoScreen(
-    onNext: (sessionCode: String, roomId: String, DeviceCategory) -> Unit,
-    onBack: () -> Unit
+    onNext: (roomId: String, DeviceCategory) -> Unit,
+    onBack: () -> Unit,
+    sendViewIntent: (SkyNetInfoViewIntent) -> Unit,
+    initSDKSuccess: Boolean?,
+    errorMessage: String?,
+    isLoading: Boolean
 ) {
+
     var sessionCode by remember {
         mutableStateOf("")
     }
@@ -65,7 +114,21 @@ private fun SkyeNetInfoScreen(
         mutableStateOf(listDeviceCategories.first())
     }
 
-    SkyNetScaffold(title = "Info", onBack = onBack) {
+    val isNeedASessionCode by remember {
+        mutableStateOf(NamiSDK.shouldInit())
+    }
+
+    LaunchedEffect(key1 = initSDKSuccess) {
+        if (initSDKSuccess == true) {
+            onNext(roomId, currentCategory)
+        }
+    }
+
+    val isShowError by remember(errorMessage) {
+        derivedStateOf { !errorMessage.isNullOrEmpty() }
+    }
+
+    SkyNetScaffold(title = "Info", onBack = onBack, isLoading = isLoading) {
         Spacer(modifier = Modifier.height(48.dp))
         OutlinedTextField(
             value = sessionCode,
@@ -76,6 +139,17 @@ private fun SkyeNetInfoScreen(
                 imeAction = ImeAction.Next
             )
         )
+        if (!isNeedASessionCode) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(text = "No need a new session code. You can leave this field empty")
+        }
+        AnimatedVisibility(visible = isShowError) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = errorMessage!!,
+                style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.error)
+            )
+        }
         Spacer(modifier = Modifier.height(24.dp))
         OutlinedTextField(
             value = roomId,
@@ -103,7 +177,7 @@ private fun SkyeNetInfoScreen(
             modifier = Modifier.fillMaxWidth(),
             text = "Next",
             onClick = {
-                onNext(sessionCode, roomId, currentCategory)
+                sendViewIntent(SkyNetInfoViewIntent.InitNamiSDK(sessionCode))
             },
             enabled = isEnableButton,
         )
