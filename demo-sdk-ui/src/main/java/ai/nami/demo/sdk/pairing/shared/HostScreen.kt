@@ -2,13 +2,11 @@ package ai.nami.demo.sdk.pairing.shared
 
 
 import ai.nami.sdk.NamiSDKUI
-import ai.nami.sdk.common.NamiSdkSession
 import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
-import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
 import android.util.Log
@@ -23,34 +21,22 @@ fun HostScreen() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
 
-        Log.e("Pairing-SDK", "HostScreen")
-
         composable(route = "home") {
-            HomeScreen { sessionCode, roomId, deviceCategory ->
+            HomeRoute(onPairNamiDevice = { roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
-                Log.e("Pairing-SDK", "Home Screen : sessionCode $sessionCode ")
-                val realSessionCode = if (sessionCode?.isEmpty() == true) null else sessionCode
-                NamiSDKUI.initPairing(navController.context)
                 val route = NamiPairingSdkNavigation.createRoute(
                     input = NamiPairingInput(
-                        sessionCode = realSessionCode,
                         roomId = roomId,
                         parameters = params,
                         deviceCategory = deviceCategory
                     ),
                 )
-                Log.e("Pairing-SDK", "Home Screen start : $route ")
-                Log.e(
-                    "Pairing-SDK",
-                    "token : ${NamiSdkSession.getCustomerAccessToken()} -- refresh token: ${NamiSdkSession.getRefreshToken()} ${NamiSdkSession.sessionCode}",
-                )
                 navController.navigate(
                     route
                 )
+            }, viewModel = HomeViewModel())
 
-
-            }
         }
 
 
@@ -62,16 +48,16 @@ fun HostScreen() {
                 val deviceName = output.deviceName
                 val deviceUrn = output.listPairedDevices.firstOrNull()?.deviceUrn
                 if (isWidarDevice && deviceUrn != null) {
-                    NamiSDKUI.initPositioning(context = navController.context)
-                    val widarRoute = NamiPositionSdkNavigation.createRoute(
-                        input = NamiPositioningInput(
+
+                    val widarRoute = NamiSDKUI.startPositioning(
+                        context = navController.context, input = NamiPositioningInput(
                             deviceUrn = deviceUrn,
                             placeId = placeId,
                             deviceName = deviceName
                         )
-
                     )
                     navController.navigate(widarRoute)
+
                 } else {
                     navController.navigate(
                         PairingSuccessNavigation.createRoute(
@@ -119,8 +105,7 @@ fun HostScreen() {
         namiPositioningSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
-            NamiSDKUI.resetPairingSession()
-            NamiSDKUI.resetPositioningSession()
+            NamiSDKUI.clear()
             navController.navigate("home") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)

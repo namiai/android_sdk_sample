@@ -74,7 +74,7 @@ fun SkyNetHostScreen(
 ) {
 
     val onExitPairing: () -> Unit = {
-        NamiPairingSdk.clear()
+        NamiPairingSdk.reset()
         onBack(SkyNetInfoNavigation, true)
     }
     NavHost(navController = navHostController, startDestination = SkyNetInfoNavigation.route) {
@@ -93,35 +93,6 @@ fun SkyNetHostScreen(
 
         }
 
-        composable(
-            route = SkyNetFetchPairingInfoNavigation.route,
-            arguments = SkyNetFetchPairingInfoNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val sessionCode = SkyNetFetchPairingInfoNavigation.sessionCode(it)
-                val roomId = SkyNetFetchPairingInfoNavigation.roomId(it)
-                val viewModel = NamiPairingViewModelModule.provideFetchPairingPlaceViewModel()
-                val categoryName = SkyNetFetchPairingInfoNavigation.deviceCategory(it)
-                SkyNetFetchPairingInfoRoute(
-                    sessionCode = sessionCode,
-                    roomId = roomId,
-                    viewModel = viewModel,
-                    onNext = {
-                        onNavigateTo(
-                            SkyNetQRCodeNavigation,
-                            SkyNetQRCodeNavigation.createRoute(
-                                deviceCategory = categoryName,
-                                placeId = DEFAULT_PLACE_ID,
-                                zoneId = DEFAULT_ZONE_ID,
-                                roomId = DEFAULT_ROOM_ID,
-                                zoneName = DEFAULT_ZONE_NAME
-                            )
-                        )
-                    }, onBack = {
-                        onBack(null, false)
-                    })
-            }
-        }
 
         composable(route = SkyNetQRCodeNavigation.route) {
             if (it.lifecycleIsResumed()) {
