@@ -9,11 +9,10 @@ import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetEnterWifiPasswordNavigatio
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetEnterWifiPasswordRoute
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkNavigation
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkRoute
+import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameErrorNavigation
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameNavigation
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameRoute
 import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedNavigation
-import ai.nami.demo.coreSdk.pairing.fetchPairingInfo.SkyNetFetchPairingInfoNavigation
-import ai.nami.demo.coreSdk.pairing.fetchPairingInfo.SkyNetFetchPairingInfoRoute
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongNavigation
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongRoute
 import ai.nami.demo.coreSdk.pairing.qrCode.SkyNetQRCodeNavigation
@@ -25,12 +24,10 @@ import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoViewModel
-import ai.nami.sdk.common.DEFAULT_PLACE_ID
-import ai.nami.sdk.common.DEFAULT_ROOM_ID
-import ai.nami.sdk.common.DEFAULT_ZONE_ID
-import ai.nami.sdk.common.DEFAULT_ZONE_NAME
+import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.NamiPairingSdk
+import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -81,20 +78,22 @@ fun SkyNetHostScreen(
     NavHost(navController = navHostController, startDestination = SkyNetInfoNavigation.route) {
 
         composable(route = SkyNetInfoNavigation.route) {
-            SkyNetInfoRoute(onNext = { roomId, deviceCategory ->
-                val route = SkyNetQRCodeNavigation.createRoute(
-                    deviceCategory = deviceCategory.categoryName,
-                    roomId = roomId,
-                    placeId = DEFAULT_PLACE_ID,
-                    zoneId = DEFAULT_ZONE_ID,
-                    zoneName = DEFAULT_ZONE_NAME
-                )
+            if (it.lifecycleIsResumed()) {
+                SkyNetInfoRoute(onNext = { roomId, deviceCategory ->
+                    val placeInfo = NamiSDK.getPlaceInfo(roomId)
+                    val route = SkyNetQRCodeNavigation.createRoute(
+                        deviceCategory = deviceCategory.categoryName,
+                        roomId = placeInfo.roomId,
+                        placeId = placeInfo.placeId,
+                        zoneId = placeInfo.zoneId,
+                        zoneName = placeInfo.zoneName
+                    )
 
-                onNavigateTo(SkyNetFetchPairingInfoNavigation, route)
-            }, onBack = {
-                onBack(null, false)
-            }, viewModel = SkyNetInfoViewModel())
-
+                    onNavigateTo(SkyNetQRCodeNavigation, route)
+                }, onBack = {
+                    onBack(null, false)
+                }, viewModel = SkyNetInfoViewModel())
+            }
         }
 
 
@@ -146,6 +145,7 @@ fun SkyNetHostScreen(
             if (it.lifecycleIsResumed()) {
                 val defaultName = SkyNetDeviceNameNavigation.defaultName(it)
                 val productId = SkyNetDeviceNameNavigation.productId(it)
+                val zoneName = SkyNetDeviceNameNavigation.zoneName(it)
                 val viewModel = NamiPairingViewModelModule.provideRenameDeviceViewModel()
                 SkyNetDeviceNameRoute(
                     viewModel = viewModel,
@@ -169,14 +169,23 @@ fun SkyNetHostScreen(
                             )
                         )
                     },
-                    onNavigateToErrorScreen = { isBluetoothDisconnected, pairingErrorCode, errorMessage ->
+                    onNavigateToErrorScreen = { isBluetoothDisconnected, pairingErrorCode, errorMessage, deviceCategory ->
                         if (isBluetoothDisconnected) {
                             onNavigateTo(
                                 SkyNetBluetoothDisconnectedNavigation,
                                 SkyNetBluetoothDisconnectedNavigation.createRoute()
                             )
                         } else {
-
+                            onNavigateTo(
+                                SkyNetDeviceNameErrorNavigation,
+                                SkyNetDeviceNameErrorNavigation.createRoute(
+                                    errorCode = pairingErrorCode?.code
+                                        ?: PairingErrorCode.Common.code,
+                                    errorMessage = errorMessage,
+                                    zoneName = zoneName,
+                                    deviceCategory = deviceCategory.categoryName
+                                )
+                            )
                         }
                     }
                 )

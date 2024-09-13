@@ -1,5 +1,8 @@
 package ai.nami.demo.sdk.positioning.info
 
+import ai.nami.sdk.NamiSDK
+import ai.nami.sdk.common.NamiLog
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,12 +18,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,24 +36,59 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun WidarNetworkInfoScreen(
     viewModel: WidarNetworkInfoViewModel,
-    onConnect: (placeId: Int, sessionCode: String, deviceUrn: String) -> Unit
+    onConnect: (placeId: Int?, deviceUrn: String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isLoading by remember(uiState.isLoading) {
         derivedStateOf { uiState.isLoading }
     }
+
+    val viewIntentChannel = remember {
+        Channel<WidarNetworkInfoViewIntent>(Channel.UNLIMITED)
+    }
+
+    val sendViewIntent: (WidarNetworkInfoViewIntent) -> Unit = remember {
+        { viewIntent -> viewIntentChannel.trySend(viewIntent) }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        withContext(Dispatchers.Main.immediate) {
+            viewIntentChannel.consumeAsFlow().onEach(viewModel::handleViewIntent).collect()
+        }
+    }
+
+    val errorMessage by remember(uiState.errorMessage) {
+        derivedStateOf { uiState.errorMessage }
+    }
+
+    val initSDKSuccess by remember(uiState.initSDKSuccess) {
+        derivedStateOf { uiState.initSDKSuccess }
+    }
+
+    SideEffect {
+        NamiLog.e("WidarInfoScreen uiState: $uiState", "debug_sample_nami")
+    }
+
     Scaffold(
     ) { paddingValues ->
         WidarNetworkInfoBodyScreen(
             onConnect = onConnect,
             modifier = Modifier.padding(paddingValues),
             listPairedDeviceUrn = uiState.listPairedDeviceUrns,
-            isLoading = isLoading
+            isLoading = isLoading,
+            sendViewIntent = sendViewIntent,
+            isInitSDKSuccess = initSDKSuccess,
+            errorMessage = errorMessage
         )
     }
 }
@@ -55,13 +96,16 @@ fun WidarNetworkInfoScreen(
 @Composable
 fun WidarNetworkInfoBodyScreen(
     modifier: Modifier = Modifier,
-    onConnect: (placeId: Int, sessionCode: String, deviceUrn: String) -> Unit,
+    onConnect: (placeId: Int?, deviceUrn: String) -> Unit,
     listPairedDeviceUrn: List<String>, // should use ImmutableList for production app
-    isLoading: Boolean
+    isLoading: Boolean,
+    sendViewIntent: (WidarNetworkInfoViewIntent) -> Unit,
+    isInitSDKSuccess: Boolean? = null,
+    errorMessage: String?
 ) {
 
     var placeId by remember {
-        mutableStateOf("5563")
+        mutableStateOf("")
     }
 
     var sessionCode by remember {
@@ -75,6 +119,20 @@ fun WidarNetworkInfoBodyScreen(
     val isShowWarningMessage by remember(isLoading, listPairedDeviceUrn) {
         derivedStateOf {
             !isLoading && listPairedDeviceUrn.isEmpty()
+        }
+    }
+
+    val isNeedASessionCode by remember {
+        mutableStateOf(!NamiSDK.shouldInit())
+    }
+
+    val isShowError by remember(errorMessage) {
+        derivedStateOf { !errorMessage.isNullOrEmpty() }
+    }
+
+    LaunchedEffect(isInitSDKSuccess) {
+        if (isInitSDKSuccess == true) {
+            onConnect(placeId.toIntOrNull(), selectedDeviceUrn)
         }
     }
 
@@ -99,6 +157,13 @@ fun WidarNetworkInfoBodyScreen(
                     onValueChange = { sessionCode = it },
                     modifier = Modifier.fillMaxWidth()
                 )
+                AnimatedVisibility(visible = isShowError) {
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = errorMessage!!,
+                        style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.error)
+                    )
+                }
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(text = "Place Id")
@@ -136,9 +201,11 @@ fun WidarNetworkInfoBodyScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(onClick = {
-                    val realPlaceId: Int =
-                        placeId.toIntOrNull() ?: throw Exception("Invalid Place ID")
-                    onConnect(realPlaceId, sessionCode, selectedDeviceUrn)
+                    if (sessionCode.isNotEmpty()) {
+                        sendViewIntent(WidarNetworkInfoViewIntent.InitNamiSDK(sessionCode))
+                    } else if (!isNeedASessionCode && placeId.isNotEmpty()) {
+                        onConnect(placeId.toIntOrNull(), selectedDeviceUrn)
+                    }
                 }, modifier = Modifier.fillMaxWidth(), enabled = selectedDeviceUrn.isNotEmpty()) {
                     Text("Start Positioning")
                 }

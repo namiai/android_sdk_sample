@@ -3,6 +3,7 @@ package ai.nami.demo.coreSdk.pairing.deviceName
 import ai.nami.demo.coreSdk.common.SkyNetButton
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
 import ai.nami.sdk.common.NamiDeviceType
+import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.renamedevice.RenameDeviceViewIntent
 import ai.nami.sdk.pairing.viewmodels.renamedevice.RenameDeviceViewModel
@@ -61,7 +62,7 @@ fun SkyNetDeviceNameRoute(
     onBack: () -> Unit,
     onNavigateToPingPongScreen: (deviceName: String) -> Unit,
     onNavigateConnectWifiScreen: (Boolean, String) -> Unit,
-    onNavigateToErrorScreen: (isBluetoothDisconnected: Boolean, pairingErrorCode: PairingErrorCode?, errorMessage: String?) -> Unit
+    onNavigateToErrorScreen: (isBluetoothDisconnected: Boolean, pairingErrorCode: PairingErrorCode?, errorMessage: String?, deviceCategory: DeviceCategory) -> Unit
 ) {
 
     var deviceName by remember(defaultName) {
@@ -92,7 +93,7 @@ fun SkyNetDeviceNameRoute(
 
     LaunchedEffect(key1 = uiState.isBluetoothDisconnected) {
         if (uiState.isBluetoothDisconnected) {
-            onNavigateToErrorScreen(true, null, null)
+            onNavigateToErrorScreen(true, null, null, uiState.deviceCategory)
         }
     }
 
@@ -107,6 +108,7 @@ fun SkyNetDeviceNameRoute(
                     false,
                     uiState.pairingError?.code ?: PairingErrorCode.Unknown,
                     uiState.pairingError?.errorMessage ?: uiState.errorMessage,
+                    uiState.deviceCategory
                 )
             }
         }

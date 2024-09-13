@@ -96,7 +96,7 @@ fun SkyNetQRCodeRoute(
     }
 
     LaunchedEffect(key1 = uiState.isValidateQRCodeSuccess) {
-        if (uiState.isValidateQRCodeSuccess) {
+        if (uiState.isValidateQRCodeSuccess == true) {
             onNext()
         }
     }
