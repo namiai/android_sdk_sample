@@ -34,7 +34,7 @@ class CustomizeUIActivity: ComponentActivity() {
             }
 
 
-            scanDeviceScreen { productId, deviceName, onBack, _ ->
+            scanDeviceScreen { productId, deviceName, onBack, _, _ ->
                 SkyNetScanDevice(productId = productId, deviceName = deviceName, onBack = onBack)
             }
 

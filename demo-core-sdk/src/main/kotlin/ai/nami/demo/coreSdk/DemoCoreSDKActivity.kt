@@ -68,7 +68,7 @@ fun SkyNetHostScreen(
 ) {
 
     val onExitPairing: () -> Unit = {
-        NamiPairingSdk.clear()
+        NamiPairingSdk.reset()
         onBack(SkyNetInfoNavigation, true)
     }
     NavHost(navController = navHostController, startDestination = SkyNetInfoNavigation.route) {
@@ -78,7 +78,7 @@ fun SkyNetHostScreen(
                 val route = SkyNetFetchPairingInfoNavigation.createRoute(
                     sessionCode,
                     roomId,
-                    deviceCategory = deviceCategory.categoryName
+                    deviceCategory = deviceCategory.id
                 )
                 onNavigateTo(SkyNetFetchPairingInfoNavigation, route)
             }, onBack = {

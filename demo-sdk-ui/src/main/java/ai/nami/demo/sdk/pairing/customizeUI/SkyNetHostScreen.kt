@@ -3,14 +3,17 @@ package ai.nami.demo.sdk.pairing.customizeUI
 import ai.nami.demo.sdk.pairing.shared.HomeScreen
 import ai.nami.demo.sdk.pairing.shared.PairingSuccessNavigation
 import ai.nami.demo.sdk.pairing.shared.PairingSuccessScreen
+import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.NamiSDKUI
+import ai.nami.sdk.common.NamiLog
+import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
-import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
+import ai.nami.sdk.sample.pairing.shared.HomeViewModel
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,23 +25,18 @@ fun SkyNetHostScreen() {
 
     NavHost(navController = navController, startDestination = "home") {
         composable(route = "home") {
-            HomeScreen { sessionCode, roomId, deviceCategory ->
+            HomeScreen(viewModel = HomeViewModel()) { roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
-                params["from"] = "home"
-
-                NamiSDKUI.initPairing(context = navController.context)
-
-                navController.navigate(
-                    NamiPairingSdkNavigation.createRoute(
-                        input = NamiPairingInput(
-                            sessionCode = sessionCode,
-                            roomId = roomId,
-                            parameters = params,
-                            deviceCategory = deviceCategory
-                        )
-
-                    )
+                val route = NamiSDKUI.startPairing(
+                    context = navController.context,
+                    input = NamiPairingInput(
+                        roomId = roomId,
+                        parameters = params,
+                        deviceCategory = deviceCategory
+                    ),
                 )
+                NamiLog.e("Home Screen start : $route", "debug_sample_nami")
+                navController.navigate(route)
             }
         }
 
@@ -51,16 +49,14 @@ fun SkyNetHostScreen() {
                 val deviceName = output.deviceName
                 val deviceUrn = output.listPairedDevices.firstOrNull()?.deviceUrn
                 if (isWidarDevice && deviceUrn != null) {
-                    NamiSDKUI.initPositioning(context = navController.context)
-                    val widarRoute = NamiPositionSdkNavigation.createRoute(
-                        input = NamiPositioningInput(
-                            deviceUrn = deviceUrn,
-                            placeId = placeId,
-                            deviceName = deviceName
-                        )
-
+                    val input = NamiPositioningInput(
+                        deviceUrn = deviceUrn,
+                        placeId = placeId,
+                        deviceName = deviceName
                     )
-                    navController.navigate(widarRoute)
+
+                    val positioningStartRoute = NamiSDKUI.startPositioning(context = navController.context, input)
+                    navController.navigate(positioningStartRoute)
                 } else {
                     navController.navigate(
                         PairingSuccessNavigation.createRoute(
@@ -108,8 +104,7 @@ fun SkyNetHostScreen() {
         namiPositioningSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
-            NamiSDKUI.resetPairingSession()
-            NamiSDKUI.resetPositioningSession()
+            NamiPositioningViewModelModule.reset()
             navController.navigate("pair-success") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)

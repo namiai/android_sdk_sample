@@ -2,15 +2,17 @@ package ai.nami.demo.sdk.pairing.shared
 
 
 import ai.nami.sdk.NamiSDKUI
-import ai.nami.sdk.common.NamiSdkSession
+import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.model.DeviceCategory
+import ai.nami.sdk.pairing.model.PairingErrorCode
+import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
-import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositionSdkNavigation
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
+import ai.nami.sdk.sample.pairing.shared.HomeViewModel
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -26,30 +28,18 @@ fun HostScreen() {
         Log.e("Pairing-SDK", "HostScreen")
 
         composable(route = "home") {
-            HomeScreen { sessionCode, roomId, deviceCategory ->
+            HomeScreen(viewModel = HomeViewModel()) { roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
-                params["from"] = "home"
-                Log.e("Pairing-SDK", "Home Screen : sessionCode $sessionCode ")
-                val realSessionCode = if (sessionCode?.isEmpty() == true) null else sessionCode
-                NamiSDKUI.initPairing(navController.context)
-                val route = NamiPairingSdkNavigation.createRoute(
+                val route = NamiSDKUI.startPairing(
+                    context = navController.context,
                     input = NamiPairingInput(
-                        sessionCode = realSessionCode,
                         roomId = roomId,
                         parameters = params,
                         deviceCategory = deviceCategory
                     ),
                 )
-                Log.e("Pairing-SDK", "Home Screen start : $route ")
-                Log.e(
-                    "Pairing-SDK",
-                    "token : ${NamiSdkSession.getCustomerAccessToken()} -- refresh token: ${NamiSdkSession.getRefreshToken()} ${NamiSdkSession.sessionCode}",
-                )
-                navController.navigate(
-                    route
-                )
-
-
+                NamiLog.e("Home Screen start : $route", "debug_sample_nami")
+                navController.navigate(route)
             }
         }
 
@@ -58,35 +48,54 @@ fun HostScreen() {
             navController = navController,
             onPairSuccess = { output ->
                 val isWidarDevice = output.isWidarDevice
+                val firstDeviceInfo = output.listPairedDevices.firstOrNull()
+                val deviceUrn = output.listPairedDevices.firstOrNull()?.deviceUrn
+                val devicePort =
+                    if (firstDeviceInfo?.devicePort == 0) null else firstDeviceInfo?.devicePort
+                val deviceHost =
+                    if (firstDeviceInfo?.deviceHost.isNullOrEmpty()) null else firstDeviceInfo?.deviceHost
                 val placeId = output.placeId
                 val deviceName = output.deviceName
-                val deviceUrn = output.listPairedDevices.firstOrNull()?.deviceUrn
                 if (isWidarDevice && deviceUrn != null) {
-                    NamiSDKUI.initPositioning(context = navController.context)
-                    val widarRoute = NamiPositionSdkNavigation.createRoute(
-                        input = NamiPositioningInput(
+                    val widarRoute = NamiSDKUI.startPositioning(
+                        context = navController.context, input = NamiPositioningInput(
                             deviceUrn = deviceUrn,
                             placeId = placeId,
-                            deviceName = deviceName
+                            devicePort = devicePort,
+                            deviceIp = deviceHost,
+                            deviceName = deviceName,
+                            params = null
                         )
-
                     )
                     navController.navigate(widarRoute)
                 } else {
-                    navController.navigate(
-                        PairingSuccessNavigation.createRoute(
-                            placeId = placeId,
-                            zoneId = output.zoneId,
-                            zoneName = output.zoneName,
-                            roomId = output.roomId,
-                            deviceName = output.deviceName,
-                            deviceCategory = output.deviceCategory
+                    val from = output.parameters?.get("from") ?: ""
+                    if (from == "home") {
+                        navController.navigate("device-screen")
+                    } else {
+                        navController.navigate(
+                            PairingSuccessNavigation.createRoute(
+                                placeId = placeId,
+                                zoneId = output.zoneId,
+                                zoneName = output.zoneName,
+                                roomId = output.roomId,
+                                deviceName = output.deviceName,
+                                deviceCategory = output.deviceCategory
+                            )
                         )
-                    )
+                    }
                 }
             },
-
-            )
+            onExitPairing = { output ->
+                NamiLog.e("debug_sample_nami","onExitPairing")
+                if (output.errorCode == PairingErrorCode.DeviceMismatchQRCode) {
+                    // todo: add device category selection, and back to that screen
+                    navController.popBackStack("home", false)
+                } else {
+                    navController.popBackStack("home", false)
+                }
+            }
+        )
 
         composable(
             route = PairingSuccessNavigation.route,
@@ -119,8 +128,7 @@ fun HostScreen() {
         namiPositioningSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
-            NamiSDKUI.resetPairingSession()
-            NamiSDKUI.resetPositioningSession()
+            NamiPositioningViewModelModule.reset()
             navController.navigate("home") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)

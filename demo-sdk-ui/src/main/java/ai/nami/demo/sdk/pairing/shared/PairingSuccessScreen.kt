@@ -49,7 +49,7 @@ object PairingSuccessNavigation {
     ): String {
         val encodedDeviceName = Uri.encode(deviceName)
         val encodedZoneName = Uri.encode(zoneName)
-        return "$baseRoute/$deviceCategoryArg=${deviceCategory.categoryName}&$zoneNameArg=$encodedZoneName&$deviceNameArg=$encodedDeviceName&$roomIdArg=$roomId&$placeIdArg=$placeId&$zoneIdArg=$zoneId"
+        return "$baseRoute/$deviceCategoryArg=${deviceCategory.id}&$zoneNameArg=$encodedZoneName&$deviceNameArg=$encodedDeviceName&$roomIdArg=$roomId&$placeIdArg=$placeId&$zoneIdArg=$zoneId"
     }
 
     fun getDeviceName(entry: NavBackStackEntry): String {
