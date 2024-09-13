@@ -76,7 +76,7 @@ fun HomeScreen(
 
     // zone
     var roomId by remember {
-        mutableStateOf("28c8752b-7f02-4e58-aee3-7506a5852843")
+        mutableStateOf("59c6624e-7181-426c-a373-86a3d93a78ef")
     }
 
 
@@ -144,7 +144,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
             NamiDropdown(
                 currentValue = currentCategory.getDeviceCategoryName(context),
-                listTitles = listDeviceCategories.map { currentCategory.getDeviceCategoryName(context) },
+                listTitles = listDeviceCategories.map { it.getDeviceCategoryName(context) },
                 onSelectItem = {
                     currentCategory = listDeviceCategories[it]
                 },
