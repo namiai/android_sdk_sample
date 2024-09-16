@@ -16,6 +16,7 @@ import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameErrorRoute
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameNavigation
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameRoute
 import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedNavigation
+import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedRoute
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongNavigation
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongRoute
 import ai.nami.demo.coreSdk.pairing.qrCode.SkyNetQRCodeNavigation
@@ -390,9 +391,8 @@ fun SkyNetHostScreen(
                         onNavigateTo(
                             SkyNetWifiNetworkErrorNavigation,
                             SkyNetWifiNetworkErrorNavigation.createRoute(
-                                errorCode = pairingErrorCode?.code
-                                    ?: PairingErrorCode.Common.code,
-                                isFromPingPong = true
+                                pairingErrorCode?.code?.code ?: PairingErrorCode.Common.code,
+                                true
                             )
                         )
                     },
@@ -454,6 +454,15 @@ fun SkyNetHostScreen(
                         onExitPairing()
                     }
                 )
+            }
+        }
+
+        composable(route = SkyNetBluetoothDisconnectedNavigation.route){
+            if(it.lifecycleIsResumed()){
+                val viewModel = NamiPairingViewModelModule.provideCancelPairingViewModel()
+                SkyNetBluetoothDisconnectedRoute(viewModel = viewModel) {
+                    onExitPairing()
+                }
             }
         }
 
