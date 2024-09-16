@@ -126,6 +126,16 @@ fun SkyNetScanWifiNetworkRoute(
         }
     }
 
+    val isShowError by remember(uiState) {
+        derivedStateOf { !uiState.errorMessage.isNullOrBlank() || uiState.pairingError != null }
+    }
+
+    LaunchedEffect(key1 = isShowError){
+            if(isShowError){
+                onNavigateWifiNetworkErrorScreen(uiState.pairingError?.code)
+            }
+    }
+
     SkyNetScanWifiNetworkScreen(
         isScanning = uiState.isScanning,
         isShowAddAnotherWifiNetworkButton = uiState.isShowAddAnotherNetworkButton,

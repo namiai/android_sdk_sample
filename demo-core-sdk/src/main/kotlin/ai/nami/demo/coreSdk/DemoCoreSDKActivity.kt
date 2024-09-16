@@ -9,7 +9,10 @@ import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetEnterWifiPasswordNavigatio
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetEnterWifiPasswordRoute
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkNavigation
 import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkRoute
+import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetWifiNetworkErrorNavigation
+import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetWifiNetworkErrorRoute
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameErrorNavigation
+import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameErrorRoute
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameNavigation
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameRoute
 import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedNavigation
@@ -21,6 +24,8 @@ import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceNavigation
 import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceRoute
 import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessNavigation
 import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessRoute
+import ai.nami.demo.coreSdk.pairing.thread.SkyNetJoinThreadNetworkFailRoute
+import ai.nami.demo.coreSdk.pairing.thread.SkyNetJoinThreadNetworkFailRouteNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoViewModel
@@ -193,6 +198,45 @@ fun SkyNetHostScreen(
         }
 
         composable(
+            route = SkyNetDeviceNameErrorNavigation.route,
+            arguments = SkyNetDeviceNameErrorNavigation.arguments()
+        ) {
+            if (it.lifecycleIsResumed()) {
+                val viewModel = NamiPairingViewModelModule.provideRenameDeviceErrorViewModel()
+                val code = SkyNetDeviceNameErrorNavigation.errorCode(it)
+
+                SkyNetDeviceNameErrorRoute(
+                    viewModel = viewModel,
+                    pairingErrorCode = PairingErrorCode.from(code),
+                    errorMessage = SkyNetDeviceNameErrorNavigation.errorMessage(it),
+                    onNavigateToPingPongScreen = { deviceName ->
+                        onNavigateTo(
+                            SkyNetPingPongNavigation,
+                            SkyNetPingPongNavigation.createRoute(true, deviceName)
+                        )
+                    },
+                    onNavigateConnectWifiScreen = { isFirstDevice, deviceName ->
+                        onNavigateTo(
+                            SkyNetScanWifiNetworkNavigation,
+                            SkyNetScanWifiNetworkNavigation.createRoute(
+                                deviceName,
+                                isJoinThreadNetwork = false
+                            )
+                        )
+                    },
+                    onExitPairing = { onExitPairing() },
+                    deviceCategory = DeviceCategory.from(
+                        SkyNetDeviceNameErrorNavigation.deviceCategory(
+                            it
+                        )
+                    ),
+                    zoneName = SkyNetDeviceNameErrorNavigation.zoneName(it)
+                )
+
+            }
+        }
+
+        composable(
             route = SkyNetScanWifiNetworkNavigation.route,
             arguments = SkyNetScanWifiNetworkNavigation.arguments()
         ) {
@@ -228,8 +272,15 @@ fun SkyNetHostScreen(
                             SkyNetPingPongNavigation.createRoute(isJoinThreadNetwork, deviceName)
                         )
                     },
-                    onNavigateWifiNetworkErrorScreen = {
-
+                    onNavigateWifiNetworkErrorScreen = { pairingErrorCode ->
+                        onNavigateTo(
+                            SkyNetWifiNetworkErrorNavigation,
+                            SkyNetWifiNetworkErrorNavigation.createRoute(
+                                errorCode = pairingErrorCode?.code
+                                    ?: PairingErrorCode.Common.code,
+                                isFromPingPong = false
+                            )
+                        )
                     },
                     onNavigateBluetoothDisconnectedScreen = {
                         onNavigateTo(
@@ -241,6 +292,27 @@ fun SkyNetHostScreen(
             }
         }
 
+        composable(
+            route = SkyNetWifiNetworkErrorNavigation.route,
+            arguments = SkyNetWifiNetworkErrorNavigation.arguments()
+        ) {
+            if (it.lifecycleIsResumed()) {
+                val viewModel = NamiPairingViewModelModule.provideCancelPairingViewModel()
+                val code = SkyNetWifiNetworkErrorNavigation.errorCode(it)
+                val isFromPingPong = SkyNetWifiNetworkErrorNavigation.isFromPingPong(it)
+                SkyNetWifiNetworkErrorRoute(
+                    viewModel = viewModel,
+                    pairingError = PairingErrorCode.from(code),
+                    onExitPairing = { onExitPairing() },
+                    onRetry = {
+                        if (isFromPingPong) {
+                            navHostController.popBackStack(SkyNetPingPongNavigation.route, true)
+                        } else {
+                            navHostController.popBackStack()
+                        }
+                    })
+            }
+        }
 
         composable(
             route = SkyNetEnterWifiPasswordNavigation.route,
@@ -314,8 +386,22 @@ fun SkyNetHostScreen(
                             )
                         )
                     },
-                    onNavigateConnectWifiFailScreen = {},
-                    onNavigateJoinThreadNetworkFailScreen = { /*TODO*/ },
+                    onNavigateConnectWifiFailScreen = { pairingErrorCode ->
+                        onNavigateTo(
+                            SkyNetWifiNetworkErrorNavigation,
+                            SkyNetWifiNetworkErrorNavigation.createRoute(
+                                errorCode = pairingErrorCode?.code
+                                    ?: PairingErrorCode.Common.code,
+                                isFromPingPong = true
+                            )
+                        )
+                    },
+                    onNavigateJoinThreadNetworkFailScreen = {
+                        onNavigateTo(
+                            SkyNetJoinThreadNetworkFailRouteNavigation,
+                            SkyNetJoinThreadNetworkFailRouteNavigation.createRoute()
+                        )
+                    },
                     onNavigateBluetoothDisconnectedScreen = {
                         onNavigateTo(
                             SkyNetBluetoothDisconnectedNavigation,
@@ -326,6 +412,14 @@ fun SkyNetHostScreen(
             }
         }
 
+        composable(route = SkyNetJoinThreadNetworkFailRouteNavigation.route) {
+            if (it.lifecycleIsResumed()) {
+                val viewModel = NamiPairingViewModelModule.provideCancelPairingViewModel()
+                SkyNetJoinThreadNetworkFailRoute(viewModel = viewModel) {
+                    onExitPairing()
+                }
+            }
+        }
 
         composable(
             route = SkyNetSuccessNavigation.route,
