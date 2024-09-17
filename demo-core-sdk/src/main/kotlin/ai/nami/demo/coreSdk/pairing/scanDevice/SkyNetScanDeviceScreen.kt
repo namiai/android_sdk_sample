@@ -148,7 +148,9 @@ fun SkyNetScanDeviceRoute(
 
     val errorMessage by remember(uiState.pairingError) {
         derivedStateOf {
-            uiState.pairingError?.errorMessage ?: "Error code: ${uiState.pairingError?.code}"
+            if(uiState.pairingError != null) {
+                uiState.pairingError?.errorMessage ?: "Error code: ${uiState.pairingError?.code}"
+            } else null
         }
     }
 

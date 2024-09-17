@@ -17,6 +17,7 @@ import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameNavigation
 import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameRoute
 import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedNavigation
 import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedRoute
+import ai.nami.demo.coreSdk.pairing.pairingGraph
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongNavigation
 import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongRoute
 import ai.nami.demo.coreSdk.pairing.qrCode.SkyNetQRCodeNavigation
@@ -27,15 +28,31 @@ import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessNavigation
 import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessRoute
 import ai.nami.demo.coreSdk.pairing.thread.SkyNetJoinThreadNetworkFailRoute
 import ai.nami.demo.coreSdk.pairing.thread.SkyNetJoinThreadNetworkFailRouteNavigation
+import ai.nami.demo.coreSdk.positioning.error.SkyNetWidarErrorNavigation
+import ai.nami.demo.coreSdk.positioning.error.SkyNetWidarErrorRoute
+import ai.nami.demo.coreSdk.positioning.position.SkyNetWidarPositionNavigation
+import ai.nami.demo.coreSdk.positioning.position.SkyNetWidarPositionRoute
+import ai.nami.demo.coreSdk.positioning.positioningGraph
+import ai.nami.demo.coreSdk.positioning.recommendations.SkyNetWidarRecommendationNavigation
+import ai.nami.demo.coreSdk.positioning.recommendations.SkyNetWidarRecommendationRoute
+import ai.nami.demo.coreSdk.positioning.success.SkyNetWidarSuccessNavigation
+import ai.nami.demo.coreSdk.positioning.success.SkyNetWidarSuccessRoute
+import ai.nami.demo.coreSdk.shared.SkyNetHomeRoute
+import ai.nami.demo.coreSdk.shared.SkyNetHomeRouteNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoViewModel
 import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.model.DeviceCategory
+import ai.nami.sdk.model.NamiSavedThreadNetworkInfo
 import ai.nami.sdk.pairing.NamiPairingSdk
 import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
+import ai.nami.sdk.positioning.model.PositioningErrorCode
+import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
+import ai.nami.sdk.registerNamiPairingEvent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
@@ -44,12 +61,55 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.fatherofapps.jnav.JNavigation
+import kotlinx.coroutines.flow.firstOrNull
+import org.json.JSONObject
+import java.util.Base64
+
+
+fun NamiSavedThreadNetworkInfo.toStringFormat(): String {
+    val credentialsBase64String = Base64.getEncoder().encodeToString(credentialsDataset)
+
+    val json = JSONObject()
+    json.put("name", name)
+    json.put("panId", panId)
+    json.put("credentials", credentialsBase64String)
+
+    return json.toString()
+}
+
+fun String.toNamiSavedThreadNetworkInfo(): NamiSavedThreadNetworkInfo {
+    val json = JSONObject(this)
+    val name = json.optString("name")
+    val panId = json.optInt("panId")
+    val credentials = json.optString("credentials")
+    val decodeCredentials = Base64.getDecoder().decode(credentials)
+    return NamiSavedThreadNetworkInfo(
+        name = name,
+        panId = panId.toInt(),
+        credentialsDataset = decodeCredentials
+    )
+}
 
 class DemoCoreSDKActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        NamiPairingViewModelModule.init(this)
+        NamiSDK.enableReleaseLog()
+        val namiLocalStorage = ai.nami.demo.common.NamiLocalStorage.getInstance(this)
+        registerNamiPairingEvent {
+            onConnectThreadNetworkSuccess { threadNetworkCredentials, key ->
+                namiLocalStorage.saveThreadNetworkCredential(
+                    key,
+                    threadNetworkCredentials.toStringFormat()
+                )
+            }
+
+            onGetSavedThreadCredentials { key1, key2, key3 ->
+                val list = namiLocalStorage.listThreadCredentials.firstOrNull()?.toList()
+                list?.firstOrNull { it.first == key2 }?.second?.toNamiSavedThreadNetworkInfo()
+
+            }
+        }
         setContent {
             // you should replace MaterialTheme by your Theme
             MaterialTheme {
@@ -77,394 +137,75 @@ fun SkyNetHostScreen(
     onBack: (navigation: JNavigation?, inclusive: Boolean) -> Unit
 ) {
 
-    val onExitPairing: () -> Unit = {
+    val onExit: () -> Unit = {
         NamiPairingSdk.reset()
-        onBack(SkyNetInfoNavigation, true)
+        onBack(SkyNetHomeRouteNavigation, false)
     }
-    NavHost(navController = navHostController, startDestination = SkyNetInfoNavigation.route) {
-
-        composable(route = SkyNetInfoNavigation.route) {
-            if (it.lifecycleIsResumed()) {
-                SkyNetInfoRoute(onNext = { roomId, deviceCategory ->
-                    val placeInfo = NamiSDK.getPlaceInfo(roomId)
-                    val route = SkyNetQRCodeNavigation.createRoute(
-                        deviceCategory = deviceCategory.categoryName,
-                        roomId = placeInfo.roomId,
-                        placeId = placeInfo.placeId,
-                        zoneId = placeInfo.zoneId,
-                        zoneName = placeInfo.zoneName
-                    )
-
-                    onNavigateTo(SkyNetQRCodeNavigation, route)
-                }, onBack = {
-                    onBack(null, false)
-                }, viewModel = SkyNetInfoViewModel())
-            }
-        }
 
 
-        composable(route = SkyNetQRCodeNavigation.route) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.provideScanQRCodeViewModel()
-                val categoryName = SkyNetQRCodeNavigation.deviceCategory(it)
-                SkyNetQRCodeRoute(viewModel = viewModel, onNext = {
-                    onNavigateTo(
-                        SkyNetScanDeviceNavigation,
-                        SkyNetScanDeviceNavigation.createRoute()
-                    )
-                }, onBack = {
-                    onExitPairing()
-                }, deviceCategory = DeviceCategory.from(categoryName))
-            }
-        }
+    NavHost(navController = navHostController, startDestination = SkyNetHomeRouteNavigation.route) {
 
-        composable(route = SkyNetScanDeviceNavigation.route) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.provideScanDeviceViewModel()
-                SkyNetScanDeviceRoute(
-                    viewModel = viewModel,
-                    onBack = { onExitPairing() },
-                    onScanDeviceSuccess = { productId, deviceName, zoneName ->
-                        onNavigateTo(
-                            SkyNetDeviceNameNavigation,
-                            SkyNetDeviceNameNavigation.createRoute(
-                                defaultName = deviceName,
-                                productId = productId,
-                                zoneName = zoneName
-                            )
-                        )
-                    },
-                    onNavigateBluetoothDisconnectedScreen = {
-                        onNavigateTo(
-                            SkyNetBluetoothDisconnectedNavigation,
-                            SkyNetBluetoothDisconnectedNavigation.createRoute()
-                        )
-                    }
+        composable(route = SkyNetHomeRouteNavigation.route) {
+            SkyNetHomeRoute(onNext = { isPositioning ->
+                onNavigateTo(
+                    SkyNetInfoNavigation,
+                    SkyNetInfoNavigation.createRoute(isPositioning)
                 )
-            }
+            }, onBack = {
+                navHostController.popBackStack()
+            })
+
         }
 
         composable(
-            route = SkyNetDeviceNameNavigation.route,
-            arguments = SkyNetDeviceNameNavigation.arguments()
+            route = SkyNetInfoNavigation.route,
+            arguments = SkyNetInfoNavigation.arguments()
         ) {
             if (it.lifecycleIsResumed()) {
-                val defaultName = SkyNetDeviceNameNavigation.defaultName(it)
-                val productId = SkyNetDeviceNameNavigation.productId(it)
-                val zoneName = SkyNetDeviceNameNavigation.zoneName(it)
-                val viewModel = NamiPairingViewModelModule.provideRenameDeviceViewModel()
-                SkyNetDeviceNameRoute(
-                    viewModel = viewModel,
-                    defaultName = defaultName,
-                    productId = productId,
-                    onBack = {
-                        onExitPairing()
-                    },
-                    onNavigateToPingPongScreen = { deviceName ->
-                        onNavigateTo(
-                            SkyNetPingPongNavigation,
-                            SkyNetPingPongNavigation.createRoute(true, deviceName)
-                        )
-                    },
-                    onNavigateConnectWifiScreen = { isFirstDevice, deviceName ->
-                        onNavigateTo(
-                            SkyNetScanWifiNetworkNavigation,
-                            SkyNetScanWifiNetworkNavigation.createRoute(
-                                deviceName,
-                                isJoinThreadNetwork = false
+                val isOpenForPositioning = SkyNetInfoNavigation.isOpenForPositioning(it)
+                SkyNetInfoRoute(
+                    isOpenForPositioning = isOpenForPositioning,
+                    onNext = { roomId, deviceCategory, deviceUrn ->
+                        val placeInfo = NamiSDK.getPlaceInfo(roomId)
+                        if (isOpenForPositioning && deviceUrn != null) {
+                            NamiPositioningViewModelModule.init(navHostController.context)
+                            val route = SkyNetWidarRecommendationNavigation.createRoute(
+                                deviceUrn = deviceUrn,
+                                placeId = placeInfo.placeId,
+                                deviceHost = null,
+                                devicePort = 0
                             )
-                        )
-                    },
-                    onNavigateToErrorScreen = { isBluetoothDisconnected, pairingErrorCode, errorMessage, deviceCategory ->
-                        if (isBluetoothDisconnected) {
-                            onNavigateTo(
-                                SkyNetBluetoothDisconnectedNavigation,
-                                SkyNetBluetoothDisconnectedNavigation.createRoute()
-                            )
+                            onNavigateTo(SkyNetWidarRecommendationNavigation, route)
                         } else {
-                            onNavigateTo(
-                                SkyNetDeviceNameErrorNavigation,
-                                SkyNetDeviceNameErrorNavigation.createRoute(
-                                    errorCode = pairingErrorCode?.code
-                                        ?: PairingErrorCode.Common.code,
-                                    errorMessage = errorMessage,
-                                    zoneName = zoneName,
-                                    deviceCategory = deviceCategory.categoryName
-                                )
+                            NamiPairingViewModelModule.init(navHostController.context)
+                            val route = SkyNetQRCodeNavigation.createRoute(
+                                deviceCategory = deviceCategory.categoryName,
+                                roomId = placeInfo.roomId,
+                                placeId = placeInfo.placeId,
+                                zoneId = placeInfo.zoneId,
+                                zoneName = placeInfo.zoneName
                             )
+                            onNavigateTo(SkyNetQRCodeNavigation, route)
                         }
-                    }
-                )
-            }
-        }
-
-        composable(
-            route = SkyNetDeviceNameErrorNavigation.route,
-            arguments = SkyNetDeviceNameErrorNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.provideRenameDeviceErrorViewModel()
-                val code = SkyNetDeviceNameErrorNavigation.errorCode(it)
-
-                SkyNetDeviceNameErrorRoute(
-                    viewModel = viewModel,
-                    pairingErrorCode = PairingErrorCode.from(code),
-                    errorMessage = SkyNetDeviceNameErrorNavigation.errorMessage(it),
-                    onNavigateToPingPongScreen = { deviceName ->
-                        onNavigateTo(
-                            SkyNetPingPongNavigation,
-                            SkyNetPingPongNavigation.createRoute(true, deviceName)
-                        )
-                    },
-                    onNavigateConnectWifiScreen = { isFirstDevice, deviceName ->
-                        onNavigateTo(
-                            SkyNetScanWifiNetworkNavigation,
-                            SkyNetScanWifiNetworkNavigation.createRoute(
-                                deviceName,
-                                isJoinThreadNetwork = false
-                            )
-                        )
-                    },
-                    onExitPairing = { onExitPairing() },
-                    deviceCategory = DeviceCategory.from(
-                        SkyNetDeviceNameErrorNavigation.deviceCategory(
-                            it
-                        )
-                    ),
-                    zoneName = SkyNetDeviceNameErrorNavigation.zoneName(it)
-                )
-
-            }
-        }
-
-        composable(
-            route = SkyNetScanWifiNetworkNavigation.route,
-            arguments = SkyNetScanWifiNetworkNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.provideScanWifiNetworkViewModel()
-                val deviceName = SkyNetScanWifiNetworkNavigation.deviceName(it)
-                val isJoinThreadNetwork = SkyNetScanWifiNetworkNavigation.isJoinThreadNetwork(it)
-                SkyNetScanWifiNetworkRoute(
-                    viewModel = viewModel,
-                    onBack = { onExitPairing() },
-                    onNavigateEnterWifiPasswordScreen = { wifiName ->
-                        onNavigateTo(
-                            SkyNetEnterWifiPasswordNavigation,
-                            SkyNetEnterWifiPasswordNavigation.createRoute(
-                                wifiName,
-                                deviceName,
-                                isJoinThreadNetwork
-                            )
-                        )
-                    },
-                    onNavigateAddAnotherWifiNetworkScreen = {
-                        onNavigateTo(
-                            SkyNetAddWifiNetworkNavigation,
-                            SkyNetAddWifiNetworkNavigation.createRoute(
-                                deviceName,
-                                isJoinThreadNetwork
-                            )
-                        )
-                    },
-                    onNavigateConnectWifiNetwork = {
-                        onNavigateTo(
-                            SkyNetPingPongNavigation,
-                            SkyNetPingPongNavigation.createRoute(isJoinThreadNetwork, deviceName)
-                        )
-                    },
-                    onNavigateWifiNetworkErrorScreen = { pairingErrorCode ->
-                        onNavigateTo(
-                            SkyNetWifiNetworkErrorNavigation,
-                            SkyNetWifiNetworkErrorNavigation.createRoute(
-                                errorCode = pairingErrorCode?.code
-                                    ?: PairingErrorCode.Common.code,
-                                isFromPingPong = false
-                            )
-                        )
-                    },
-                    onNavigateBluetoothDisconnectedScreen = {
-                        onNavigateTo(
-                            SkyNetBluetoothDisconnectedNavigation,
-                            SkyNetBluetoothDisconnectedNavigation.createRoute()
-                        )
-                    }
-                )
-            }
-        }
-
-        composable(
-            route = SkyNetWifiNetworkErrorNavigation.route,
-            arguments = SkyNetWifiNetworkErrorNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.provideCancelPairingViewModel()
-                val code = SkyNetWifiNetworkErrorNavigation.errorCode(it)
-                val isFromPingPong = SkyNetWifiNetworkErrorNavigation.isFromPingPong(it)
-                SkyNetWifiNetworkErrorRoute(
-                    viewModel = viewModel,
-                    pairingError = PairingErrorCode.from(code),
-                    onExitPairing = { onExitPairing() },
-                    onRetry = {
-                        if (isFromPingPong) {
-                            navHostController.popBackStack(SkyNetPingPongNavigation.route, true)
-                        } else {
-                            navHostController.popBackStack()
-                        }
-                    })
-            }
-        }
-
-        composable(
-            route = SkyNetEnterWifiPasswordNavigation.route,
-            arguments = SkyNetEnterWifiPasswordNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val wifiName = SkyNetEnterWifiPasswordNavigation.wifiName(it)
-                val viewModel = NamiPairingViewModelModule.provideEnterWifiPasswordViewModel()
-                val deviceName = SkyNetEnterWifiPasswordNavigation.deviceName(it)
-                val isJoinThread = SkyNetEnterWifiPasswordNavigation.isJoinThreadNetwork(it)
-                SkyNetEnterWifiPasswordRoute(
-                    viewModel = viewModel,
-                    wifiName = wifiName,
-                    onBack = {
+                    }, onBack = {
                         onBack(null, false)
-                    },
-                    onNavigateConnectWifiNetwork = {
-                        onNavigateTo(
-                            SkyNetPingPongNavigation,
-                            SkyNetPingPongNavigation.createRoute(isJoinThread, deviceName)
-                        )
-                    }
+                    }, viewModel = SkyNetInfoViewModel()
                 )
             }
         }
 
-        composable(
-            route = SkyNetAddWifiNetworkNavigation.route,
-            arguments = SkyNetAddWifiNetworkNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.provideAddAnotherWifiNetworkViewModel()
-                val deviceName = SkyNetAddWifiNetworkNavigation.deviceName(it)
-                val isJoinThread = SkyNetAddWifiNetworkNavigation.isJoinThreadNetwork(it)
-                SkyNetAddWifiNetworkRoute(
-                    viewModel = viewModel,
-                    onBack = { onBack(null, false) },
-                    onNavigateConnectWifiNetwork = {
-                        onNavigateTo(
-                            SkyNetPingPongNavigation,
-                            SkyNetPingPongNavigation.createRoute(isJoinThread, deviceName)
-                        )
-                    })
-            }
-        }
+        pairingGraph(
+            onNavigateTo = onNavigateTo,
+            onBack = onBack,
+            onExitPairing = onExit,
+            navHostController = navHostController
+        )
 
-        composable(
-            route = SkyNetPingPongNavigation.route,
-            arguments = SkyNetPingPongNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.providePingPongViewModel()
-                val isJoinThreadNetwork = SkyNetPingPongNavigation.isJoinThreadNetwork(it)
-                val deviceName = SkyNetPingPongNavigation.deviceName(it)
-                SkyNetPingPongRoute(
-                    viewModel = viewModel,
-                    isJoinThreadNetwork = isJoinThreadNetwork,
-                    onBack = {
-                        onExitPairing()
-                    },
-                    onNavigatePairingSuccessScreen = { productId: Int, zoneName: String, isWidar: Boolean, placeId: Int, zoneId: Int, roomId: Int ->
-                        onNavigateTo(
-                            SkyNetSuccessNavigation, SkyNetSuccessNavigation.createRoute(
-                                productId = productId,
-                                zoneName = zoneName,
-                                isWidar = isWidar,
-                                placeId = placeId,
-                                deviceName = deviceName,
-                                zoneId = zoneId,
-                                roomId = roomId
-                            )
-                        )
-                    },
-                    onNavigateConnectWifiFailScreen = { pairingErrorCode ->
-                        onNavigateTo(
-                            SkyNetWifiNetworkErrorNavigation,
-                            SkyNetWifiNetworkErrorNavigation.createRoute(
-                                pairingErrorCode?.code?.code ?: PairingErrorCode.Common.code,
-                                true
-                            )
-                        )
-                    },
-                    onNavigateJoinThreadNetworkFailScreen = {
-                        onNavigateTo(
-                            SkyNetJoinThreadNetworkFailRouteNavigation,
-                            SkyNetJoinThreadNetworkFailRouteNavigation.createRoute()
-                        )
-                    },
-                    onNavigateBluetoothDisconnectedScreen = {
-                        onNavigateTo(
-                            SkyNetBluetoothDisconnectedNavigation,
-                            SkyNetBluetoothDisconnectedNavigation.createRoute()
-                        )
-                    }
-                )
-            }
-        }
-
-        composable(route = SkyNetJoinThreadNetworkFailRouteNavigation.route) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel = NamiPairingViewModelModule.provideCancelPairingViewModel()
-                SkyNetJoinThreadNetworkFailRoute(viewModel = viewModel) {
-                    onExitPairing()
-                }
-            }
-        }
-
-        composable(
-            route = SkyNetSuccessNavigation.route,
-            arguments = SkyNetSuccessNavigation.arguments()
-        ) {
-            if (it.lifecycleIsResumed()) {
-                val placeId = SkyNetSuccessNavigation.placeId(it)
-                val zoneId = SkyNetSuccessNavigation.zoneId(it)
-                val roomId = SkyNetSuccessNavigation.roomId(it)
-                val zoneName = SkyNetSuccessNavigation.zoneName(it)
-                SkyNetSuccessRoute(
-                    productId = SkyNetSuccessNavigation.productId(it),
-                    deviceName = SkyNetSuccessNavigation.deviceName(it),
-                    zoneName = zoneName,
-                    isWidar = SkyNetSuccessNavigation.isWidar(it),
-                    placeId = placeId,
-                    onPairAnotherDevice = {
-                        onBack(SkyNetQRCodeNavigation, true)
-                        onNavigateTo(
-                            SkyNetQRCodeNavigation,
-                            SkyNetQRCodeNavigation.createRoute(
-                                deviceCategory = DeviceCategory.UN_SPECIFIED.categoryName,
-                                placeId = placeId,
-                                zoneId = zoneId,
-                                roomId = roomId,
-                                zoneName = zoneName
-                            )
-                        )
-                    },
-                    onPairSuccess = {
-                        // isWidar : navigate to positioning flow
-                        onExitPairing()
-                    }
-                )
-            }
-        }
-
-        composable(route = SkyNetBluetoothDisconnectedNavigation.route){
-            if(it.lifecycleIsResumed()){
-                val viewModel = NamiPairingViewModelModule.provideCancelPairingViewModel()
-                SkyNetBluetoothDisconnectedRoute(viewModel = viewModel) {
-                    onExitPairing()
-                }
-            }
-        }
+        positioningGraph(
+            onNavigateTo = onNavigateTo,
+            onBack = onBack,
+            onExitPositioning = onExit
+        )
 
     }
 }

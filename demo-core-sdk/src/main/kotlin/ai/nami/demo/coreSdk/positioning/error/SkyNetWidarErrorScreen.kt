@@ -4,11 +4,18 @@ import ai.nami.demo.coreSdk.pairing.error.SkyNetPairingErrorScreen
 import ai.nami.sdk.positioning.model.PositioningErrorCode
 import androidx.compose.runtime.Composable
 import com.fatherofapps.jnav.annotations.JNav
+import com.fatherofapps.jnav.annotations.JNavArg
 
 @JNav(
     baseRoute = "sky_net_widar_error_route",
     destination = "sky_net_widar_error_destination",
-    name = "SkyNetWidarErrorNavigation"
+    name = "SkyNetWidarErrorNavigation",
+    arguments = [
+        JNavArg(
+            name = "errorCode",
+            type = Int::class
+        )
+    ]
 )
 @Composable
 fun SkyNetWidarErrorRoute(

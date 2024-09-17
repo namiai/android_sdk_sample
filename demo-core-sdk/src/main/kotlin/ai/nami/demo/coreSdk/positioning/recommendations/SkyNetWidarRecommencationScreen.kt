@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.collect
         JNavArg(
             name = "deviceHost",
             type = String::class,
-            isNullable = false
+            isNullable = true
         ),
         JNavArg(
             name = "devicePort",
@@ -97,9 +97,11 @@ fun SkyNetWidarRecommendationRoute(
 
     SkyNetWidarRecommendationScreen(
         onStartPositioning = {
+            // it seems a mistake of JNav library
+            val host = if ( deviceHost == "null") null else deviceHost
             sendViewIntent(
                 RecommendationIntentView.StartPositioningIntentView(
-                    urn = deviceUrn, host = deviceHost, port = devicePort, placeId = placeId
+                    urn = deviceUrn, host = host, port = devicePort, placeId = placeId
                 )
             )
         },

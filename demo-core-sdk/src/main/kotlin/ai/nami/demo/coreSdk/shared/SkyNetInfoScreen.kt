@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fatherofapps.jnav.annotations.JNav
+import com.fatherofapps.jnav.annotations.JNavArg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
@@ -37,15 +38,21 @@ import kotlinx.coroutines.withContext
 @JNav(
     baseRoute = "sky_net_info_route",
     destination = "sky_net_info_destination",
-    name = "SkyNetInfoNavigation"
+    name = "SkyNetInfoNavigation",
+    arguments = [
+        JNavArg(
+            name = "isOpenForPositioning",
+            type = Boolean::class,
+        )
+    ]
 )
 @Composable
 fun SkyNetInfoRoute(
-    onNext: (roomId: String, DeviceCategory) -> Unit,
+    isOpenForPositioning: Boolean,
+    onNext: (roomId: String, DeviceCategory, deviceUrn: String?) -> Unit,
     onBack: () -> Unit,
     viewModel: SkyNetInfoViewModel
 ) {
-
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -78,19 +85,21 @@ fun SkyNetInfoRoute(
         sendViewIntent = sendViewIntent,
         initSDKSuccess = uiState.initSDKSuccess,
         errorMessage = errorMessage,
-        isLoading = isLoading
+        isLoading = isLoading,
+        isOpenForPositioning = isOpenForPositioning
     )
 }
 
 
 @Composable
 private fun SkyeNetInfoScreen(
-    onNext: (roomId: String, DeviceCategory) -> Unit,
+    onNext: (roomId: String, DeviceCategory, String?) -> Unit,
     onBack: () -> Unit,
     sendViewIntent: (SkyNetInfoViewIntent) -> Unit,
     initSDKSuccess: Boolean?,
     errorMessage: String?,
-    isLoading: Boolean
+    isLoading: Boolean,
+    isOpenForPositioning: Boolean,
 ) {
 
     var sessionCode by remember {
@@ -118,9 +127,13 @@ private fun SkyeNetInfoScreen(
         mutableStateOf(NamiSDK.shouldInit())
     }
 
+    var deviceUrn by remember {
+        mutableStateOf("")
+    }
+
     LaunchedEffect(key1 = initSDKSuccess) {
         if (initSDKSuccess == true) {
-            onNext(roomId, currentCategory)
+            onNext(roomId, currentCategory, deviceUrn)
         }
     }
 
@@ -157,19 +170,31 @@ private fun SkyeNetInfoScreen(
             modifier = Modifier.fillMaxWidth(),
             label = { Text(text = "Room UID") },
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done
+                imeAction = if (isOpenForPositioning) ImeAction.Next else ImeAction.Done
             )
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-        NamiDropdown(
-            currentValue = currentCategory.categoryName,
-            listTitles = listDeviceCategories.map { it.categoryName },
-            onSelectItem = {
-                currentCategory = listDeviceCategories[it]
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
+        if (isOpenForPositioning) {
+            OutlinedTextField(
+                value = deviceUrn,
+                onValueChange = { deviceUrn = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = "Device's urn") },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                )
+            )
+        } else {
+            NamiDropdown(
+                currentValue = currentCategory.categoryName,
+                listTitles = listDeviceCategories.map { it.categoryName },
+                onSelectItem = {
+                    currentCategory = listDeviceCategories[it]
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         Spacer(modifier = Modifier.height(48.dp))
 

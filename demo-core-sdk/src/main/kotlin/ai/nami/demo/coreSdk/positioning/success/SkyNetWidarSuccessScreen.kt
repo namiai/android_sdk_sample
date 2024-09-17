@@ -9,11 +9,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.fatherofapps.jnav.annotations.JNav
+import com.fatherofapps.jnav.annotations.JNavArg
 
 @JNav(
     baseRoute = "sky_net_widar_success_route",
     destination = "sky_net_widar_success_destination",
-    name = "SkyNetWidarSuccessNavigation"
+    name = "SkyNetWidarSuccessNavigation",
+    arguments = [
+        JNavArg(
+            name = "deviceName",
+            type = String::class,
+            isNullable = false
+        )
+    ]
 )
 @Composable
 fun SkyNetWidarSuccessRoute(

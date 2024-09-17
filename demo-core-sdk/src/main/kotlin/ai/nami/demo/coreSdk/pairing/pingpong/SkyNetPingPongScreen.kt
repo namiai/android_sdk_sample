@@ -1,6 +1,7 @@
 package ai.nami.demo.coreSdk.pairing.pingpong
 
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
+import ai.nami.sdk.pairing.model.PairingDeviceInfo
 import ai.nami.sdk.pairing.model.PairingError
 import ai.nami.sdk.pairing.viewmodels.pingpong.PairingPingPongViewIntent
 import ai.nami.sdk.pairing.viewmodels.pingpong.PairingPingPongViewModel
@@ -56,7 +57,7 @@ fun SkyNetPingPongRoute(
     viewModel: PairingPingPongViewModel,
     isJoinThreadNetwork: Boolean,
     onBack: () -> Unit,
-    onNavigatePairingSuccessScreen: (productId: Int, zoneName: String, isWidar: Boolean, placeId: Int, zoneId: Int, roomId: Int) -> Unit,
+    onNavigatePairingSuccessScreen: (productId: Int, zoneName: String, isWidar: Boolean, placeId: Int, zoneId: Int, roomId: Int, pairingDeviceInfo: PairingDeviceInfo?) -> Unit,
     onNavigateConnectWifiFailScreen: (errorCode: PairingError?) -> Unit,
     onNavigateJoinThreadNetworkFailScreen: () -> Unit,
     onNavigateBluetoothDisconnectedScreen: () -> Unit
@@ -105,13 +106,15 @@ fun SkyNetPingPongRoute(
                 val productId = uiState.productId
                 val zoneName = uiState.zoneName
                 if (productId != null && zoneName != null) {
+                    val pairingDeviceInfo =  uiState.listPairedDevices.firstOrNull()
                     onNavigatePairingSuccessScreen(
                         productId,
                         zoneName,
                         uiState.isWidar,
                         uiState.placeId,
                         uiState.zoneId,
-                        uiState.roomId
+                        uiState.roomId,
+                        pairingDeviceInfo
                     )
                 }
             } else if (uiState.isSuccess == false) {
