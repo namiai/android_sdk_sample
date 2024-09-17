@@ -8,6 +8,8 @@ import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.sample.pairing.shared.HomeViewIntent
 import ai.nami.sdk.sample.pairing.shared.HomeViewModel
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -76,12 +78,12 @@ fun HomeScreen(
 
     // zone
     var roomId by remember {
-        mutableStateOf("59c6624e-7181-426c-a373-86a3d93a78ef")
+        mutableStateOf("1a7a48ec-ea38-4410-ba13-529ea89829b6")
     }
 
 
     val listDeviceCategories =
-        DeviceCategory.values().toList().filter { it != DeviceCategory.OTHERS }
+        DeviceCategory.values().toList().filter { it != DeviceCategory.OTHERS && it != DeviceCategory.UN_SPECIFIED }
 
     var currentCategory by remember {
         mutableStateOf(DeviceCategory.MESH_SENSOR)
@@ -131,7 +133,7 @@ fun HomeScreen(
             AnimatedVisibility(visible = isShowError) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = errorMessage!!,
+                    text = errorMessage ?: "",
                     style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.error)
                 )
             }
@@ -162,7 +164,7 @@ fun HomeScreen(
             }
         }
 
-        AnimatedVisibility(visible = isLoading) {
+        AnimatedVisibility(visible = isLoading, enter = fadeIn(), exit = fadeOut()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
