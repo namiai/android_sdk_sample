@@ -4,17 +4,13 @@ import ai.nami.demo.sdk.pairing.shared.HomeRoute
 import ai.nami.demo.sdk.pairing.shared.HomeViewModel
 import ai.nami.demo.sdk.pairing.shared.PairingSuccessNavigation
 import ai.nami.demo.sdk.pairing.shared.PairingSuccessScreen
-import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.NamiSDKUI
-import ai.nami.sdk.common.NamiLog
-import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
-import ai.nami.sdk.sample.pairing.shared.HomeViewModel
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable

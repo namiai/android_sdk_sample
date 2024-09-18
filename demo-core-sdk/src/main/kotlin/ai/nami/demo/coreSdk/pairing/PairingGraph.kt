@@ -147,7 +147,7 @@ fun NavGraphBuilder.pairingGraph(
                                         ?: PairingErrorCode.Common.code,
                                     errorMessage = errorMessage,
                                     zoneName = zoneName,
-                                    deviceCategory = deviceCategory.categoryName
+                                    deviceCategory = deviceCategory.id
                                 )
                             )
                         }
@@ -415,7 +415,7 @@ fun NavGraphBuilder.pairingGraph(
                         onNavigateTo(
                             SkyNetQRCodeNavigation,
                             SkyNetQRCodeNavigation.createRoute(
-                                deviceCategory = DeviceCategory.UN_SPECIFIED.categoryName,
+                                deviceCategory = DeviceCategory.OPTIONAL.id,
                                 placeId = placeId,
                                 zoneId = zoneId,
                                 roomId = roomId,

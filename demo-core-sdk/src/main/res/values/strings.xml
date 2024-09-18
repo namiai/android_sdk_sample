@@ -2,4 +2,13 @@
 <resources>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="dismiss">Dismiss</string>
+
+    <string name="device_setup_alarm_pod">Alarm Pod</string>
+    <string name="device_setup_contact_sensor">Door Sensor</string>
+    <string name="device_setup_security_pod">Security Pod</string>
+    <string name="device_setup_sense_plug">SensePlug</string>
+    <string name="device_setup_widar_sensor">WiDAR Sensor</string>
+    <string name="device_setup_wifi_sensor">Wi-Fi Sensor</string>
+    <string name="device_setup_optional">Optional</string>
+    <string name="device_setup_others">Others</string>
 </resources>

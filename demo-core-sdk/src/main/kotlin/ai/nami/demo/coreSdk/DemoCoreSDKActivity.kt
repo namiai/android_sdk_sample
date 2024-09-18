@@ -3,56 +3,22 @@ package ai.nami.demo.coreSdk
 import ai.nami.demo.coreSdk.common.AppState
 import ai.nami.demo.coreSdk.common.lifecycleIsResumed
 import ai.nami.demo.coreSdk.common.rememberAppState
-import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetAddWifiNetworkNavigation
-import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetAddWifiNetworkRoute
-import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetEnterWifiPasswordNavigation
-import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetEnterWifiPasswordRoute
-import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkNavigation
-import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetScanWifiNetworkRoute
-import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetWifiNetworkErrorNavigation
-import ai.nami.demo.coreSdk.pairing.connectWifi.SkyNetWifiNetworkErrorRoute
-import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameErrorNavigation
-import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameErrorRoute
-import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameNavigation
-import ai.nami.demo.coreSdk.pairing.deviceName.SkyNetDeviceNameRoute
-import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedNavigation
-import ai.nami.demo.coreSdk.pairing.error.SkyNetBluetoothDisconnectedRoute
 import ai.nami.demo.coreSdk.pairing.pairingGraph
-import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongNavigation
-import ai.nami.demo.coreSdk.pairing.pingpong.SkyNetPingPongRoute
 import ai.nami.demo.coreSdk.pairing.qrCode.SkyNetQRCodeNavigation
-import ai.nami.demo.coreSdk.pairing.qrCode.SkyNetQRCodeRoute
-import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceNavigation
-import ai.nami.demo.coreSdk.pairing.scanDevice.SkyNetScanDeviceRoute
-import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessNavigation
-import ai.nami.demo.coreSdk.pairing.success.SkyNetSuccessRoute
-import ai.nami.demo.coreSdk.pairing.thread.SkyNetJoinThreadNetworkFailRoute
-import ai.nami.demo.coreSdk.pairing.thread.SkyNetJoinThreadNetworkFailRouteNavigation
-import ai.nami.demo.coreSdk.positioning.error.SkyNetWidarErrorNavigation
-import ai.nami.demo.coreSdk.positioning.error.SkyNetWidarErrorRoute
-import ai.nami.demo.coreSdk.positioning.position.SkyNetWidarPositionNavigation
-import ai.nami.demo.coreSdk.positioning.position.SkyNetWidarPositionRoute
 import ai.nami.demo.coreSdk.positioning.positioningGraph
 import ai.nami.demo.coreSdk.positioning.recommendations.SkyNetWidarRecommendationNavigation
-import ai.nami.demo.coreSdk.positioning.recommendations.SkyNetWidarRecommendationRoute
-import ai.nami.demo.coreSdk.positioning.success.SkyNetWidarSuccessNavigation
-import ai.nami.demo.coreSdk.positioning.success.SkyNetWidarSuccessRoute
 import ai.nami.demo.coreSdk.shared.SkyNetHomeRoute
 import ai.nami.demo.coreSdk.shared.SkyNetHomeRouteNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoNavigation
 import ai.nami.demo.coreSdk.shared.SkyNetInfoRoute
 import ai.nami.demo.coreSdk.shared.SkyNetInfoViewModel
 import ai.nami.sdk.NamiSDK
-import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.model.NamiSavedThreadNetworkInfo
 import ai.nami.sdk.pairing.NamiPairingSdk
-import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
-import ai.nami.sdk.positioning.model.PositioningErrorCode
 import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.registerNamiPairingEvent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
@@ -179,7 +145,7 @@ fun SkyNetHostScreen(
                         } else {
                             NamiPairingViewModelModule.init(navHostController.context)
                             val route = SkyNetQRCodeNavigation.createRoute(
-                                deviceCategory = deviceCategory.categoryName,
+                                deviceCategory = deviceCategory.id,
                                 roomId = placeInfo.roomId,
                                 placeId = placeInfo.placeId,
                                 zoneId = placeInfo.zoneId,

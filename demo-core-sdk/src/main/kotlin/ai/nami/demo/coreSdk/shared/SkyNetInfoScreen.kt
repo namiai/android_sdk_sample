@@ -1,11 +1,12 @@
 package ai.nami.demo.coreSdk.shared
 
+import ai.nami.demo.core.sdk.R
 import ai.nami.demo.coreSdk.common.NamiDropdown
 import ai.nami.demo.coreSdk.common.SkyNetButton
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
 import ai.nami.sdk.NamiSDK
-import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.model.DeviceCategory
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -110,21 +112,21 @@ private fun SkyeNetInfoScreen(
         mutableStateOf("e81c075e-f5c0-4104-b814-62d12cfaa368")
     }
 
-    val isEnableButton by remember(sessionCode, roomId) {
+    val isNeedASessionCode by remember {
+        mutableStateOf(NamiSDK.shouldInit())
+    }
+
+    val isEnableButton by remember(isNeedASessionCode, sessionCode, roomId) {
         derivedStateOf {
-            sessionCode.isNotEmpty() && roomId.isNotEmpty()
+            (!isNeedASessionCode || sessionCode.isNotEmpty())
+                && roomId.isNotEmpty()
         }
     }
 
-    val listDeviceCategories =
-        DeviceCategory.values().toList().filter { it != DeviceCategory.OTHERS }
+    val listDeviceCategories = DeviceCategory.values().toList()
 
     var currentCategory by remember {
         mutableStateOf(listDeviceCategories.first())
-    }
-
-    val isNeedASessionCode by remember {
-        mutableStateOf(NamiSDK.shouldInit())
     }
 
     var deviceUrn by remember {
@@ -159,7 +161,7 @@ private fun SkyeNetInfoScreen(
         AnimatedVisibility(visible = isShowError) {
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = errorMessage!!,
+                text = errorMessage ?: "",
                 style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.error)
             )
         }
@@ -174,6 +176,7 @@ private fun SkyeNetInfoScreen(
             )
         )
 
+        val context = LocalContext.current
         Spacer(modifier = Modifier.height(24.dp))
         if (isOpenForPositioning) {
             OutlinedTextField(
@@ -187,8 +190,8 @@ private fun SkyeNetInfoScreen(
             )
         } else {
             NamiDropdown(
-                currentValue = currentCategory.categoryName,
-                listTitles = listDeviceCategories.map { it.categoryName },
+                currentValue = currentCategory.getDeviceCategoryName(context),
+                listTitles = listDeviceCategories.map { it.getDeviceCategoryName(context) },
                 onSelectItem = {
                     currentCategory = listDeviceCategories[it]
                 },
@@ -208,4 +211,18 @@ private fun SkyeNetInfoScreen(
         )
 
     }
+}
+
+fun DeviceCategory.getDeviceCategoryName(context: Context): String {
+    val id = when (this) {
+        DeviceCategory.ALARM_POD -> R.string.device_setup_alarm_pod
+        DeviceCategory.MESH_SENSOR -> R.string.device_setup_sense_plug
+        DeviceCategory.SECURITY_POD -> R.string.device_setup_security_pod
+        DeviceCategory.WIFI_SENSOR -> R.string.device_setup_wifi_sensor
+        DeviceCategory.CONTACT_SENSOR -> R.string.device_setup_contact_sensor
+        DeviceCategory.WIDAR_SENSOR -> R.string.device_setup_widar_sensor
+        DeviceCategory.OPTIONAL -> R.string.device_setup_optional
+        else -> R.string.device_setup_others
+    }
+    return context.getString(id)
 }
