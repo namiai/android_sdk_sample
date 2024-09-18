@@ -5,15 +5,12 @@ import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.model.PairingErrorCode
-import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
-import ai.nami.sdk.sample.pairing.shared.HomeViewModel
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,22 +22,20 @@ fun HostScreen() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
 
-        Log.e("Pairing-SDK", "HostScreen")
-
         composable(route = "home") {
-            HomeScreen(viewModel = HomeViewModel()) { roomId, deviceCategory ->
+            HomeRoute(onPairNamiDevice = { roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
-                val route = NamiSDKUI.startPairing(
-                    context = navController.context,
+                params["from"] = "home"
+                val route = NamiPairingSdkNavigation.createRoute(
                     input = NamiPairingInput(
                         roomId = roomId,
                         parameters = params,
                         deviceCategory = deviceCategory
                     ),
                 )
-                NamiLog.e("Home Screen start : $route", "debug_sample_nami")
                 navController.navigate(route)
-            }
+            }, viewModel = HomeViewModel())
+
         }
 
 
@@ -128,7 +123,7 @@ fun HostScreen() {
         namiPositioningSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
-            NamiPositioningViewModelModule.reset()
+            NamiSDKUI.clear()
             navController.navigate("home") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)

@@ -11,6 +11,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,18 +41,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 
+
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.ui.text.TextStyle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.collect
+
+
 @Composable
-fun HomeScreen(
-    viewModel: HomeViewModel,
-    onPairNamiDevice: (roomUID: String, deviceCategory: DeviceCategory) -> Unit
+fun HomeRoute(
+    onPairNamiDevice: (roomUID: String, deviceCategory: DeviceCategory) -> Unit,
+    viewModel: HomeViewModel
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,13 +96,13 @@ fun HomeScreen(
         mutableStateOf("1a7a48ec-ea38-4410-ba13-529ea89829b6")
     }
 
-
     val listDeviceCategories =
         DeviceCategory.values().toList().filter { it != DeviceCategory.OTHERS && it != DeviceCategory.UN_SPECIFIED }
 
     var currentCategory by remember {
-        mutableStateOf(DeviceCategory.MESH_SENSOR)
+        mutableStateOf(listDeviceCategories.first())
     }
+
     val context = LocalContext.current
 
     SideEffect {
@@ -133,7 +148,7 @@ fun HomeScreen(
             AnimatedVisibility(visible = isShowError) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = errorMessage ?: "",
+                    text = errorMessage!!,
                     style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.error)
                 )
             }
@@ -145,8 +160,8 @@ fun HomeScreen(
             })
             Spacer(modifier = Modifier.height(24.dp))
             NamiDropdown(
-                currentValue = currentCategory.getDeviceCategoryName(context),
-                listTitles = listDeviceCategories.map { it.getDeviceCategoryName(context) },
+                currentValue = currentCategory.categoryName,
+                listTitles = listDeviceCategories.map { it.categoryName },
                 onSelectItem = {
                     currentCategory = listDeviceCategories[it]
                 },
@@ -177,4 +192,3 @@ fun HomeScreen(
         }
     }
 }
-

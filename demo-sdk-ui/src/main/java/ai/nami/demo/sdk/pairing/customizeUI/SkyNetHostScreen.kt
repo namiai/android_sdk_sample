@@ -1,6 +1,7 @@
 package ai.nami.demo.sdk.pairing.customizeUI
 
-import ai.nami.demo.sdk.pairing.shared.HomeScreen
+import ai.nami.demo.sdk.pairing.shared.HomeRoute
+import ai.nami.demo.sdk.pairing.shared.HomeViewModel
 import ai.nami.demo.sdk.pairing.shared.PairingSuccessNavigation
 import ai.nami.demo.sdk.pairing.shared.PairingSuccessScreen
 import ai.nami.sdk.NamiSDK
@@ -25,19 +26,21 @@ fun SkyNetHostScreen() {
 
     NavHost(navController = navController, startDestination = "home") {
         composable(route = "home") {
-            HomeScreen(viewModel = HomeViewModel()) { roomId, deviceCategory ->
+            HomeRoute(onPairNamiDevice = { roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
-                val route = NamiSDKUI.startPairing(
-                    context = navController.context,
+                params["from"] = "home"
+                val route = NamiPairingSdkNavigation.createRoute(
                     input = NamiPairingInput(
                         roomId = roomId,
                         parameters = params,
                         deviceCategory = deviceCategory
                     ),
                 )
-                NamiLog.e("Home Screen start : $route", "debug_sample_nami")
-                navController.navigate(route)
-            }
+                navController.navigate(
+                    route
+                )
+            }, viewModel = HomeViewModel())
+
         }
 
 
@@ -49,14 +52,14 @@ fun SkyNetHostScreen() {
                 val deviceName = output.deviceName
                 val deviceUrn = output.listPairedDevices.firstOrNull()?.deviceUrn
                 if (isWidarDevice && deviceUrn != null) {
-                    val input = NamiPositioningInput(
-                        deviceUrn = deviceUrn,
-                        placeId = placeId,
-                        deviceName = deviceName
+                    val widarRoute = NamiSDKUI.startPositioning(
+                        context = navController.context, input = NamiPositioningInput(
+                            deviceUrn = deviceUrn,
+                            placeId = placeId,
+                            deviceName = deviceName
+                        )
                     )
-
-                    val positioningStartRoute = NamiSDKUI.startPositioning(context = navController.context, input)
-                    navController.navigate(positioningStartRoute)
+                    navController.navigate(widarRoute)
                 } else {
                     navController.navigate(
                         PairingSuccessNavigation.createRoute(
@@ -104,7 +107,7 @@ fun SkyNetHostScreen() {
         namiPositioningSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
-            NamiPositioningViewModelModule.reset()
+            NamiSDKUI.clear()
             navController.navigate("pair-success") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)
@@ -119,18 +122,18 @@ fun SkyNetHostScreen() {
             SkyNetPairingGuideRoute(startedScreenName = startedScreenName,
                 onNext = {
 
-                NamiPairingSdkNavigation.resumeRoute()?.let {route ->
-                    navController.navigate(route){
-                        popUpTo(SkyNetPairingGuideNavigation.route){
-                            inclusive = true
+                    NamiPairingSdkNavigation.resumeRoute()?.let { route ->
+                        navController.navigate(route) {
+                            popUpTo(SkyNetPairingGuideNavigation.route) {
+                                inclusive = true
+                            }
                         }
                     }
-                }
-            },
+                },
                 onCancel = {
-                    NamiPairingSdkNavigation.resumeRoute(shouldCancelPairing = true)?.let {route ->
-                        navController.navigate(route){
-                            popUpTo(SkyNetPairingGuideNavigation.route){
+                    NamiPairingSdkNavigation.resumeRoute(shouldCancelPairing = true)?.let { route ->
+                        navController.navigate(route) {
+                            popUpTo(SkyNetPairingGuideNavigation.route) {
                                 inclusive = true
                             }
                         }

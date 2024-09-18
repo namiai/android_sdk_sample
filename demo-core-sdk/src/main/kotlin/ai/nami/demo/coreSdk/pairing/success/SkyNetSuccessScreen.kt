@@ -2,7 +2,6 @@ package ai.nami.demo.coreSdk.pairing.success
 
 import ai.nami.demo.coreSdk.common.SkyNetButton
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
-import ai.nami.sdk.pairing.model.PairingDeviceInfo
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -45,6 +44,16 @@ import com.fatherofapps.jnav.annotations.JNavArg
             name = "placeId",
             type = Int::class,
             isNullable = false
+        ),
+        JNavArg(
+            name = "zoneId",
+            type = Int::class,
+            isNullable = false
+        ),
+        JNavArg(
+            name = "roomId",
+            type = Int::class,
+            isNullable = false
         )
     ]
 )
@@ -56,14 +65,14 @@ fun SkyNetSuccessRoute(
     isWidar: Boolean,
     placeId: Int,
     onPairAnotherDevice: () -> Unit,
-    onPairSuccess: (listPairedDevices: List<PairingDeviceInfo>) -> Unit
+    onPairSuccess: () -> Unit
 ) {
     SkyNetSuccessScreen(
         productId = productId,
         zoneName = zoneName,
         deviceName = deviceName,
-        onPairAnotherDevice = { },
-        onDonePairing = { },
+        onPairAnotherDevice = onPairAnotherDevice,
+        onDonePairing = onPairSuccess,
         isWidar = isWidar,
         isShowLoading = false
     )

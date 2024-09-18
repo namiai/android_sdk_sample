@@ -26,6 +26,7 @@ fun StandardPositioningHostScreen() {
         namiPositioningSDKGraph(navController = navController, onCancel = {
             navController.popBackStack(NamiPositioningSdkRoute, true)
         }, onPositionDone = {
+            NamiSDKUI.clear()
             navController.navigate("done_position") {
                 // make sure that you do this step in  your project
                 popUpTo(NamiPositioningSdkRoute)
@@ -33,7 +34,7 @@ fun StandardPositioningHostScreen() {
         })
 
         composable(route = "widar_info") {
-            WidarNetworkInfoScreen(viewModel = widarNetworkInfoViewModel) { placeId, deviceUrn ->
+            WidarNetworkInfoScreen(viewModel =  WidarNetworkInfoViewModel(NamiLocalStorage.getInstance(context = navController.context))) { placeId, deviceUrn ->
                 val widarRoute =   NamiSDKUI.startPositioning(context = navController.context,  input = NamiPositioningInput(
                     deviceUrn = deviceUrn,
                     placeId = placeId,

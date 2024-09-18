@@ -47,7 +47,27 @@ import kotlinx.coroutines.withContext
             name = "deviceCategory",
             type = String::class,
             isNullable = false
-        )
+        ),
+        JNavArg(
+            name = "placeId",
+            type = Int::class,
+            isNullable = false,
+        ),
+        JNavArg(
+            name = "zoneId",
+            type = Int::class,
+            isNullable = false
+        ),
+        JNavArg(
+            name = "roomId",
+            type = Int::class,
+            isNullable = false
+        ),
+        JNavArg(
+            name = "zoneName",
+            type = String::class,
+            isNullable = false
+        ),
     ]
 )
 
@@ -56,7 +76,11 @@ fun SkyNetQRCodeRoute(
     viewModel: ScanQRCodeViewModel,
     onNext: () -> Unit,
     onBack: () -> Unit,
-    deviceCategory: DeviceCategory
+    deviceCategory: DeviceCategory,
+    placeId: Int,
+    zoneId: Int,
+    roomId: Int,
+    zoneName: String
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,7 +100,7 @@ fun SkyNetQRCodeRoute(
     }
 
     LaunchedEffect(key1 = uiState.isValidateQRCodeSuccess) {
-        if (uiState.isValidateQRCodeSuccess) {
+        if (uiState.isValidateQRCodeSuccess == true) {
             onNext()
         }
     }
@@ -109,10 +133,10 @@ fun SkyNetQRCodeRoute(
             sendViewIntent(
                 ScanQRCodeViewIntent.ValidateQRCode(
                     qrCodeString = qrCode,
-                    roomId = DEFAULT_ROOM_ID,
-                    placeId = DEFAULT_PLACE_ID,
-                    zoneId = DEFAULT_ZONE_ID,
-                    zoneName = DEFAULT_ZONE_NAME,
+                    roomId = roomId,
+                    placeId = placeId,
+                    zoneId = zoneId,
+                    zoneName = zoneName,
                     deviceCategory = deviceCategory
                 )
             )
@@ -159,7 +183,15 @@ private fun SkyNetQRCodeScreen(
         OutlinedTextField(
             value = qrCode,
             onValueChange = { qrCode = it },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text(text = "NAMI:300:128182410")
+            }
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(
+            text = "You can use an application to scan the device's QRCode, then copy its value and paste it in here",
+            style = MaterialTheme.typography.caption
         )
         Spacer(modifier = Modifier.height(24.dp))
         SkyNetButton(

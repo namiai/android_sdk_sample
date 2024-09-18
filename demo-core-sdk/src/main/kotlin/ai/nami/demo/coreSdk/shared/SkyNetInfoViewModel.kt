@@ -1,4 +1,4 @@
-package ai.nami.demo.sdk.pairing.shared
+package ai.nami.demo.coreSdk.shared
 
 import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.common.NamiLog
@@ -17,40 +17,41 @@ import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class HomeViewModel: ViewModel() {
+class SkyNetInfoViewModel : ViewModel() {
 
-    private val viewIntentFlow = MutableSharedFlow<HomeViewIntent>()
 
-    val uiState: StateFlow<HomeUIState>
+    private val viewIntentFlow = MutableSharedFlow<SkyNetInfoViewIntent>()
+
+    val uiState: StateFlow<SkyNetInfoUIState>
 
     init {
-        NamiLog.e("debug_sample_nami","HomeViewModel init")
-        val initialState = HomeUIState()
+        NamiLog.e("debug_sample_nami","SkyNetInfoViewModel init")
+        val initialState = SkyNetInfoUIState()
         uiState =
             merge(viewIntentFlow.toPartialState()).scan(initialState) { currentState, partialState ->
                 partialState.reduce(currentState)
             }.stateIn(viewModelScope, SharingStarted.Eagerly, initialState)
     }
 
-    fun handleViewIntent(viewIntent: HomeViewIntent) {
+    fun handleViewIntent(viewIntent: SkyNetInfoViewIntent) {
         viewModelScope.launch {
             viewIntentFlow.emit(viewIntent)
         }
     }
 
-    private fun Flow<HomeViewIntent>.toPartialState(): Flow<HomePartialState> {
+    private fun Flow<SkyNetInfoViewIntent>.toPartialState(): Flow<SkyNetInfoPartialState> {
         return flatMapLatest {
             when (it) {
-                is HomeViewIntent.InitNamiSDK -> initSDK(it.sessionCode)
+                is SkyNetInfoViewIntent.InitNamiSDK -> initSDK(it.sessionCode)
             }
         }
     }
 
-    private fun initSDK(sessionCode: String): Flow<HomePartialState> =
-        flow<HomePartialState> {
+    private fun initSDK(sessionCode: String): Flow<SkyNetInfoPartialState> =
+        flow<SkyNetInfoPartialState> {
             val result = NamiSDK.init(sessionCode)
-            emit(HomePartialState.InitSuccess(result))
+            emit(SkyNetInfoPartialState.InitSuccess(result))
         }.onStart {
-            emit(HomePartialState.Loading)
-        }.catch { e -> emit(HomePartialState.InitFail(error = e.message)) }
+            emit(SkyNetInfoPartialState.Loading)
+        }.catch { e -> emit(SkyNetInfoPartialState.InitFail(error = e.message)) }
 }

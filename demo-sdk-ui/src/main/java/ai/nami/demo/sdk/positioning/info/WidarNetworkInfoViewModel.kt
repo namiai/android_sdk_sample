@@ -25,6 +25,8 @@ class WidarNetworkInfoViewModel(namiLocalStorage: NamiLocalStorage): ViewModel()
 
     private val viewIntentFlow = MutableSharedFlow<WidarNetworkInfoViewIntent>()
 
+    private val viewIntentFlow = MutableSharedFlow<WidarNetworkInfoViewIntent>()
+
     val uiState: StateFlow<WidarNetworkInfoState>
 
     init {

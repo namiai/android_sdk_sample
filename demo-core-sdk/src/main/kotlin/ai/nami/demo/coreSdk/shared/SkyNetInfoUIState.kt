@@ -1,22 +1,22 @@
-package ai.nami.demo.sdk.pairing.shared
+package ai.nami.demo.coreSdk.shared
 
-data class HomeUIState(
+data class SkyNetInfoUIState(
     val isLoading: Boolean = false,
     val initSDKSuccess: Boolean? = null,
     val errorMessage: String? = null
 )
 
-sealed interface HomeViewIntent {
-    data class InitNamiSDK(val sessionCode: String): HomeViewIntent
+sealed interface SkyNetInfoViewIntent {
+    data class InitNamiSDK(val sessionCode: String): SkyNetInfoViewIntent
 }
 
-sealed interface HomePartialState {
-    object Loading: HomePartialState
-    data class InitSuccess(val isSuccess:Boolean): HomePartialState
+sealed interface SkyNetInfoPartialState {
+    object Loading: SkyNetInfoPartialState
+    data class InitSuccess(val isSuccess: Boolean): SkyNetInfoPartialState
 
-    data class InitFail(val error: String?): HomePartialState
+    data class InitFail(val error: String?): SkyNetInfoPartialState
 
-    fun reduce(currentState: HomeUIState): HomeUIState {
+    fun reduce(currentState: SkyNetInfoUIState): SkyNetInfoUIState {
         return when (this) {
             is Loading -> currentState.copy(isLoading = true, errorMessage = null)
             is InitSuccess -> currentState.copy(isLoading = false, initSDKSuccess = isSuccess)
