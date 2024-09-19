@@ -15,5 +15,5 @@
 local.properties
 /.idea/misc.xml
 /.idea/**
-/script/nami_log.sh
-/script/nami_log_environment.sh
+script/nami_log.sh
+script/nami_log_environment.sh
