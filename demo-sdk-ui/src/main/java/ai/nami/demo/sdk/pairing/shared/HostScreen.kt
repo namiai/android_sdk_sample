@@ -90,7 +90,7 @@ fun HostScreen() {
                 val route = NamiPairingSdkNavigation.createRoute(
                     input = NamiPairingInput(
                         roomId = roomId.toString(),
-                        deviceCategory = DeviceCategory.OPTIONAL,
+                        deviceCategory = null,
                         placeId = placeId,
                         zoneId = zoneId,
                         zoneName = zoneName,
