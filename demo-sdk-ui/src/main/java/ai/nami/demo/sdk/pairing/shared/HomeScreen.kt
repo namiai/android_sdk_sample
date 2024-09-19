@@ -81,7 +81,8 @@ fun HomeRoute(
     }
 
     val listDeviceCategories =
-        DeviceCategory.values().toList().filter { it != DeviceCategory.OTHERS }
+        DeviceCategory.values().toList()
+            .filter { it != DeviceCategory.OTHERS && it != DeviceCategory.OPTIONAL }
 
     var currentCategory by remember {
         mutableStateOf(listDeviceCategories.first())

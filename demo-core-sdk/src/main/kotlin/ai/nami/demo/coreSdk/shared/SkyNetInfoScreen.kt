@@ -119,11 +119,12 @@ private fun SkyeNetInfoScreen(
     val isEnableButton by remember(isNeedASessionCode, sessionCode, roomId) {
         derivedStateOf {
             (!isNeedASessionCode || sessionCode.isNotEmpty())
-                && roomId.isNotEmpty()
+                    && roomId.isNotEmpty()
         }
     }
 
-    val listDeviceCategories = DeviceCategory.values().toList()
+    val listDeviceCategories =
+        DeviceCategory.values().toList().filter { it != DeviceCategory.OPTIONAL }
 
     var currentCategory by remember {
         mutableStateOf(listDeviceCategories.first())
