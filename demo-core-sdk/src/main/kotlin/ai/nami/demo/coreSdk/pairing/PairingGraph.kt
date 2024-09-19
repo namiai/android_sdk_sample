@@ -415,7 +415,7 @@ fun NavGraphBuilder.pairingGraph(
                         onNavigateTo(
                             SkyNetQRCodeNavigation,
                             SkyNetQRCodeNavigation.createRoute(
-                                deviceCategory = DeviceCategory.OPTIONAL.id,
+                                deviceCategory = null,
                                 placeId = placeId,
                                 zoneId = zoneId,
                                 roomId = roomId,
