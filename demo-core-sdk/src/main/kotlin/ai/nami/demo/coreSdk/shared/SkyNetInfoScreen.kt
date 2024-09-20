@@ -123,8 +123,7 @@ private fun SkyeNetInfoScreen(
         }
     }
 
-    val listDeviceCategories =
-        DeviceCategory.values().toList().filter { it != DeviceCategory.OPTIONAL }
+    val listDeviceCategories = DeviceCategory.values().toList()
 
     var currentCategory by remember {
         mutableStateOf(listDeviceCategories.first())
@@ -222,7 +221,6 @@ fun DeviceCategory.getDeviceCategoryName(context: Context): String {
         DeviceCategory.WIFI_SENSOR -> R.string.device_setup_wifi_sensor
         DeviceCategory.CONTACT_SENSOR -> R.string.device_setup_contact_sensor
         DeviceCategory.WIDAR_SENSOR -> R.string.device_setup_widar_sensor
-        DeviceCategory.OPTIONAL -> R.string.device_setup_optional
         else -> R.string.device_setup_others
     }
     return context.getString(id)

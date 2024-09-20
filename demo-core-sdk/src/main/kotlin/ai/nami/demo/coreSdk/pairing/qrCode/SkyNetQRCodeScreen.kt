@@ -3,10 +3,6 @@ package ai.nami.demo.coreSdk.pairing.qrCode
 
 import ai.nami.demo.coreSdk.common.SkyNetButton
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
-import ai.nami.sdk.common.DEFAULT_PLACE_ID
-import ai.nami.sdk.common.DEFAULT_ROOM_ID
-import ai.nami.sdk.common.DEFAULT_ZONE_ID
-import ai.nami.sdk.common.DEFAULT_ZONE_NAME
 import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.viewmodels.scanqrcode.ScanQRCodeViewIntent
 import ai.nami.sdk.pairing.viewmodels.scanqrcode.ScanQRCodeViewModel
@@ -76,7 +72,7 @@ fun SkyNetQRCodeRoute(
     viewModel: ScanQRCodeViewModel,
     onNext: () -> Unit,
     onBack: () -> Unit,
-    deviceCategory: DeviceCategory,
+    deviceCategory: DeviceCategory?,
     placeId: Int,
     zoneId: Int,
     roomId: Int,

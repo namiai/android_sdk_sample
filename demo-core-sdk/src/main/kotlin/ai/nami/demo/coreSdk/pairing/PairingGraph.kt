@@ -51,7 +51,7 @@ fun NavGraphBuilder.pairingGraph(
         ) {
             if (it.lifecycleIsResumed()) {
                 val viewModel = NamiPairingViewModelModule.provideScanQRCodeViewModel()
-                val categoryName = SkyNetQRCodeNavigation.deviceCategory(it)
+                val deviceCategoryId = SkyNetQRCodeNavigation.deviceCategory(it)
                 val placeId = SkyNetQRCodeNavigation.placeId(it)
                 val zoneId = SkyNetQRCodeNavigation.zoneId(it)
                 val roomId = SkyNetQRCodeNavigation.roomId(it)
@@ -67,7 +67,7 @@ fun NavGraphBuilder.pairingGraph(
                     onBack = {
                         onExitPairing()
                     },
-                    deviceCategory = DeviceCategory.from(categoryName),
+                    deviceCategory = deviceCategoryId?.let { DeviceCategory.from(it) },
                     placeId = placeId,
                     zoneId = zoneId,
                     roomId = roomId,
