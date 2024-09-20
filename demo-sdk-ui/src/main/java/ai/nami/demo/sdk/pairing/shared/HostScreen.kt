@@ -26,7 +26,8 @@ fun HostScreen() {
             HomeRoute(onPairNamiDevice = { roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
-                val route = NamiPairingSdkNavigation.createRoute(
+                val route = NamiSDKUI.startPairing(
+                    context = navController.context,
                     input = NamiPairingInput(
                         roomId = roomId,
                         parameters = params,
@@ -105,7 +106,8 @@ fun HostScreen() {
             val deviceCategory = PairingSuccessNavigation.deviceCategory(it)
 
             PairingSuccessScreen(onPairAnotherDevice = {
-                val route = NamiPairingSdkNavigation.createRoute(
+                val route =    NamiSDKUI.startPairing(
+                    context = navController.context,
                     input = NamiPairingInput(
                         roomId = roomId.toString(),
                         deviceCategory = null,
@@ -114,6 +116,7 @@ fun HostScreen() {
                         zoneName = zoneName,
                     ),
                 )
+
                 navController.navigate(route)
             }, onFinishPairing = {
                 navController.popBackStack("home", false)

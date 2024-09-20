@@ -1,5 +1,6 @@
 package ai.nami.sdk.sample
 
+import ai.nami.demo.coreSdk.DemoCoreSDKActivity
 import ai.nami.demo.sdk.DemoUIMainActivity
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
 import android.content.Intent
@@ -47,11 +48,11 @@ class MainActivity: ComponentActivity() {
                             Text("Demo SDK-UI")
                         }
                         Spacer(modifier = Modifier.height(24.dp))
-//                        Button(onClick = {
-//                            openDemoUIActivity(DemoCoreSDKActivity::class.java)
-//                        }) {
-//                            Text("Demo Core-SDK")
-//                        }
+                        Button(onClick = {
+                            openDemoUIActivity(DemoCoreSDKActivity::class.java)
+                        }) {
+                            Text("Demo Core-SDK")
+                        }
                     }
                 }
             }

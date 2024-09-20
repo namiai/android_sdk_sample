@@ -8,6 +8,7 @@ import ai.nami.demo.sdk.positioning.customizeTheme.PositioningCustomizeThemeActi
 import ai.nami.demo.sdk.positioning.customizeUI.CustomizePositioningUIActivity
 import ai.nami.demo.sdk.positioning.standard.PositioningStandardActivity
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.registerNamiPairingEvent
 import android.content.Intent
 import android.os.Bundle
@@ -42,6 +43,7 @@ import kotlinx.coroutines.launch
 class DemoUIMainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NamiSDK.enableReleaseLog()
         val namiLocalStorage = ai.nami.demo.common.NamiLocalStorage.getInstance(this)
         registerNamiPairingEvent {
 
