@@ -3,11 +3,9 @@ package ai.nami.demo.sdk.pairing.shared
 
 import ai.nami.sdk.NamiSDKUI
 import ai.nami.sdk.common.NamiLog
-import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
-import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
@@ -25,7 +23,7 @@ fun HostScreen() {
         composable(route = "home") {
             HomeRoute(onPairNamiDevice = { roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
-                params["from"] = "home"
+//                params["from"] = "home"
                 val route = NamiSDKUI.startPairing(
                     context = navController.context,
                     input = NamiPairingInput(
@@ -67,7 +65,7 @@ fun HostScreen() {
                 } else {
                     val from = output.parameters?.get("from") ?: ""
                     if (from == "home") {
-                        navController.navigate("device-screen")
+                        navController.navigate("home")
                     } else {
                         navController.navigate(
                             PairingSuccessNavigation.createRoute(
