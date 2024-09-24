@@ -66,12 +66,12 @@ android {
 dependencies {
     implementation(
         files(
-            "libs/nami-widar-sdk-1.0.8.7.aar",
             "libs/A3LLocation-1.0.0.aar"
         )
     )
 
     implementation("ai.nami:pairing-sdk:1.5.9.1")
+    implementation("ai.nami:widar-sdk:1.1.6")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
@@ -123,13 +123,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-threadnetwork:16.0.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
-    // libraries for positioning (widar)
-    val coroutinesVersion = "1.7.0"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
-    val coapVersion = "3.7.0"
-    implementation("org.eclipse.californium:californium-core:$coapVersion")
-    implementation("org.eclipse.californium:scandium:$coapVersion")
-    implementation("com.google.protobuf:protobuf-javalite:3.14.0")
-    implementation("com.airbnb.android:lottie-compose:6.2.0")
 
 }

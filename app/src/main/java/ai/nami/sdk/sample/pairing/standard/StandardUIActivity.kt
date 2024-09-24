@@ -83,9 +83,9 @@ class StandardUIActivity: ComponentActivity() {
                 )
             }
 
-            namiScanQRCodeLayout { modifier, onScanQRCodeSuccess ->
-                ZXingScanQRCode(onScanQRCodeSuccess = onScanQRCodeSuccess, modifier = modifier)
-            }
+//            namiScanQRCodeLayout { modifier, onScanQRCodeSuccess ->
+//                ZXingScanQRCode(onScanQRCodeSuccess = onScanQRCodeSuccess, modifier = modifier)
+//            }
         }
 
         setContent {
