@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.Dispatchers
@@ -77,7 +78,7 @@ fun HomeRoute(
 
     // zone
     var roomId by remember {
-        mutableStateOf("89648c39-6c8e-4b86-8ab1-f36f4532191f")
+        mutableStateOf("4355cdc6-0ce6-4fac-a30e-be602890964b")
     }
 
     val listDeviceCategories =
@@ -145,8 +146,8 @@ fun HomeRoute(
             })
             Spacer(modifier = Modifier.height(24.dp))
             NamiDropdown(
-                currentValue = currentCategory.getDeviceCategoryName(context),
-                listTitles = listDeviceCategories.map { it.getDeviceCategoryName(context) },
+                currentValue = stringResource(currentCategory.getDeviceCategoryName()),
+                listTitles = listDeviceCategories.map { stringResource(it.getDeviceCategoryName()) },
                 onSelectItem = {
                     currentCategory = listDeviceCategories[it]
                 },

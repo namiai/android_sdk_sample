@@ -2,9 +2,9 @@
 jetpackComposePermission = "0.30.0"
 jnav = "1.0.2"
 
-namiCoreSDK = "2.3.0.0-snapshots"
-namiSDKRouting = "2.3.0.6-snapshots"
-namiSDKUI = "2.3.0.6-snapshots"
+namiCoreSDK = "2.3.0.3-snapshots"
+namiSDKRouting = "2.3.0.8-snapshots"
+namiSDKUI = "2.3.0.8-snapshots"
 
 
 androidXCamera = "1.2.3"
