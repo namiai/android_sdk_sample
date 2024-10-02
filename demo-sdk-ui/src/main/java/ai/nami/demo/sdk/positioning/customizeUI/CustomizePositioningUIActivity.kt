@@ -50,7 +50,7 @@ class CustomizePositioningUIActivity: ComponentActivity() {
                 )
             }
 
-            successScreen { deviceCategory, deviceName, onDone ->
+            successScreen { deviceName, onDone ->
                 SkyNetPositioningSuccessScreen(deviceName = deviceName, onDone)
             }
         }
