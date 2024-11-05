@@ -89,8 +89,12 @@ class StandardUIActivity: ComponentActivity() {
             }
 
             onGetSavedThreadCredentials { key1, key2, key3 ->
-                val list = namiLocalStorage.listThreadCredentials.firstOrNull()?.toList()
-                list?.firstOrNull { it.first == key2 }?.second?.toNamiSavedThreadNetworkInfo()
+                val list = namiLocalStorage.listThreadCredentials.firstOrNull()?.toList().also {
+                    Log.e("debug_nami_sample","list ThreadCredentials $it")
+                }
+                list?.firstOrNull { it.first == key2 }?.second?.toNamiSavedThreadNetworkInfo()?.also {
+                    Log.e("debug_nami_sample","savedThreadCredentials $it")
+                }
 
             }
 

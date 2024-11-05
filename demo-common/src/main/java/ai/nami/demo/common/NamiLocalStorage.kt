@@ -86,7 +86,17 @@ class NamiLocalStorage private constructor(private val context: Context) {
             json.put("data", credentials)
             val currentSet =
                 preferences[LIST_THREAD_NETWORK_CREDENTIALS]?.toMutableSet() ?: mutableSetOf()
+
+            currentSet.removeIf {
+                val savedJson = JSONObject(it)
+                val savedKey = savedJson.optInt("key")
+                (savedKey == key).also { isSaved ->
+                    Log.e("debug_nami_sample","saveThreadNetworkCredential isSaved $isSaved")
+                }
+            }
+            Log.e("debug_nami_sample","saveThreadNetworkCredential currentSet after removing: $currentSet")
             currentSet.add(json.toString())
+            Log.e("debug_nami_sample","saveThreadNetworkCredential currentSet after adding: $currentSet")
             preferences[LIST_THREAD_NETWORK_CREDENTIALS] = currentSet.toSet()
         }
     }
