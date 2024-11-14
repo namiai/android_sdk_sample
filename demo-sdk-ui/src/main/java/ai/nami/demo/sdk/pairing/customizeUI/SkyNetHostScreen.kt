@@ -25,16 +25,15 @@ fun SkyNetHostScreen() {
             HomeRoute(onPairNamiDevice = { roomId, deviceCategory ->
                 val params = mutableMapOf<String, String>()
                 params["from"] = "home"
-                val route = NamiPairingSdkNavigation.createRoute(
+                val route = NamiSDKUI.startPairing(
+                    context = navController.context,
                     input = NamiPairingInput(
                         roomId = roomId,
                         parameters = params,
                         deviceCategory = deviceCategory
                     ),
                 )
-                navController.navigate(
-                    route
-                )
+                navController.navigate(route)
             }, viewModel = HomeViewModel())
 
         }
