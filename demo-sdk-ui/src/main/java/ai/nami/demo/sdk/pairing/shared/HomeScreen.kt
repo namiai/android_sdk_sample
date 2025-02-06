@@ -74,9 +74,9 @@ fun HomeRoute(
         mutableStateOf(NamiSDK.shouldInit())
     }
 
-    // zone
+
     var roomId by remember {
-        mutableStateOf("e81c075e-f5c0-4104-b814-62d12cfaa368")
+        mutableStateOf("")
     }
 
 

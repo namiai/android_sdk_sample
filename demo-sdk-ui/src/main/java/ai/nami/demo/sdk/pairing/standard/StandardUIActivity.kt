@@ -2,10 +2,12 @@ package ai.nami.demo.sdk.pairing.standard
 
 import ai.nami.demo.sdk.pairing.shared.HostScreen
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
+import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.model.NamiSavedThreadNetworkInfo
 import ai.nami.sdk.pairing.NamiPairingSdk
 import ai.nami.sdk.pairing.model.PairingSavedWifiInfo
 import ai.nami.sdk.registerNamiPairingEvent
+import ai.nami.sdk.ui.BuildConfig
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -69,6 +71,8 @@ class StandardUIActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        NamiSDK.enableReleaseLog()
+
         val namiLocalStorage = ai.nami.demo.common.NamiLocalStorage.getInstance(this)
 
         lifecycleScope.launch {
@@ -90,11 +94,12 @@ class StandardUIActivity: ComponentActivity() {
 
             onGetSavedThreadCredentials { key1, key2, key3 ->
                 val list = namiLocalStorage.listThreadCredentials.firstOrNull()?.toList().also {
-                    Log.e("debug_nami_sample","list ThreadCredentials $it")
+                    Log.e("debug_nami_sample", "list ThreadCredentials $it")
                 }
-                list?.firstOrNull { it.first == key2 }?.second?.toNamiSavedThreadNetworkInfo()?.also {
-                    Log.e("debug_nami_sample","savedThreadCredentials $it")
-                }
+                list?.firstOrNull { it.first == key2 }?.second?.toNamiSavedThreadNetworkInfo()
+                    ?.also {
+                        Log.e("debug_nami_sample", "savedThreadCredentials $it")
+                    }
 
             }
 
