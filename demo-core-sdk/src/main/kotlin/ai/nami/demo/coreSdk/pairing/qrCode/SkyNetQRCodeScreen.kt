@@ -88,6 +88,12 @@ fun SkyNetQRCodeRoute(
         Channel<ScanQRCodeViewIntent>(Channel.UNLIMITED)
     }
 
+    LaunchedEffect(uiState.pairingError) {
+        if (uiState.pairingError?.isSessionExpired() == true) {
+            onExitPairing(PairingErrorCode.SessionExpired)
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         withContext(Dispatchers.Main.immediate) {
             viewIntentChannel.consumeAsFlow().onEach(viewModel::handleViewIntent).collect()
@@ -107,12 +113,6 @@ fun SkyNetQRCodeRoute(
     LaunchedEffect(key1 = uiState.isCanceledPairing) {
         if (uiState.isCanceledPairing) {
             onBack()
-        }
-    }
-
-    LaunchedEffect(uiState.pairingError) {
-        if (uiState.pairingError?.isSessionExpired() == true) {
-            onExitPairing(PairingErrorCode.SessionExpired)
         }
     }
 
