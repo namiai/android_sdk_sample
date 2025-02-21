@@ -40,7 +40,7 @@ const val PairingGraphRoute = "sky_net_pairing_graph_route"
 fun NavGraphBuilder.pairingGraph(
     onNavigateTo: (navigation: JNavigation, route: String?) -> Unit,
     onBack: (navigation: JNavigation?, inclusive: Boolean) -> Unit,
-    onExitPairing: () -> Unit,
+    onExitPairing: (PairingErrorCode?) -> Unit,
     navHostController: NavHostController
 ) {
     navigation(route = PairingGraphRoute, startDestination = SkyNetQRCodeNavigation.route) {
@@ -65,8 +65,9 @@ fun NavGraphBuilder.pairingGraph(
                         )
                     },
                     onBack = {
-                        onExitPairing()
+                        onExitPairing(null)
                     },
+                    onExitPairing = onExitPairing,
                     deviceCategory = deviceCategoryId?.let { DeviceCategory.from(it) },
                     placeId = placeId,
                     zoneId = zoneId,
@@ -81,7 +82,7 @@ fun NavGraphBuilder.pairingGraph(
                 val viewModel = NamiPairingViewModelModule.provideScanDeviceViewModel()
                 SkyNetScanDeviceRoute(
                     viewModel = viewModel,
-                    onBack = { onExitPairing() },
+                    onBack = { onExitPairing(null) },
                     onScanDeviceSuccess = { productId, deviceName, zoneName ->
                         onNavigateTo(
                             SkyNetDeviceNameNavigation,
@@ -97,7 +98,8 @@ fun NavGraphBuilder.pairingGraph(
                             SkyNetBluetoothDisconnectedNavigation,
                             SkyNetBluetoothDisconnectedNavigation.createRoute()
                         )
-                    }
+                    },
+                    onExitPairing = onExitPairing
                 )
             }
         }
@@ -116,7 +118,7 @@ fun NavGraphBuilder.pairingGraph(
                     defaultName = defaultName,
                     productId = productId,
                     onBack = {
-                        onExitPairing()
+                        onExitPairing(null)
                     },
                     onNavigateToPingPongScreen = { deviceName ->
                         onNavigateTo(
@@ -133,6 +135,7 @@ fun NavGraphBuilder.pairingGraph(
                             )
                         )
                     },
+                    onExitPairing = onExitPairing,
                     onNavigateToErrorScreen = { isBluetoothDisconnected, pairingErrorCode, errorMessage, deviceCategory ->
                         if (isBluetoothDisconnected) {
                             onNavigateTo(
@@ -183,7 +186,7 @@ fun NavGraphBuilder.pairingGraph(
                             )
                         )
                     },
-                    onExitPairing = { onExitPairing() },
+                    onExitPairing = { onExitPairing(null) },
                     deviceCategory = DeviceCategory.from(
                         SkyNetDeviceNameErrorNavigation.deviceCategory(
                             it
@@ -205,7 +208,7 @@ fun NavGraphBuilder.pairingGraph(
                 val isJoinThreadNetwork = SkyNetScanWifiNetworkNavigation.isJoinThreadNetwork(it)
                 SkyNetScanWifiNetworkRoute(
                     viewModel = viewModel,
-                    onBack = { onExitPairing() },
+                    onBack = { onExitPairing(null) },
                     onNavigateEnterWifiPasswordScreen = { wifiName ->
                         onNavigateTo(
                             SkyNetEnterWifiPasswordNavigation,
@@ -241,6 +244,7 @@ fun NavGraphBuilder.pairingGraph(
                             )
                         )
                     },
+                    onExitPairing = onExitPairing,
                     onNavigateBluetoothDisconnectedScreen = {
                         onNavigateTo(
                             SkyNetBluetoothDisconnectedNavigation,
@@ -262,7 +266,7 @@ fun NavGraphBuilder.pairingGraph(
                 SkyNetWifiNetworkErrorRoute(
                     viewModel = viewModel,
                     pairingError = PairingErrorCode.from(code),
-                    onExitPairing = { onExitPairing() },
+                    onExitPairing = { onExitPairing(null) },
                     onRetry = {
                         if (isFromPingPong) {
                             onBack(SkyNetPingPongNavigation, true)
@@ -330,8 +334,9 @@ fun NavGraphBuilder.pairingGraph(
                     viewModel = viewModel,
                     isJoinThreadNetwork = isJoinThreadNetwork,
                     onBack = {
-                        onExitPairing()
+                        onExitPairing(null)
                     },
+                    onExitPairing = onExitPairing,
                     onNavigatePairingSuccessScreen = { productId: Int, zoneName: String, isWidar: Boolean, placeId: Int, zoneId: Int, roomId: Int, pairingDeviceInfo ->
 
                         if (isWidar && null != pairingDeviceInfo) {
@@ -388,7 +393,7 @@ fun NavGraphBuilder.pairingGraph(
             if (it.lifecycleIsResumed()) {
                 val viewModel = NamiPairingViewModelModule.provideCancelPairingViewModel()
                 SkyNetJoinThreadNetworkFailRoute(viewModel = viewModel) {
-                    onExitPairing()
+                    onExitPairing(null)
                 }
             }
         }
@@ -424,7 +429,7 @@ fun NavGraphBuilder.pairingGraph(
                         )
                     },
                     onPairSuccess = {
-                        onExitPairing()
+                        onExitPairing(null)
                     }
                 )
             }
@@ -434,7 +439,7 @@ fun NavGraphBuilder.pairingGraph(
             if (it.lifecycleIsResumed()) {
                 val viewModel = NamiPairingViewModelModule.provideCancelPairingViewModel()
                 SkyNetBluetoothDisconnectedRoute(viewModel = viewModel) {
-                    onExitPairing()
+                    onExitPairing(null)
                 }
             }
         }

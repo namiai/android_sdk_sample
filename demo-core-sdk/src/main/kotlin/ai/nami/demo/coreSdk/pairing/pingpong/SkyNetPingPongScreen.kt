@@ -1,8 +1,10 @@
 package ai.nami.demo.coreSdk.pairing.pingpong
 
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
+import ai.nami.sdk.extension.isSessionExpired
 import ai.nami.sdk.pairing.model.PairingDeviceInfo
 import ai.nami.sdk.pairing.model.PairingError
+import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.pingpong.PairingPingPongViewIntent
 import ai.nami.sdk.pairing.viewmodels.pingpong.PairingPingPongViewModel
 import androidx.compose.animation.core.LinearEasing
@@ -57,6 +59,7 @@ fun SkyNetPingPongRoute(
     viewModel: PairingPingPongViewModel,
     isJoinThreadNetwork: Boolean,
     onBack: () -> Unit,
+    onExitPairing: (PairingErrorCode?) -> Unit,
     onNavigatePairingSuccessScreen: (productId: Int, zoneName: String, isWidar: Boolean, placeId: Int, zoneId: Int, roomId: Int, pairingDeviceInfo: PairingDeviceInfo?) -> Unit,
     onNavigateConnectWifiFailScreen: (errorCode: PairingError?) -> Unit,
     onNavigateJoinThreadNetworkFailScreen: () -> Unit,
@@ -72,6 +75,12 @@ fun SkyNetPingPongRoute(
     LaunchedEffect(key1 = Unit) {
         withContext(Dispatchers.Main.immediate) {
             viewIntentChannel.consumeAsFlow().onEach(viewModel::handleViewIntent).collect()
+        }
+    }
+
+    LaunchedEffect(key1 = uiState.pairingError) {
+        if (uiState.pairingError?.isSessionExpired() == true) {
+            onExitPairing(PairingErrorCode.SessionExpired)
         }
     }
 
@@ -106,7 +115,7 @@ fun SkyNetPingPongRoute(
                 val productId = uiState.productId
                 val zoneName = uiState.zoneName
                 if (productId != null && zoneName != null) {
-                    val pairingDeviceInfo =  uiState.listPairedDevices.firstOrNull()
+                    val pairingDeviceInfo = uiState.listPairedDevices.firstOrNull()
                     onNavigatePairingSuccessScreen(
                         productId,
                         zoneName,

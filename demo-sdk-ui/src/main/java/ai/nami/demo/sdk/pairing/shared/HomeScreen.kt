@@ -77,7 +77,7 @@ fun HomeRoute(
 
     // zone
     var roomId by remember {
-        mutableStateOf("4355cdc6-0ce6-4fac-a30e-be602890964b")
+        mutableStateOf("")
     }
 
     val listDeviceCategories =

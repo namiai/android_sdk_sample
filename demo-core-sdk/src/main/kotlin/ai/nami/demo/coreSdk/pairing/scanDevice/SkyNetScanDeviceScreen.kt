@@ -5,6 +5,8 @@ import ai.nami.demo.coreSdk.common.SkyNetPermissionRequest
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
 import ai.nami.demo.coreSdk.common.launchPermissionAppSetting
 import ai.nami.sdk.common.DEFAULT_PRODUCT_ID
+import ai.nami.sdk.extension.isSessionExpired
+import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.scandevice.ScanDeviceViewIntent
 import ai.nami.sdk.pairing.viewmodels.scandevice.ScanDeviceViewModel
 import android.Manifest
@@ -46,6 +48,7 @@ import kotlinx.coroutines.withContext
 fun SkyNetScanDeviceRoute(
     viewModel: ScanDeviceViewModel,
     onBack: () -> Unit,
+    onExitPairing: (PairingErrorCode?) -> Unit,
     onScanDeviceSuccess: (productId: Int, deviceName: String, zoneName: String) -> Unit,
     onNavigateBluetoothDisconnectedScreen: () -> Unit
 ) {
@@ -129,6 +132,12 @@ fun SkyNetScanDeviceRoute(
     LaunchedEffect(key1 = uiState.isCanceledPairing) {
         if (uiState.isCanceledPairing) {
             onBack()
+        }
+    }
+
+    LaunchedEffect(uiState.pairingError) {
+        if (uiState.pairingError?.isSessionExpired() == true) {
+            onExitPairing(PairingErrorCode.SessionExpired)
         }
     }
 

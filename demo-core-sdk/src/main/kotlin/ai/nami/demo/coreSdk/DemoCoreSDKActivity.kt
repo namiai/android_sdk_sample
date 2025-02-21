@@ -15,14 +15,18 @@ import ai.nami.demo.coreSdk.shared.SkyNetInfoViewModel
 import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.model.NamiSavedThreadNetworkInfo
 import ai.nami.sdk.pairing.NamiPairingSdk
+import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.di.NamiPairingViewModelModule
 import ai.nami.sdk.positioning.viewmodels.di.NamiPositioningViewModelModule
 import ai.nami.sdk.registerNamiPairingEvent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -103,9 +107,16 @@ fun SkyNetHostScreen(
     onBack: (navigation: JNavigation?, inclusive: Boolean) -> Unit
 ) {
 
-    val onExit: () -> Unit = {
-        NamiPairingSdk.reset()
-        onBack(SkyNetHomeRouteNavigation, false)
+    val context = LocalContext.current
+    val onExit: (PairingErrorCode?) -> Unit = remember(context) {
+        { errorCode ->
+            NamiPairingSdk.reset()
+            onBack(SkyNetHomeRouteNavigation, false)
+            if (errorCode == PairingErrorCode.SessionExpired) {
+                Toast.makeText(context, "Session is expired, please try again!", Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
     }
 
 
@@ -170,7 +181,9 @@ fun SkyNetHostScreen(
         positioningGraph(
             onNavigateTo = onNavigateTo,
             onBack = onBack,
-            onExitPositioning = onExit
+            onExitPositioning = {
+                onExit(null)
+            }
         )
 
     }

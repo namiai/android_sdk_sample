@@ -2,6 +2,7 @@ package ai.nami.demo.coreSdk.pairing.deviceName
 
 import ai.nami.demo.coreSdk.pairing.error.SkyNetPairingErrorScreen
 import ai.nami.sdk.common.NamiDeviceType
+import ai.nami.sdk.extension.isSessionExpired
 import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.renamedevice.RenameDeviceErrorViewIntent
@@ -34,7 +35,7 @@ fun SkyNetDeviceNameErrorRoute(
     errorMessage: String?,
     onNavigateToPingPongScreen: (deviceName: String) -> Unit,
     onNavigateConnectWifiScreen: (Boolean, String) -> Unit,
-    onExitPairing: () -> Unit,
+    onExitPairing: (PairingErrorCode?) -> Unit,
     deviceCategory: DeviceCategory,
     zoneName: String,
 ) {
@@ -46,7 +47,7 @@ fun SkyNetDeviceNameErrorRoute(
 
     LaunchedEffect(key1 = uiState) {
         if (uiState.isCanceled) {
-            onExitPairing()
+            onExitPairing(null)
         }
     }
 
@@ -61,6 +62,12 @@ fun SkyNetDeviceNameErrorRoute(
             } else {
                 onNavigateToPingPongScreen(uiState.deviceName)
             }
+        }
+    }
+
+    LaunchedEffect(uiState.pairingError) {
+        if (uiState.pairingError?.isSessionExpired() == true) {
+            onExitPairing(PairingErrorCode.SessionExpired)
         }
     }
 
