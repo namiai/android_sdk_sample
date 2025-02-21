@@ -5,13 +5,16 @@ import ai.nami.demo.sdk.pairing.shared.HomeViewModel
 import ai.nami.demo.sdk.pairing.shared.PairingSuccessNavigation
 import ai.nami.demo.sdk.pairing.shared.PairingSuccessScreen
 import ai.nami.sdk.NamiSDKUI
+import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.routing.common.NamiPairingInput
 import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.NamiPairingSdkNavigation
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,7 +22,7 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun SkyNetHostScreen() {
     val navController = rememberNavController()
-
+    val context = LocalContext.current
     NavHost(navController = navController, startDestination = "home") {
         composable(route = "home") {
             HomeRoute(onPairNamiDevice = { roomId, deviceCategory ->
@@ -68,6 +71,17 @@ fun SkyNetHostScreen() {
                     )
                 }
             },
+            onExitPairing = { output ->
+                if (output.errorCode == PairingErrorCode.SessionExpired) {
+                    navController.popBackStack("home", false)
+                    Toast.makeText(
+                        context,
+                        "Session is expired, please try again!",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                }
+            }
 
             )
 
