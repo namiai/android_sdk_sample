@@ -9,7 +9,9 @@ import ai.nami.sdk.routing.common.NamiPositioningInput
 import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk.routing.positioning.ui.navigation.NamiPositioningSdkRoute
 import ai.nami.sdk.routing.positioning.ui.navigation.namiPositioningSDKGraph
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun HostScreen() {
     val navController = rememberNavController()
+    val context = LocalContext.current
     NavHost(navController = navController, startDestination = "home") {
 
         composable(route = "home") {
@@ -81,12 +84,24 @@ fun HostScreen() {
                 }
             },
             onExitPairing = { output ->
-                NamiLog.e("debug_sample_nami","onExitPairing")
-                if (output.errorCode == PairingErrorCode.DeviceMismatchQRCode) {
-                    // todo: add device category selection, and back to that screen
-                    navController.popBackStack("home", false)
-                } else {
-                    navController.popBackStack("home", false)
+                NamiLog.e("debug_sample_nami", "onExitPairing")
+                when (output.errorCode) {
+                    PairingErrorCode.DeviceMismatchQRCode -> {
+                        navController.popBackStack("home", false)
+                    }
+
+                    PairingErrorCode.SessionExpired -> {
+                        navController.popBackStack("home", false)
+                        Toast.makeText(
+                            context,
+                            "Session is expired, please try again!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    else -> {
+                        navController.popBackStack("home", false)
+                    }
                 }
             }
         )
@@ -104,7 +119,7 @@ fun HostScreen() {
             val deviceCategory = PairingSuccessNavigation.deviceCategory(it)
 
             PairingSuccessScreen(onPairAnotherDevice = {
-                val route =    NamiSDKUI.startPairing(
+                val route = NamiSDKUI.startPairing(
                     context = navController.context,
                     input = NamiPairingInput(
                         roomId = roomId.toString(),

@@ -3,6 +3,7 @@ package ai.nami.demo.coreSdk.pairing.deviceName
 import ai.nami.demo.coreSdk.common.SkyNetButton
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
 import ai.nami.sdk.common.NamiDeviceType
+import ai.nami.sdk.extension.isSessionExpired
 import ai.nami.sdk.model.DeviceCategory
 import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.renamedevice.RenameDeviceViewIntent
@@ -60,6 +61,7 @@ fun SkyNetDeviceNameRoute(
     defaultName: String,
     productId: Int,
     onBack: () -> Unit,
+    onExitPairing: (PairingErrorCode?) -> Unit,
     onNavigateToPingPongScreen: (deviceName: String) -> Unit,
     onNavigateConnectWifiScreen: (Boolean, String) -> Unit,
     onNavigateToErrorScreen: (isBluetoothDisconnected: Boolean, pairingErrorCode: PairingErrorCode?, errorMessage: String?, deviceCategory: DeviceCategory) -> Unit
@@ -94,6 +96,12 @@ fun SkyNetDeviceNameRoute(
     LaunchedEffect(key1 = uiState.isBluetoothDisconnected) {
         if (uiState.isBluetoothDisconnected) {
             onNavigateToErrorScreen(true, null, null, uiState.deviceCategory)
+        }
+    }
+
+    LaunchedEffect(uiState.pairingError) {
+        if (uiState.pairingError?.isSessionExpired() == true) {
+            onExitPairing(PairingErrorCode.SessionExpired)
         }
     }
 

@@ -3,7 +3,9 @@ package ai.nami.demo.coreSdk.pairing.qrCode
 
 import ai.nami.demo.coreSdk.common.SkyNetButton
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
+import ai.nami.sdk.extension.isSessionExpired
 import ai.nami.sdk.model.DeviceCategory
+import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.viewmodels.scanqrcode.ScanQRCodeViewIntent
 import ai.nami.sdk.pairing.viewmodels.scanqrcode.ScanQRCodeViewModel
 import androidx.compose.foundation.layout.Spacer
@@ -72,6 +74,7 @@ fun SkyNetQRCodeRoute(
     viewModel: ScanQRCodeViewModel,
     onNext: () -> Unit,
     onBack: () -> Unit,
+    onExitPairing: (PairingErrorCode?) -> Unit,
     deviceCategory: DeviceCategory?,
     placeId: Int,
     zoneId: Int,
@@ -83,6 +86,12 @@ fun SkyNetQRCodeRoute(
 
     val viewIntentChannel = remember {
         Channel<ScanQRCodeViewIntent>(Channel.UNLIMITED)
+    }
+
+    LaunchedEffect(uiState.pairingError) {
+        if (uiState.pairingError?.isSessionExpired() == true) {
+            onExitPairing(PairingErrorCode.SessionExpired)
+        }
     }
 
     LaunchedEffect(key1 = Unit) {

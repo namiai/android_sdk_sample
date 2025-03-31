@@ -2,6 +2,7 @@ package ai.nami.demo.coreSdk.pairing.connectWifi
 
 import ai.nami.demo.coreSdk.common.SkyNetDialog
 import ai.nami.demo.coreSdk.common.SkyNetScaffold
+import ai.nami.sdk.extension.isSessionExpired
 import ai.nami.sdk.pairing.model.PairingErrorCode
 import ai.nami.sdk.pairing.model.PairingWifiInfo
 import ai.nami.sdk.pairing.viewmodels.connectwifi.scanning.ScanWifiNetworkViewIntent
@@ -64,6 +65,7 @@ import kotlinx.coroutines.withContext
 fun SkyNetScanWifiNetworkRoute(
     viewModel: ScanWifiNetworkViewModel,
     onBack: () -> Unit,
+    onExitPairing: (PairingErrorCode?) -> Unit,
     onNavigateEnterWifiPasswordScreen: (String) -> Unit,
     onNavigateAddAnotherWifiNetworkScreen: () -> Unit,
     onNavigateConnectWifiNetwork: () -> Unit,
@@ -75,6 +77,12 @@ fun SkyNetScanWifiNetworkRoute(
 
     val viewIntentChannel = remember {
         Channel<ScanWifiNetworkViewIntent>(Channel.UNLIMITED)
+    }
+
+    LaunchedEffect(uiState.pairingError) {
+        if (uiState.pairingError?.isSessionExpired() == true) {
+            onExitPairing(PairingErrorCode.SessionExpired)
+        }
     }
 
     LaunchedEffect(key1 = Unit) {
