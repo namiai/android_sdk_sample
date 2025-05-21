@@ -67,11 +67,10 @@ dependencies {
     implementation(
         files(
             "libs/nami-widar-sdk-1.0.8.7.aar",
-            "libs/A3LLocation-1.0.0.aar"
         )
     )
 
-    implementation("ai.nami:pairing-sdk:1.5.9.1")
+    implementation("ai.nami:pairing-sdk:1.5.9.8")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
