@@ -3,6 +3,7 @@ package ai.nami.sdk.sample
 import ai.nami.demo.coreSdk.DemoCoreSDKActivity
 import ai.nami.demo.sdk.DemoUIMainActivity
 import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
+import ai.nami.demo_sdk_ui_extension.DemoUIExtensionActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -46,6 +47,12 @@ class MainActivity: ComponentActivity() {
                             openDemoUIActivity(DemoUIMainActivity::class.java)
                         }) {
                             Text("Demo SDK-UI")
+                        }
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Button(onClick = {
+                            openDemoUIActivity(DemoUIExtensionActivity::class.java)
+                        }) {
+                            Text("Demo SDK-UI Extension")
                         }
                         Spacer(modifier = Modifier.height(24.dp))
                         Button(onClick = {

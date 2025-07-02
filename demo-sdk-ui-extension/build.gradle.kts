@@ -1,11 +1,10 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
-    namespace = "ai.nami.demo.core.sdk"
+    namespace = "ai.nami.demo_sdk_ui_extension"
     compileSdk = 34
 
     defaultConfig {
@@ -28,16 +27,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
     configureKotlin()
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
 }
-
 fun Project.configureKotlin() {
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
@@ -57,10 +55,8 @@ fun Project.configureKotlin() {
         }
     }
 }
-
 dependencies {
 
-    implementation(project(":demo-common"))
 
     implementation(libs.appcompat)
     implementation(libs.android.core.ktx)
@@ -72,13 +68,17 @@ dependencies {
 
     implementation(libs.androidx.datastore)
 
-    implementation(libs.nami.core.sdk)
+    implementation(libs.nami.sdk.ui.extensions)
+    implementation(libs.nami.sdk.ui)
+    // dependencies for Nami SDK
+//    implementation(libs.nami.core.sdk)
 
-    implementation(libs.jnav)
-    ksp(libs.jnav)
+    // libraries for camera preview scan qr code
+    // if you custom NamiQRScanView, you do not need to add these libraries
+    implementation(libs.bundles.androidCameraLibs)
 
-    implementation(libs.jetpack.compose.permission)
-
-    //  check location service for Android 11 and below
-    implementation(libs.play.services.location)
+    // google vision for scan qrcode
+    // if you custom NamiQRScanView, you do not need to add this library
+    implementation(libs.google.barcode.scanning)
+    implementation(libs.android.navigation.compose)
 }
