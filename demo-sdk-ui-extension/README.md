@@ -10,7 +10,7 @@
  NavHost(navController, startDestination = startDestination) {
 
     sdkUiExtensionsGraph(navController = navController, onExit = {
-        navController.popBackStack( )
+
     }, onFinish = { })
      
  }
@@ -22,7 +22,6 @@
 ```kotlin
 SDK.init(sessionCode)
 ```
-Note: this function is a suspend function
 
 ## Present the template
 ```kotlin
