@@ -5,7 +5,7 @@
  implementation("ai.nami:sdk-ui-extensions:1.0.0-snapshots")
 ```
 
-## Add ```kotlin  sdkUiExtensionsGraph  ``` to their `NavHost`
+## Add `sdkUiExtensionsGraph` to their `NavHost`
 ```kotlin
  NavHost(navController, startDestination = startDestination) {
 
