@@ -1,15 +1,13 @@
 package ai.nami.demo_sdk_ui_extension
 
-import ai.nami.sdk.NamiSDKUI
-import ai.nami.sdk.routing.common.NamiPairingInput
-import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
-import ai.nami.sdk_ui_extensions.NamiSdkUiExtensions
-import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsEntryPoint
-import ai.nami.sdk_ui_extensions.ui.navigation.sdkUiExtensionsGraph
 //import ai.nami.sdk.NamiSDKUI
 //import ai.nami.sdk.routing.common.NamiPairingInput
 //import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
-import android.util.Log
+import ai.nami.sdk_ui_extensions.NamiSdkUiExtensions
+import ai.nami.sdk_ui_extensions.config.NamiMeasureSystem
+import ai.nami.sdk_ui_extensions.config.SdkConfig
+import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsEntryPoint
+import ai.nami.sdk_ui_extensions.ui.navigation.sdkUiExtensionsGraph
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -32,7 +30,12 @@ fun MainNavHost(navController: NavHostController) {
             HomeScreen(onPresentTemplate = {
                 val route = NamiSdkUiExtensions.presentTemplate(
                     navController.context,
-                    NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
+                    NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl,
+                    sdkConfig = SdkConfig(
+                        countryCode = "us",
+                        measureSystem = NamiMeasureSystem.METRIC,
+                        clientID = "nami"
+                    )
                 )
                 navController.navigate(route)
             }, viewModel = HomeViewModel())
@@ -41,26 +44,9 @@ fun MainNavHost(navController: NavHostController) {
         sdkUiExtensionsGraph(navController = navController, onExit = {
             navController.popBackStack( )
         }, onFinish = { output ->
-            val roomId = output.roomID.toString()
-            val placeId = output.placeID
-            val route = NamiSDKUI.startPairing(
-                context = navController.context,
-                input = NamiPairingInput(
-                    placeId = placeId,
-                    roomId = roomId,
-                    deviceCategory = null,
-                    zoneId = output.zoneID,
-                    zoneName = output.zoneName
-                )
-            )
-            Log.e("nami-log", "finish presenting template $roomId")
-            navController.navigate(route)
-
-        })
-
-        namiPairingSdkGraph(navController = navController, onPairSuccess = {
             navController.navigate("fake_pairing_screen")
         })
+
 
         composable(
             route = "fake_pairing_screen"
