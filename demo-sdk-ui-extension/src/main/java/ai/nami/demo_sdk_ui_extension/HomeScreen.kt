@@ -39,7 +39,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onPresentTemplate: () -> Unit,
+    onPresentTemplate: (clientID: String) -> Unit,
     viewModel: HomeViewModel
 ) {
 
@@ -63,12 +63,17 @@ fun HomeScreen(
         mutableStateOf("")
     }
 
+    var clientID by remember {
+        mutableStateOf("alarm_com_security")
+    }
+
+
     val isNeedASessionCode by remember {
         mutableStateOf(NamiSDK.shouldInit())
     }
     LaunchedEffect(key1 = uiState.initSDKSuccess) {
         if (uiState.initSDKSuccess == true) {
-            onPresentTemplate()
+            onPresentTemplate(clientID)
         }
     }
 
@@ -82,6 +87,16 @@ fun HomeScreen(
 
     val isShowError by remember(errorMessage) {
         derivedStateOf { !errorMessage.isNullOrEmpty() }
+    }
+
+    val isEnableButton by remember(isNeedASessionCode, clientID, sessionCode) {
+        derivedStateOf {
+            if (clientID.isEmpty()) {
+                false
+            } else if (!isNeedASessionCode) {
+                true
+            } else sessionCode.isNotEmpty()
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -102,6 +117,14 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(text = "No need a new session code. You can leave this field empty")
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            OutlinedTextField(value = clientID, onValueChange = {
+                clientID = it
+            }, modifier = Modifier.fillMaxWidth(), label = {
+                Text(text = "Client ID")
+            })
+
             AnimatedVisibility(visible = isShowError) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
@@ -115,9 +138,9 @@ fun HomeScreen(
                 if (sessionCode.isNotEmpty()) {
                     sendViewIntent(HomeViewIntent.InitNamiSDK(sessionCode))
                 } else if (!isNeedASessionCode) {
-                    onPresentTemplate()
+                    onPresentTemplate(clientID)
                 }
-            }) {
+            }, enabled = isEnableButton) {
                 Text("Start Setup A Kit")
             }
         }
