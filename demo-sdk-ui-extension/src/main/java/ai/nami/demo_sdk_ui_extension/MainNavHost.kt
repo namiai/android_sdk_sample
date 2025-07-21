@@ -1,8 +1,5 @@
 package ai.nami.demo_sdk_ui_extension
 
-//import ai.nami.sdk.NamiSDKUI
-//import ai.nami.sdk.routing.common.NamiPairingInput
-//import ai.nami.sdk.routing.pairing.ui.navigation.namiPairingSdkGraph
 import ai.nami.sdk_ui_extensions.NamiSdkUiExtensions
 import ai.nami.sdk_ui_extensions.config.NamiAppearance
 import ai.nami.sdk_ui_extensions.config.NamiMeasureSystem
@@ -28,12 +25,20 @@ fun MainNavHost(navController: NavHostController) {
     NavHost(navController, startDestination = startDestination) {
 
         composable(startDestination) {
-            HomeScreen(onPresentTemplate = { clientId ->
+            HomeScreen(onPresentTemplate = { clientId, typeEntryPoint ->
+
+                val entryPoint = when (typeEntryPoint) {
+                    TypeStartingEntryPoint.Settings -> NamiSdkUiExtensionsEntryPoint().settingUrl
+                    TypeStartingEntryPoint.StartingSetupASingleDevice -> NamiSdkUiExtensionsEntryPoint().startSetupASingleDeviceUrl
+                    else -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
+                }
+
                 val route = NamiSdkUiExtensions.presentTemplate(
                     navController.context,
-                    NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl,
+                    entryPoint,
                     sdkConfig = SdkConfig(
                         baseUrl = "https://mobile-screens.nami.surf/divkit/precompiled_layouts",
+//                        baseUrl = "https://mobile-screens.nami.surf/divkit/v0.2.0",
                         countryCode = "us",
                         measureSystem = NamiMeasureSystem.METRIC,
                         clientID = clientId,
@@ -46,7 +51,9 @@ fun MainNavHost(navController: NavHostController) {
         }
 
         sdkUiExtensionsGraph(navController = navController, onExit = {
-            navController.popBackStack( )
+            // the user cancels the setting up flow
+            // you can navigate to another screen
+            // if you don't do anything, the system will back to the screen before opening the SDK
         }, onFinish = { output ->
             navController.navigate("fake_pairing_screen")
         })

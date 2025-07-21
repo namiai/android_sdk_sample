@@ -5,7 +5,7 @@ jnav = "1.0.2"
 namiCoreSDK = "3.0.4-snapshots"
 namiSDKRouting = "4.1.0-snapshots"
 namiSDKUI = "4.1.0-snapshots"
-sdkUiExtensions = "1.0.5-snapshots"
+sdkUiExtensions = "1.0.8-snapshots"
 
 androidXCamera = "1.2.3"
 googleBarcodeScanning = "17.1.0"
