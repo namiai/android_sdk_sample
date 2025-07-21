@@ -37,8 +37,7 @@ fun MainNavHost(navController: NavHostController) {
                     navController.context,
                     entryPoint,
                     sdkConfig = SdkConfig(
-                        baseUrl = "https://mobile-screens.nami.surf/divkit/precompiled_layouts",
-//                        baseUrl = "https://mobile-screens.nami.surf/divkit/v0.2.0",
+                        baseUrl = "https://mobile-screens.nami.surf/divkit/v0.2.0/precompiled_layouts",
                         countryCode = "us",
                         measureSystem = NamiMeasureSystem.METRIC,
                         clientID = clientId,
