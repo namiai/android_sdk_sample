@@ -46,4 +46,13 @@ SdkConfig(
 )
 ```
 
+# Release notes
+
+## 1.0.8-snapshots
+
+- Support settings and start a single device entry point
+- Bug fixes
+- Integrate with the new core-SDK that supports fetching Thread credentials from LocalComm
+- Send DeviceCategory to the pairing flow
+- Create a new zone (support creating a default room
 
