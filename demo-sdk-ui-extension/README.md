@@ -1,5 +1,26 @@
 
 # Setup
+
+## Add Nami SDK repository url to the settings.gradle.kts file of your project
+
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            name = "nami-maven-repository-releases"
+            setUrl("https://raw.githubusercontent.com/namiai/nami-maven-repository/main/repository/releases")
+        }
+        maven {
+            name = "nami-maven-repository-snapshots"
+            setUrl("https://raw.githubusercontent.com/namiai/nami-maven-repository/main/repository/snapshots")
+        }
+    }
+}
+```
+
 ## Add dependency 
 ```kotlin
  implementation("ai.nami:sdk-ui-extensions:1.0.8-snapshots")
