@@ -58,7 +58,7 @@ For testing the snapshots version, please use the below configuration:
 
 ```kotlin
 SdkConfig(
-    baseUrl = "https://mobile-screens.nami.surf/divkit/v0.2.0/precompiled_layouts",
+    baseUrl = "https://mobile-screens.nami.surf/divkit/v0.3.0/precompiled_layouts",
     countryCode = "us",
     measureSystem = NamiMeasureSystem.METRIC,
     clientID = "alarm_com_security",
