@@ -32,7 +32,8 @@ fun SkyNetTwoButtonScreenLayout(
 ) {
     val topBarData = topBarData(topBar)
     val primaryButtonData = primaryButtonData(primaryButton)
-    val borderColorButton = primaryButtonData.borderColor ?: NamiSdkTheme.colors.primary
+    val borderColorButton =
+        primaryButtonData.borderColor ?: NamiSdkTheme.colors.borderDefaultPrimary
     val tertiaryButtonData = tertiaryButtonData(tertiaryButton)
 
     SkyNetScreenLayout(isShowLoading = isShowLoading, topBar = {
@@ -58,9 +59,10 @@ fun SkyNetTwoButtonScreenLayout(
                 width = 1.dp,
                 color = borderColorButton
             ),
-            backgroundColor = primaryButtonData.backgroundColor ?: NamiSdkTheme.colors.primary,
-            textColor = primaryButtonData.textColor ?: NamiSdkTheme.colors.onPrimary,
-            rippleColor = primaryButtonData.rippleColor ?: NamiSdkTheme.colors.onPrimary,
+            backgroundColor = primaryButtonData.backgroundColor
+                ?: NamiSdkTheme.colors.backgroundDefaultPrimary,
+            textColor = primaryButtonData.textColor ?: NamiSdkTheme.colors.textDefaultPrimary,
+            rippleColor = primaryButtonData.rippleColor ?: NamiSdkTheme.colors.textDefaultPrimary,
             interactionSource = primaryButtonData.interactionSource
                 ?: remember { MutableInteractionSource() },
             modifier = primaryButtonData.modifier.then(

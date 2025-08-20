@@ -2,11 +2,11 @@ package ai.nami.demo.sdk.pairing.cusomizeTheme.theme
 
 
 import ai.nami.demo.sdk.ui.R
-import ai.nami.sdk.designsystem.theme.NamiSdkColors
 import ai.nami.sdk.designsystem.theme.NamiSdkShapes
 import ai.nami.sdk.designsystem.theme.NamiSdkTypography
+import ai.nami.sdk.designsystem.theme.colorsDarkMode
+import ai.nami.sdk.designsystem.theme.colorsLightMode
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -14,32 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-val customNamiSDKColors = NamiSdkColors(
-    primary = Color(0xffa03671),
-    secondary = Color(0xff725762),
-    tertiary = Color(0xff7f5539),
-    error = Color(0xffba1a1a),
-    onError = Color(0xFFffffff),
-    background = Color(0xfffffbff),
-    primaryText = Color(0xff1f1a1c),
-    line = Color(0xff827378),
-    statusBarColor = Color(0xfffdd9e7),
-    toolbarColor = Color(0xffffd8e7)
-)
+val customNamiSDKColors = colorsLightMode()
 
-val customNamiSDKColorsDarkMode = NamiSdkColors(
-    primary = Color(0xffa03671),
-    secondary = Color(0xff725762),
-    tertiary = Color(0xff7f5539),
-    error = Color(0xffba1a1a),
-    onError = Color(0xFFffffff),
-    background = Color(0xff1f1a1c),
-    primaryText = Color(0xfffffbff),
-    line = Color(0xff827378),
-    statusBarColor = Color(0xfffdd9e7),
-    toolbarColor = Color(0xffffd8e7),
-    onPrimary = Color(0xff1f1a1c)
-)
+val customNamiSDKColorsDarkMode = colorsDarkMode()
 
 val customNamiSDKShapes = NamiSdkShapes(
     buttonShape = RoundedCornerShape(16.dp),
@@ -59,7 +36,7 @@ val customNamiSDKTypography = NamiSdkTypography(
         fontFamily = YourFonts,
         fontSize = 34.sp,
         fontWeight = FontWeight.Medium
-    ) ,
+    ),
     h2 = TextStyle(
         fontFamily = YourFonts,
         fontSize = 28.sp,
@@ -103,8 +80,9 @@ val customNamiSDKTypography = NamiSdkTypography(
         fontWeight = FontWeight.Normal,
 
         ),
-    small2 = TextStyle(fontFamily = YourFonts,
+    small2 = TextStyle(
+        fontFamily = YourFonts,
         fontSize = 8.sp,
         fontWeight = FontWeight.Normal,
-        )
+    )
 )

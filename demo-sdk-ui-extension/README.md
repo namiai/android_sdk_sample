@@ -77,3 +77,8 @@ SdkConfig(
 - Send DeviceCategory to the pairing flow
 - Create a new zone (support creating a default room
 
+## 1.0.0
+
+- Dark mode
+- Add Entry & Exit Delays and Sensitivity
+- Bug fixes

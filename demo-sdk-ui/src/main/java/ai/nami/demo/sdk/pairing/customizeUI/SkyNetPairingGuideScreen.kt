@@ -8,15 +8,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -105,7 +101,7 @@ private fun SkyNetPairingGuideScreen(
         Text(
             text = "Plug your device into outlet.",
             style = NamiSdkTheme.typography.h3 .copy(
-                color = NamiSdkTheme.colors.primaryText,
+                color = NamiSdkTheme.colors.textDefaultPrimary,
                 textAlign = TextAlign.Center
             ),
             modifier = Modifier.fillMaxWidth()

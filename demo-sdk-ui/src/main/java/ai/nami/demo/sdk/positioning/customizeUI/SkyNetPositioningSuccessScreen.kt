@@ -2,7 +2,6 @@ package ai.nami.demo.sdk.positioning.customizeUI
 
 import ai.nami.sdk.designsystem.component.NamiPageTitle
 import ai.nami.sdk.designsystem.theme.NamiSdkTheme
-import ai.nami.sdk.positioning.ui.success.DefaultWidarPositionSuccessScreen
 import ai.nami.sdk.ui.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -73,7 +72,7 @@ fun SkyNetPositioningSuccessScreen(
             Spacer(modifier = Modifier.height(NamiSdkTheme.spaces.S8))
             Text(
                 text = "Sensing is enable for $deviceName",
-                style = NamiSdkTheme.typography.p1.copy(color = NamiSdkTheme.colors.primaryText)
+                style = NamiSdkTheme.typography.p1.copy(color = NamiSdkTheme.colors.textDefaultPrimary)
             )
         }
     }

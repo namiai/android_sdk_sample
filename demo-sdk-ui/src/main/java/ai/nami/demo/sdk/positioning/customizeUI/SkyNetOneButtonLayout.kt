@@ -5,7 +5,6 @@ import ai.nami.sdk.designsystem.component.NamiPrimaryButtonData
 import ai.nami.sdk.designsystem.component.NamiTopBarData
 import ai.nami.sdk.designsystem.component.primaryButtonData
 import ai.nami.sdk.designsystem.component.topBarData
-import ai.nami.sdk.designsystem.layout.NamiScreenLayout
 import ai.nami.sdk.designsystem.theme.NamiSdkTheme
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,7 +23,8 @@ fun SkyNetOneButtonLayout(
 ) {
     val topBarData = topBarData(topBar)
     val primaryButtonData = primaryButtonData(primaryButton)
-    val borderColorButton = primaryButtonData.borderColor ?: NamiSdkTheme.colors.primary
+    val borderColorButton =
+        primaryButtonData.borderColor ?: NamiSdkTheme.colors.borderDefaultPrimary
 
     SkyNetScreenLayout(isShowLoading = isShowLoading, topBar = {
         SkyNetPositioningTopBar(
@@ -45,9 +45,10 @@ fun SkyNetOneButtonLayout(
                 width = 1.dp,
                 color = borderColorButton
             ),
-            backgroundColor = primaryButtonData.backgroundColor ?: NamiSdkTheme.colors.primary,
-            textColor = primaryButtonData.textColor ?: NamiSdkTheme.colors.onPrimary,
-            rippleColor = primaryButtonData.rippleColor ?: NamiSdkTheme.colors.onPrimary,
+            backgroundColor = primaryButtonData.backgroundColor
+                ?: NamiSdkTheme.colors.backgroundDefaultPrimary,
+            textColor = primaryButtonData.textColor ?: NamiSdkTheme.colors.textDefaultPrimary,
+            rippleColor = primaryButtonData.rippleColor ?: NamiSdkTheme.colors.textDefaultPrimary,
             interactionSource = primaryButtonData.interactionSource
                 ?: remember { MutableInteractionSource() },
             modifier = primaryButtonData.modifier.then(

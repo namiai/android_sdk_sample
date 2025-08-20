@@ -29,8 +29,10 @@ fun SkyNetPrimarySecondaryScreenLayout(
     val topBarData = topBarData(topBar)
     val primaryButtonData = primaryButtonData(primaryButton)
     val secondaryButtonData = primaryButtonData(secondaryButton)
-    val primaryBorderColorButton = primaryButtonData.borderColor ?: NamiSdkTheme.colors.primary
-    val secondaryBorderColorButton = secondaryButtonData.borderColor ?: NamiSdkTheme.colors.primary
+    val primaryBorderColorButton =
+        primaryButtonData.borderColor ?: NamiSdkTheme.colors.borderDefaultPrimary
+    val secondaryBorderColorButton =
+        secondaryButtonData.borderColor ?: NamiSdkTheme.colors.borderDefaultPrimary
 
 
     SkyNetScreenLayout(topBar = {
@@ -58,9 +60,10 @@ fun SkyNetPrimarySecondaryScreenLayout(
                     color = secondaryBorderColorButton
                 ),
                 backgroundColor = secondaryButtonData.backgroundColor
-                    ?: NamiSdkTheme.colors.primary,
-                textColor = secondaryButtonData.textColor ?: NamiSdkTheme.colors.onPrimary,
-                rippleColor = secondaryButtonData.rippleColor ?: NamiSdkTheme.colors.onPrimary,
+                    ?: NamiSdkTheme.colors.backgroundDefaultPrimary,
+                textColor = secondaryButtonData.textColor ?: NamiSdkTheme.colors.textDefaultPrimary,
+                rippleColor = secondaryButtonData.rippleColor
+                    ?: NamiSdkTheme.colors.textDefaultPrimary,
                 interactionSource = secondaryButtonData.interactionSource
                     ?: remember { MutableInteractionSource() },
                 modifier = secondaryButtonData.modifier.then(
@@ -79,9 +82,11 @@ fun SkyNetPrimarySecondaryScreenLayout(
                     width = 1.dp,
                     color = primaryBorderColorButton
                 ),
-                backgroundColor = primaryButtonData.backgroundColor ?: NamiSdkTheme.colors.primary,
-                textColor = primaryButtonData.textColor ?: NamiSdkTheme.colors.onPrimary,
-                rippleColor = primaryButtonData.rippleColor ?: NamiSdkTheme.colors.onPrimary,
+                backgroundColor = primaryButtonData.backgroundColor
+                    ?: NamiSdkTheme.colors.backgroundDefaultPrimary,
+                textColor = primaryButtonData.textColor ?: NamiSdkTheme.colors.textDefaultPrimary,
+                rippleColor = primaryButtonData.rippleColor
+                    ?: NamiSdkTheme.colors.textDefaultPrimary,
                 interactionSource = primaryButtonData.interactionSource
                     ?: remember { MutableInteractionSource() },
                 modifier = primaryButtonData.modifier.then(

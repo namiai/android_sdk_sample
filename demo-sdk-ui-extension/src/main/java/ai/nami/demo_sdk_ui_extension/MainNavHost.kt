@@ -1,7 +1,6 @@
 package ai.nami.demo_sdk_ui_extension
 
 import ai.nami.sdk_ui_extensions.NamiSdkUiExtensions
-import ai.nami.sdk_ui_extensions.config.NamiAppearance
 import ai.nami.sdk_ui_extensions.config.NamiMeasureSystem
 import ai.nami.sdk_ui_extensions.config.SdkConfig
 import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsEntryPoint
@@ -25,25 +24,26 @@ fun MainNavHost(navController: NavHostController) {
     NavHost(navController, startDestination = startDestination) {
 
         composable(startDestination) {
-            HomeScreen(onPresentTemplate = { clientId, typeEntryPoint ->
-
+            HomeScreen(onPresentTemplate = { clientID, typeEntryPoint, shouldCreateDefaultRoomForNewZone, appearance, baseUrl ->
+                val currentState = mutableMapOf<String, String>()
+                currentState["should_show_pairing_success"] = "0"
                 val entryPoint = when (typeEntryPoint) {
                     TypeStartingEntryPoint.Settings -> NamiSdkUiExtensionsEntryPoint().settingUrl
                     TypeStartingEntryPoint.StartingSetupASingleDevice -> NamiSdkUiExtensionsEntryPoint().startSetupASingleDeviceUrl
                     else -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
                 }
-
                 val route = NamiSdkUiExtensions.presentTemplate(
                     navController.context,
                     entryPoint,
                     sdkConfig = SdkConfig(
-                        baseUrl = "https://mobile-screens.nami.surf/divkit/v0.2.0/precompiled_layouts",
+                        baseUrl = baseUrl,
                         countryCode = "us",
                         measureSystem = NamiMeasureSystem.METRIC,
-                        clientID = clientId,
+                        clientID = clientID.ifEmpty { "client_001" },
                         language = "en",
-                        appearance = NamiAppearance.Light,
-                    )
+                        appearance = appearance,
+                        topologyRoomsSupported = shouldCreateDefaultRoomForNewZone
+                    ),
                 )
                 navController.navigate(route)
             }, viewModel = HomeViewModel())
