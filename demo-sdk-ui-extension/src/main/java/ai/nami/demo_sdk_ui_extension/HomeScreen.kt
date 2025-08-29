@@ -115,7 +115,7 @@ fun HomeScreen(
     }
 
     var shouldCreateDefaultRoomForNewZone by remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
 
     val isEnableButton by remember(isNeedASessionCode, clientID, sessionCode) {
