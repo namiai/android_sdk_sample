@@ -82,3 +82,8 @@ SdkConfig(
 - Dark mode
 - Add Entry & Exit Delays and Sensitivity
 - Bug fixes
+
+## 1.1.0
+
+- System test
+- Bug fixes
