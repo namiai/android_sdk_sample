@@ -87,3 +87,11 @@ SdkConfig(
 
 - System test
 - Bug fixes
+
+## 1.2.0
+
+- RSSI Check up
+- Popup / AlertDialog
+- Snackbar error
+- PIN Management
+- Bug fixes
