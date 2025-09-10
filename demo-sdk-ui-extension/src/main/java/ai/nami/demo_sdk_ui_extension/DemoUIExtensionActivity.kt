@@ -1,6 +1,7 @@
 package ai.nami.demo_sdk_ui_extension
 
 import ai.nami.demo_sdk_ui_extension.theme.DemoUIExtensionTheme
+import ai.nami.sdk.NamiSDK
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,7 @@ class DemoUIExtensionActivity  : ComponentActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NamiSDK.enableReleaseLog()
         setContent {
             DemoUIExtensionTheme {
                 MainNavHost(navController = rememberNavController())
