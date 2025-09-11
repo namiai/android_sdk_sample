@@ -3,6 +3,7 @@
 <application>
     <activity
         android:name="ai.nami.demo_sdk_ui_extension.DemoUIExtensionActivity"
-        android:theme="@style/Theme.RemoteTemplateUI" />
+        android:theme="@style/Theme.RemoteTemplateUI"
+        android:windowSoftInputMode="adjustResize" />
 </application>
 </manifest>
