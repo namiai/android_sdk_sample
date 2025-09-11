@@ -17,12 +17,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -56,6 +59,7 @@ fun HomeScreen(
         shouldCreateDefaultRoomForNewZone: Boolean,
         appearance: NamiAppearance,
         baseUrl: String,
+        language: String
     ) -> Unit,
     viewModel: HomeViewModel
 ) {
@@ -81,7 +85,7 @@ fun HomeScreen(
     }
 
     var clientID by remember {
-        mutableStateOf("alarm_com_security")
+        mutableStateOf("nami_dev")
     }
 
     var appearance by remember {
@@ -129,6 +133,10 @@ fun HomeScreen(
         }
     }
 
+    var language by remember {
+        mutableStateOf("en")
+    }
+
     LaunchedEffect(key1 = uiState.initSDKSuccess) {
         if (uiState.initSDKSuccess == true) {
             onPresentTemplate(
@@ -136,7 +144,8 @@ fun HomeScreen(
                 selectedEntryPoint,
                 shouldCreateDefaultRoomForNewZone,
                 appearance,
-                baseUrl
+                baseUrl,
+                language
             )
         }
     }
@@ -151,6 +160,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
@@ -212,6 +222,22 @@ fun HomeScreen(
                 selectedEntryPoint = it
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
+            OutlinedTextField(
+                value = language, onValueChange = {
+                    language = it
+                }, modifier = Modifier.fillMaxWidth(), label = {
+                    Text(
+                        text = "Language",
+                        style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colors.onBackground)
+            )
+            Text(
+                text = "en: English, fr: French, jp: Japanese",
+                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground)
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
             Text(
@@ -241,6 +267,15 @@ fun HomeScreen(
                 colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colors.onBackground)
             )
 
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                "Create the default room for new zone",
+                style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Switch(checked = shouldCreateDefaultRoomForNewZone, onCheckedChange = {
+                shouldCreateDefaultRoomForNewZone = it
+            })
 
             Spacer(modifier = Modifier.height(48.dp))
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
@@ -252,7 +287,8 @@ fun HomeScreen(
                         selectedEntryPoint,
                         shouldCreateDefaultRoomForNewZone,
                         appearance,
-                        baseUrl
+                        baseUrl,
+                        language
                     )
                 }
             }, enabled = isEnableButton) {

@@ -95,3 +95,4 @@ SdkConfig(
 - Snackbar error
 - PIN Management
 - Bug fixes
+- Support French
