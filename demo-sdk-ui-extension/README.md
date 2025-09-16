@@ -96,3 +96,8 @@ SdkConfig(
 - PIN Management
 - Support French
 - Bug fixes
+
+## 1.2.2
+
+- Bug fixes: status bar's color, TextField's color in Dark Mode
+- Overriding the SDK-UI's language 
