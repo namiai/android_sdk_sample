@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "ai.nami.demo.common"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26

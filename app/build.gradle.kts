@@ -1,18 +1,18 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
     id("com.google.protobuf") version "0.9.3"
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "ai.nami.sdk.sample"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "ai.nami.sdk.sample"
         minSdk = 26
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 

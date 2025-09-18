@@ -1,11 +1,12 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "ai.nami.demo.sdk.routing"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26

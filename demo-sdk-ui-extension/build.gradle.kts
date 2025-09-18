@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "ai.nami.demo_sdk_ui_extension"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26

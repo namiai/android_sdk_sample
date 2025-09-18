@@ -165,7 +165,8 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
+
+        Spacer(modifier = Modifier.height(48.dp))
             AnimatedVisibility(visible = isShowError) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
