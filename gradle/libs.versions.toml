@@ -1,8 +1,8 @@
 [versions]
 jetpackComposePermission = "0.30.0"
-jnav = "1.0.2"
+jnav = "2.0.2"
 
-namiCoreSDK = "3.2.1"
+namiCoreSDK = "3.2.2.0-snapshots"
 namiSDKRouting = "5.2.1.4-snapshots"
 namiSDKUI = "5.2.1.4-snapshots"
 sdkUiExtensions = "1.2.1.4-snapshots"
@@ -22,17 +22,17 @@ androidxLifecycleRuntime = "2.3.1"
 androidXCoreKtx = "1.9.0"
 activityCompose = "1.7.2"
 agp = "8.13.0"
-kotlin = "2.0.21"
+kotlin = "2.2.20"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.2.1"
 espresso-core = "3.6.1"
 appcompat = "1.7.0"
 playServicesLocation = "21.0.1"
-kotlinKsp = "2.0.21-1.0.25"
+kotlinKsp = "2.2.20-2.0.2"
 
 [libraries]
 jetpack-compose-permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "jetpackComposePermission" }
-jnav = { module = "com.fatherofapps:jnav", version.ref = "jnav" }
+jnav = { module = "com.fatherofapps.jnav:jnav", version.ref = "jnav" }
 nami-sdk-ui = { module = "ai.nami:sdk-ui", version.ref = "namiSDKUI" }
 nami-sdk-routing = { module = "ai.nami:sdk-routing", version.ref = "namiSDKRouting" }
 nami-core-sdk = { module = "ai.nami:core-sdk", version.ref = "namiCoreSDK" }
