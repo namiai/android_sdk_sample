@@ -97,6 +97,10 @@ SdkConfig(
 - Support French
 - Bug fixes
 
+## 1.2.1
+
+- Update Camera and ML kit library versions
+
 ## 1.2.2
 
 - Bug fixes: status bar's color, status bar overlap, bottom button is hidden when keyboard is
