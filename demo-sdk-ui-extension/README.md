@@ -99,5 +99,7 @@ SdkConfig(
 
 ## 1.2.2
 
-- Bug fixes: status bar's color, TextField's color in Dark Mode
-- Overriding the SDK-UI's language 
+- Bug fixes: status bar's color, status bar overlap, bottom button is hidden when keyboard is
+  showed, dark mode UI issues
+- Overriding the SDK-UI's language
+- Support new devices
