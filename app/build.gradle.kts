@@ -69,6 +69,7 @@ dependencies {
     implementation(project(":demo-core-sdk"))
     implementation(project(":demo-common"))
     implementation(project(":demo-sdk-ui-extension"))
+    implementation(project(":demo-sdk-fragment"))
 
     implementation(libs.android.core.ktx)
     implementation(libs.android.lifecycle.runtime)

@@ -29,6 +29,9 @@ espresso-core = "3.6.1"
 appcompat = "1.7.0"
 playServicesLocation = "21.0.1"
 kotlinKsp = "2.2.20-2.0.2"
+activity = "1.11.0"
+constraintlayout = "2.2.1"
+ui = "1.9.1"
 
 [libraries]
 jetpack-compose-permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "jetpackComposePermission" }
@@ -67,6 +70,9 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 
 
 [bundles]
