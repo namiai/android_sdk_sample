@@ -59,7 +59,8 @@ fun HomeScreen(
         shouldCreateDefaultRoomForNewZone: Boolean,
         appearance: NamiAppearance,
         baseUrl: String,
-        language: String
+        language: String,
+        countryCode: String
     ) -> Unit,
     viewModel: HomeViewModel
 ) {
@@ -95,7 +96,7 @@ fun HomeScreen(
     // https://mobile-screens.nami.surf/divkit/v0.2.0
     var baseUrl by remember {
 //        mutableStateOf("http://192.168.1.18:5001")
-        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.3.0/precompiled_layouts")
+        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.5.0/precompiled_layouts")
     }
 
     val isNeedASessionCode by remember {
@@ -137,6 +138,10 @@ fun HomeScreen(
         mutableStateOf("en")
     }
 
+    var countryCode by remember {
+        mutableStateOf("us")
+    }
+
     LaunchedEffect(key1 = uiState.initSDKSuccess) {
         if (uiState.initSDKSuccess == true) {
             onPresentTemplate(
@@ -145,7 +150,8 @@ fun HomeScreen(
                 shouldCreateDefaultRoomForNewZone,
                 appearance,
                 baseUrl,
-                language
+                language,
+                countryCode
             )
         }
     }
@@ -239,6 +245,22 @@ fun HomeScreen(
                 style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground)
             )
 
+            OutlinedTextField(
+                value = countryCode, onValueChange = {
+                    countryCode = it
+                }, modifier = Modifier.fillMaxWidth(), label = {
+                    Text(
+                        text = "Country code",
+                        style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colors.onBackground)
+            )
+            Text(
+                text = "us: United State, jp: Japan,...",
+                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground)
+            )
+
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 "Mode",
@@ -288,7 +310,8 @@ fun HomeScreen(
                         shouldCreateDefaultRoomForNewZone,
                         appearance,
                         baseUrl,
-                        language
+                        language,
+                        countryCode
                     )
                 }
             }, enabled = isEnableButton) {

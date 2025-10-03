@@ -63,7 +63,7 @@ SdkConfig(
     measureSystem = NamiMeasureSystem.METRIC,
     clientID = "alarm_com_security",
     language = "en",
-    appearance = NamiAppearance.Light,
+    appearance = NamiAppear[Alarm_nami_Beta_1_2_2_Release.apk](../../../../Downloads/Alarm_nami_Beta_1_2_2_Release.apk)ance.Light,
 )
 ```
 
@@ -107,3 +107,7 @@ SdkConfig(
   showed, dark mode UI issues
 - Overriding the SDK-UI's language
 - Support new devices
+
+## 1.2.3:
+
+- Support default country code in SDK 
