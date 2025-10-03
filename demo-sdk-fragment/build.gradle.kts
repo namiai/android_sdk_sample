@@ -31,6 +31,11 @@ android {
     kotlin {
         jvmToolchain(17)
     }
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -64,5 +69,11 @@ dependencies {
     // if you custom NamiQRScanView, you do not need to add this library
     implementation(libs.google.barcode.scanning)
     implementation(libs.android.navigation.compose)
+
+
+    implementation(libs.androidx.fragment.ktx)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.5")
+    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 
 }

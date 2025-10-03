@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/infoFragment">
+
+    <fragment
+        android:id="@+id/infoFragment"
+        android:name="ai.nami.demo_sdk_fragment.InfoFragment"
+        android:label="InfoFragment">
+        <action
+            android:id="@+id/action_infoFragment_to_testingFragment"
+            app:destination="@id/testingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/testingFragment"
+        android:name="ai.nami.demo_sdk_fragment.TestingFragment"
+        android:label="TestingFragment" />
+    <fragment
+        android:id="@+id/discoverFragment"
+        android:name="ai.nami.demo_sdk_fragment.DiscoverFragment"
+        android:label="fragment_discover"
+        tools:layout="@layout/fragment_discover" />
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="ai.nami.demo_sdk_fragment.MoreFragment"
+        android:label="fragment_more"
+        tools:layout="@layout/fragment_more" />
+    <fragment
+        android:id="@+id/activityFragment"
+        android:name="ai.nami.demo_sdk_fragment.ActivityFragment"
+        android:label="fragment_activity"
+        tools:layout="@layout/fragment_activity" />
+</navigation>
