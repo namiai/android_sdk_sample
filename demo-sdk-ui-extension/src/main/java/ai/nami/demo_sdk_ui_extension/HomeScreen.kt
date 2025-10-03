@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -95,7 +97,7 @@ fun HomeScreen(
     // https://mobile-screens.nami.surf/divkit/v0.2.0
     var baseUrl by remember {
 //        mutableStateOf("http://192.168.1.18:5001")
-        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.3.0/precompiled_layouts")
+        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.5.0/precompiled_layouts")
     }
 
     val isNeedASessionCode by remember {
@@ -153,6 +155,8 @@ fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
             .background(
                 color = MaterialTheme.colors.background
             )

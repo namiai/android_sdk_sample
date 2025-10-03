@@ -21,20 +21,20 @@
 #-renamesourcefileattribute SourceFile
 
 
+-dontwarn javax.lang.model.**
+-dontwarn javax.tools.**
 
--dontwarn org.slf4j.impl.StaticLoggerBinder
--dontwarn org.slf4j.impl.StaticMDCBinder
+# Suppress warnings for missing SLF4J bindings
+-dontwarn org.slf4j.impl.**
+-dontnote org.slf4j.impl.**
 
-# keeps the pairing code so it can work in release build
--keep class ai.nami.** { *; }
--keep class nami.coap_proxy.v1.** { *; }
--keep class nami.localmsgs.v1.** { *; }
--keep class nami.platform_core.v1.** { *; }
--keep class pairing.** { *; }
--keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
+# Also tell R8 to ignore missing SLF4J runtime classes
+-if class org.slf4j.MarkerFactory
+-keep class org.slf4j.MarkerFactory { *; }
 
--keep class androidx.camera.** { *; }
--keep class android.bluetooth.** { *; }
+# Optional (defensive): avoid removal of MarkerFactory references
+-keepclassmembers class org.slf4j.MarkerFactory { *; }
 
--keep class org.json.** { *; }
--keepclassmembers class org.json.** { *; }
+## Keep Lottie library classes
+#-keep class com.airbnb.lottie.** { *; }
+#-dontwarn com.airbnb.lottie.**

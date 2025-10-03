@@ -34,13 +34,14 @@ android {
 
     buildTypes {
         release {
-            isDebuggable = true
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
+
+            buildConfigField("boolean", "ENABLE_R8_LOGS", "true")
         }
     }
     compileOptions {
@@ -64,12 +65,13 @@ android {
 dependencies {
 
 
-    implementation(project(":demo-sdk-ui"))
-    implementation(project(":demo-sdk-routing"))
-    implementation(project(":demo-core-sdk"))
-    implementation(project(":demo-common"))
+//    implementation(project(":demo-sdk-ui"))
+//    implementation(project(":demo-sdk-routing"))
+//    implementation(project(":demo-core-sdk"))
+//    implementation(project(":demo-common"))
     implementation(project(":demo-sdk-ui-extension"))
-    implementation(project(":demo-sdk-fragment"))
+
+//    implementation(project(":demo-sdk-fragment"))
 
     implementation(libs.android.core.ktx)
     implementation(libs.android.lifecycle.runtime)
@@ -90,7 +92,7 @@ dependencies {
 
 
     // dependencies for Nami SDK
-    implementation(libs.nami.sdk.ui)
+//    implementation(libs.nami.sdk.ui)
 
     // if you do not publish your app to Amazon store, do not need to add this
     implementation(files("libs/A3LLocation-1.0.0.aar"))
@@ -102,6 +104,10 @@ dependencies {
     // google vision for scan qrcode
     // if you custom NamiQRScanView, you do not need to add this library
     implementation(libs.google.barcode.scanning)
+
+    val lottie = "6.6.7"
+    implementation("com.airbnb.android:lottie:$lottie")
+    implementation("com.yandex.div:div-lottie:32.16.0")
 
 
 }

@@ -1,7 +1,6 @@
 package ai.nami.sdk.sample
 
-import ai.nami.demo.sdk.ui.theme.NamiSDKSampleTheme
-import ai.nami.demo_sdk_fragment.DemoSdkFragmentActivity
+import ai.nami.demo_sdk_ui_extension.DemoUIExtensionActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,7 +25,7 @@ class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NamiSDKSampleTheme {
+            MaterialTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -40,24 +39,24 @@ class MainActivity: ComponentActivity() {
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.Start
                     ) {
-                        Spacer(modifier = Modifier.height(48.dp))
+//                        Spacer(modifier = Modifier.height(48.dp))
 //                        Button(onClick = {
 //                            openDemoUIActivity(DemoUIMainActivity::class.java)
 //                        }) {
 //                            Text("Demo SDK-UI")
 //                        }
-//                        Spacer(modifier = Modifier.height(24.dp))
-//                        Button(onClick = {
-//                            openDemoUIActivity(DemoUIExtensionActivity::class.java)
-//                        }) {
-//                            Text("Demo SDK-UI Extension")
-//                        }
                         Spacer(modifier = Modifier.height(24.dp))
                         Button(onClick = {
-                            openDemoUIActivity(DemoSdkFragmentActivity::class.java)
+                            openDemoUIActivity(DemoUIExtensionActivity::class.java)
                         }) {
-                            Text("Demo SDK with Fragment")
+                            Text("Demo SDK-UI Extension")
                         }
+//                        Spacer(modifier = Modifier.height(24.dp))
+//                        Button(onClick = {
+//                            openDemoUIActivity(DemoSdkFragmentActivity::class.java)
+//                        }) {
+//                            Text("Demo SDK with Fragment")
+//                        }
 
 //                        Spacer(modifier = Modifier.height(24.dp))
 //                        Button(onClick = {

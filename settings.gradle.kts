@@ -18,17 +18,12 @@ dependencyResolutionManagement {
             name = "nami-maven-repository-snapshots"
             setUrl("https://raw.githubusercontent.com/namiai/nami-maven-repository/main/repository/snapshots")
         }
-        maven {
-            name = "nami-maven-repository-snapshots"
-            setUrl("https://raw.githubusercontent.com/namiai/nami-maven-repository/main/repository/snapshots")
-        }
     }
 }
 rootProject.name = "NamiSDKSample"
 include(":app")
-include(":demo-sdk-ui")
-include(":demo-sdk-routing")
-include(":demo-core-sdk")
+//include(":demo-sdk-ui")
+//include(":demo-core-sdk")
 include(":demo-common")
 include(":demo-sdk-ui-extension")
-include(":demo-sdk-fragment")
+//include(":demo-sdk-fragment")

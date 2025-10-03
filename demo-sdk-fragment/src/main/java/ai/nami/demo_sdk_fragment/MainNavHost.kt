@@ -5,6 +5,7 @@ import ai.nami.sdk_ui_extensions.config.NamiMeasureSystem
 import ai.nami.sdk_ui_extensions.config.SdkConfig
 import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsEntryPoint
 import ai.nami.sdk_ui_extensions.ui.navigation.sdkUiExtensionsGraph
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun MainNavHost(navController: NavHostController) {
     val startDestination = "main_screen"

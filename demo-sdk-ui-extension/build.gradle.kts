@@ -49,9 +49,10 @@ dependencies {
     implementation(libs.androidx.datastore)
 
     implementation(libs.nami.sdk.ui.extensions)
-    implementation(libs.nami.sdk.ui)
-    // dependencies for Nami SDK
-//    implementation(libs.nami.core.sdk)
+
+
+//    implementation(files("libs/A3LLocation-1.0.0.aar"))
+
 
     // libraries for camera preview scan qr code
     // if you custom NamiQRScanView, you do not need to add these libraries
