@@ -245,6 +245,7 @@ fun HomeScreen(
                 style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground)
             )
 
+            Spacer(modifier = Modifier.height(24.dp))
             OutlinedTextField(
                 value = countryCode, onValueChange = {
                     countryCode = it
