@@ -2,10 +2,10 @@
 jetpackComposePermission = "0.30.0"
 jnav = "1.0.2"
 
-namiCoreSDK = "3.2.4.3-snapshots"
-namiSDKRouting = "5.2.5.3-snapshots"
-namiSDKUI = "5.2.5.3-snapshots"
-sdkUiExtensions = "1.2.3.2-snapshots"
+namiCoreSDK = "3.2.4.4-snapshots"
+namiSDKRouting = "5.2.5.4-snapshots"
+namiSDKUI = "5.2.5.4-snapshots"
+sdkUiExtensions = "1.2.3.3-snapshots"
 
 androidXCamera = "1.4.2"
 googleBarcodeScanning = "17.3.0"
