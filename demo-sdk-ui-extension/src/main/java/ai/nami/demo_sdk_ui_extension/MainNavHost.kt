@@ -5,12 +5,16 @@ import ai.nami.sdk_ui_extensions.config.NamiMeasureSystem
 import ai.nami.sdk_ui_extensions.config.SdkConfig
 import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsEntryPoint
 import ai.nami.sdk_ui_extensions.ui.navigation.sdkUiExtensionsGraph
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -42,7 +46,9 @@ fun MainNavHost(navController: NavHostController) {
                         clientID = clientID.ifEmpty { "client_001" },
                         language = language,
                         appearance = appearance,
-                        topologyRoomsSupported = !shouldCreateDefaultRoomForNewZone
+                        topologyRoomsSupported = !shouldCreateDefaultRoomForNewZone,
+                        applyImePadding = true,
+                        applyStatusBarPadding = true,
                     ),
                 )
                 navController.navigate(route)
@@ -61,7 +67,9 @@ fun MainNavHost(navController: NavHostController) {
         composable(
             route = "fake_pairing_screen"
         ) { backStackEntry ->
-            FakePairingScreen()
+            FakePairingScreen() {
+                navController.popBackStack()
+            }
         }
 
 
@@ -69,12 +77,26 @@ fun MainNavHost(navController: NavHostController) {
 }
 
 @Composable
-fun FakePairingScreen() {
-    Box(
+fun FakePairingScreen(onBack: () -> Unit) {
+    Column(
         Modifier
             .fillMaxSize()
-            .padding(16.dp), contentAlignment = Alignment.Center
+            .padding(16.dp), verticalArrangement = Arrangement.Center
     ) {
-        Text("Pairing Success")
+        Text(
+            "Pairing Success",
+            style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
+        )
+        Spacer(Modifier.height(16.dp))
+        Button(onClick = {
+            onBack()
+        }) {
+            Text(
+                "Back to home",
+                style = MaterialTheme.typography.body1.copy(
+                    color = MaterialTheme.colors.onPrimary
+                )
+            )
+        }
     }
 }
