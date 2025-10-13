@@ -240,7 +240,7 @@ fun HomeScreen(
                 colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colors.onBackground)
             )
             Text(
-                text = "en: English, fr: French, jp: Japanese",
+                text = "en: English, fr: French, jp: Japanese, es: Spanish",
                 style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground)
             )
 
