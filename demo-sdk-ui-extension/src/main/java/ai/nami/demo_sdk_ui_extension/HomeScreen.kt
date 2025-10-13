@@ -61,7 +61,8 @@ fun HomeScreen(
         shouldCreateDefaultRoomForNewZone: Boolean,
         appearance: NamiAppearance,
         baseUrl: String,
-        language: String
+        language: String,
+        countryCode: String
     ) -> Unit,
     viewModel: HomeViewModel
 ) {
@@ -139,6 +140,10 @@ fun HomeScreen(
         mutableStateOf("en")
     }
 
+    var countryCode by remember {
+        mutableStateOf("us")
+    }
+
     LaunchedEffect(key1 = uiState.initSDKSuccess) {
         if (uiState.initSDKSuccess == true) {
             onPresentTemplate(
@@ -147,7 +152,8 @@ fun HomeScreen(
                 shouldCreateDefaultRoomForNewZone,
                 appearance,
                 baseUrl,
-                language
+                language,
+                countryCode
             )
         }
     }
@@ -245,6 +251,23 @@ fun HomeScreen(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
+            OutlinedTextField(
+                value = countryCode, onValueChange = {
+                    countryCode = it
+                }, modifier = Modifier.fillMaxWidth(), label = {
+                    Text(
+                        text = "Country code",
+                        style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colors.onBackground)
+            )
+            Text(
+                text = "us: United State, jp: Japan,...",
+                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
             Text(
                 "Mode",
                 style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
@@ -293,7 +316,8 @@ fun HomeScreen(
                         shouldCreateDefaultRoomForNewZone,
                         appearance,
                         baseUrl,
-                        language
+                        language,
+                        countryCode
                     )
                 }
             }, enabled = isEnableButton) {

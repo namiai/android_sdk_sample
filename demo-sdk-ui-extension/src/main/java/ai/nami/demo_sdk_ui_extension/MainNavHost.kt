@@ -28,7 +28,7 @@ fun MainNavHost(navController: NavHostController) {
     NavHost(navController, startDestination = startDestination) {
 
         composable(startDestination) {
-            HomeScreen(onPresentTemplate = { clientID, typeEntryPoint, shouldCreateDefaultRoomForNewZone, appearance, baseUrl, language ->
+            HomeScreen(onPresentTemplate = { clientID, typeEntryPoint, shouldCreateDefaultRoomForNewZone, appearance, baseUrl, language, countryCode ->
                 val currentState = mutableMapOf<String, String>()
                 currentState["should_show_pairing_success"] = "0"
                 val entryPoint = when (typeEntryPoint) {
@@ -41,7 +41,7 @@ fun MainNavHost(navController: NavHostController) {
                     entryPoint,
                     sdkConfig = SdkConfig(
                         baseUrl = baseUrl,
-                        countryCode = "us",
+                        countryCode = countryCode,
                         measureSystem = NamiMeasureSystem.METRIC,
                         clientID = clientID.ifEmpty { "client_001" },
                         language = language,
