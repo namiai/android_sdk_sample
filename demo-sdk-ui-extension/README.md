@@ -101,3 +101,18 @@ SdkConfig(
 
 - Bug fixes: status bar's color, TextField's color in Dark Mode
 - Overriding the SDK-UI's language 
+
+## 1.2.3
+
+- Fix keyboard overlap content issue.
+- Add applyStatusBarsPadding and applyImePadding to config.
+- Support skip devices, pin verification actions.
+- Support custom country code
+- Support new devices (product_id = 38, 41, 42, 43)
+
+## 2.0.0
+
+- Upgrade AGP to 8.12.0
+- Upgrade Kotlin to 2.2.0
+- Support Spanish
+- plug type for the countries
