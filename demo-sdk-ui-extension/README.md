@@ -111,8 +111,8 @@ SdkConfig(
 - Support new devices (product_id = 38, 41, 42, 43)
 
 ## 2.0.0
-
 - Upgrade AGP to 8.12.0
 - Upgrade Kotlin to 2.2.0
 - Support Spanish
 - plug type for the countries
+- Upgrade Divkit to 32.19.0
