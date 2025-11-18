@@ -155,6 +155,7 @@ fun HomeScreen(
                 language,
                 countryCode
             )
+            sendViewIntent(HomeViewIntent.OpenedSDK)
         }
     }
 

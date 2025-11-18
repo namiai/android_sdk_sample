@@ -8,6 +8,7 @@ data class HomeUIState(
 
 sealed interface HomeViewIntent {
     data class InitNamiSDK(val sessionCode: String) : HomeViewIntent
+    data object OpenedSDK : HomeViewIntent
 }
 
 sealed interface HomePartialState {
