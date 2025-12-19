@@ -7,7 +7,7 @@
             android:configChanges="keyboardHidden"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".DemoSdkFragmentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

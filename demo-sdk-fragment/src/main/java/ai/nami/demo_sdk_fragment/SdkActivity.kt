@@ -1,6 +1,8 @@
 package ai.nami.demo_sdk_fragment
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -20,12 +22,23 @@ class SdkActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sdk)
         val root = findViewById<LinearLayout>(R.id.container)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
-            val sysInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // apply top/bottom padding so content isn't obscured
-            v.updatePadding(top = sysInsets.top, bottom = sysInsets.bottom)
-            // return the insets (or insets) — don't consume unless you intentionally want to
-            insets
+
+        ViewCompat.setOnApplyWindowInsetsListener(root) { view, windowInsets ->
+            val imeVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime())
+            val orientation = resources.configuration.orientation
+            val isLandscapeMode = orientation == Configuration.ORIENTATION_LANDSCAPE
+            Log.e("debug-adc", "ImeVisible $imeVisible isLandscape mode : $isLandscapeMode")
+            if (imeVisible) {
+                // Keyboard is Open -> HIDE the Bar
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
+                root.updatePadding(bottom = insets.bottom)
+            } else {
+                // Keyboard is Closed -> SHOW the Bar & Restore Padding
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                view.updatePadding(bottom = insets.bottom)
+            }
+
+            windowInsets
         }
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
