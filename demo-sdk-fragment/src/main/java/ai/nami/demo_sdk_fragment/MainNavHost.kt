@@ -44,7 +44,9 @@ fun MainNavHost(navController: NavHostController) {
                         clientID = clientID.ifEmpty { "client_001" },
                         language = language,
                         appearance = appearance,
-                        topologyRoomsSupported = !shouldCreateDefaultRoomForNewZone
+                        topologyRoomsSupported = !shouldCreateDefaultRoomForNewZone,
+                        applyStatusBarPadding = false,
+                        applyImePadding = false
                     ),
                 )
                 navController.navigate(route)

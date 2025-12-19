@@ -1,5 +1,6 @@
 package ai.nami.sdk.sample
 
+import ai.nami.demo_sdk_fragment.SdkActivity
 import ai.nami.demo_sdk_ui_extension.DemoUIExtensionActivity
 import android.content.Intent
 import android.os.Bundle
@@ -53,12 +54,12 @@ class MainActivity: ComponentActivity() {
                         }) {
                             Text("Demo SDK-UI Extension")
                         }
-//                        Spacer(modifier = Modifier.height(24.dp))
-//                        Button(onClick = {
-//                            openDemoUIActivity(SdkActivity::class.java)
-//                        }) {
-//                            Text("Demo SDK with Fragment")
-//                        }
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Button(onClick = {
+                            openDemoUIActivity(SdkActivity::class.java)
+                        }) {
+                            Text("Demo SDK with Fragment")
+                        }
 
 //                        Spacer(modifier = Modifier.height(24.dp))
 //                        Button(onClick = {

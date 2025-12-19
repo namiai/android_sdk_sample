@@ -8,7 +8,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
@@ -21,7 +20,7 @@ class SdkActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sdk)
         val root = findViewById<LinearLayout>(R.id.container)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         ViewCompat.setOnApplyWindowInsetsListener(root) { view, windowInsets ->
             val imeVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime())
@@ -30,12 +29,28 @@ class SdkActivity : AppCompatActivity() {
             Log.e("debug-adc", "ImeVisible $imeVisible isLandscape mode : $isLandscapeMode")
             if (imeVisible) {
                 // Keyboard is Open -> HIDE the Bar
-                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
-                root.updatePadding(bottom = insets.bottom)
+                val insets = windowInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() or
+                            WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime()
+                )
+                view.updatePadding(
+                    bottom = insets.bottom,
+                    left = insets.left,
+                    right = insets.right,
+                    top = insets.top
+                )
             } else {
                 // Keyboard is Closed -> SHOW the Bar & Restore Padding
-                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-                view.updatePadding(bottom = insets.bottom)
+                val insets = windowInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() or
+                            WindowInsetsCompat.Type.displayCutout()
+                )
+                view.updatePadding(
+                    bottom = insets.bottom,
+                    left = insets.left,
+                    right = insets.right,
+                    top = insets.top
+                )
             }
 
             windowInsets
