@@ -27,7 +27,6 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -302,9 +301,9 @@ fun HomeScreen(
                 style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Switch(checked = shouldCreateDefaultRoomForNewZone, onCheckedChange = {
-                shouldCreateDefaultRoomForNewZone = it
-            })
+//            Switch(checked = shouldCreateDefaultRoomForNewZone, onCheckedChange = {
+//                shouldCreateDefaultRoomForNewZone = it
+//            })
 
             Spacer(modifier = Modifier.height(48.dp))
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
