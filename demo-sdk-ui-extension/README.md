@@ -23,7 +23,7 @@ dependencyResolutionManagement {
 
 ## Add dependency 
 ```kotlin
- implementation("ai.nami:sdk-ui-extensions:2.2.0.9-snapshots")
+ implementation("ai.nami:sdk-ui-extensions:2.2.0")
 ```
 
 ## Add `sdkUiExtensionsGraph` to their `NavHost`

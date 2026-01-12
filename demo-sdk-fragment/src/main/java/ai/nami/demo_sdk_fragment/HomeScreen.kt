@@ -85,7 +85,7 @@ fun HomeScreen(
     }
 
     var clientID by remember {
-        mutableStateOf("nami_dev")
+        mutableStateOf("alarm_com_security")
     }
 
     var appearance by remember {
