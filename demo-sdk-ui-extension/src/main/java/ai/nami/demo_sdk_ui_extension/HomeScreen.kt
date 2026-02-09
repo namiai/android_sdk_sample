@@ -97,7 +97,7 @@ fun HomeScreen(
     // https://mobile-screens.nami.surf/divkit/v0.2.0
     var baseUrl by remember {
 //        mutableStateOf("http://192.168.1.223:5001")
-        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.9.0/precompiled_layouts")
+        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.10.0/precompiled_layouts")
     }
 
     val isNeedASessionCode by remember {
