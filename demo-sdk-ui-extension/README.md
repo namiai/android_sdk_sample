@@ -23,7 +23,7 @@ dependencyResolutionManagement {
 
 ## Add dependency 
 ```kotlin
- implementation("ai.nami:sdk-ui-extensions:2.3.0")
+ implementation("ai.nami:sdk-ui-extensions:2.3.1.4-snapshots")
 ```
 
 ## Add `sdkUiExtensionsGraph` to their `NavHost`
@@ -58,7 +58,7 @@ For testing the snapshots version, please use the below configuration:
 
 ```kotlin
 SdkConfig(
-    baseUrl = "https://mobile-screens.nami.surf/divkit/v0.10.0/precompiled_layouts",
+    baseUrl = "https://mobile-screens.nami.surf/divkit/v0.11.0/precompiled_layouts",
     measureSystem = NamiMeasureSystem.METRIC,
     clientID = "alarm_com_security",
     language = "en",
