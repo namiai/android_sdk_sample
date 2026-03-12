@@ -17,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,6 +25,10 @@ import androidx.navigation.compose.composable
 @Composable
 fun MainNavHost(navController: NavHostController) {
     val startDestination = "main_screen"
+
+    val viewModel = viewModel {
+        HomeViewModel()
+    }
 
     NavHost(navController, startDestination = startDestination) {
 
@@ -34,6 +39,7 @@ fun MainNavHost(navController: NavHostController) {
                 val entryPoint = when (typeEntryPoint) {
                     TypeStartingEntryPoint.Settings -> NamiSdkUiExtensionsEntryPoint().settingUrl
                     TypeStartingEntryPoint.StartingSetupASingleDevice -> NamiSdkUiExtensionsEntryPoint().startSetupASingleDeviceUrl
+                    TypeStartingEntryPoint.SystemTest -> NamiSdkUiExtensionsEntryPoint().systemTestUrl
                     else -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
                 }
                 val route = NamiSdkUiExtensions.presentTemplate(
@@ -52,13 +58,14 @@ fun MainNavHost(navController: NavHostController) {
                     ),
                 )
                 navController.navigate(route)
-            }, viewModel = HomeViewModel())
+            }, viewModel = viewModel)
         }
 
         sdkUiExtensionsGraph(navController = navController, onExit = {
             // the user cancels the setting up flow
             // you can navigate to another screen
             // if you don't do anything, the system will back to the screen before opening the SDK
+            navController.navigate("fake_pairing_screen")
         }, onFinish = { output ->
             navController.navigate("fake_pairing_screen")
         })

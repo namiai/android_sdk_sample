@@ -32,6 +32,7 @@ fun MainNavHost(navController: NavHostController) {
                 val entryPoint = when (typeEntryPoint) {
                     TypeStartingEntryPoint.Settings -> NamiSdkUiExtensionsEntryPoint().settingUrl
                     TypeStartingEntryPoint.StartingSetupASingleDevice -> NamiSdkUiExtensionsEntryPoint().startSetupASingleDeviceUrl
+                    TypeStartingEntryPoint.SystemTest -> NamiSdkUiExtensionsEntryPoint().systemTestUrl
                     else -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
                 }
                 val route = NamiSdkUiExtensions.presentTemplate(
@@ -57,6 +58,7 @@ fun MainNavHost(navController: NavHostController) {
             // the user cancels the setting up flow
             // you can navigate to another screen
             // if you don't do anything, the system will back to the screen before opening the SDK
+            navController.navigate("fake_pairing_screen")
         }, onFinish = { output ->
             navController.navigate("fake_pairing_screen")
         })

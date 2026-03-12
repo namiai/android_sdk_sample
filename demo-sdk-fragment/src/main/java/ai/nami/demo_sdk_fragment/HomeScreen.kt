@@ -48,6 +48,8 @@ import kotlinx.coroutines.withContext
 enum class TypeStartingEntryPoint(val title: String) {
     StartingSetupAKit("Start set up a kit"),
     StartingSetupASingleDevice("Start setup a single device"),
+
+    SystemTest("System test"),
     Settings("Settings");
 }
 
