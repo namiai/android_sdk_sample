@@ -34,6 +34,7 @@ fun MainNavHost(navController: NavHostController) {
                 val entryPoint = when (typeEntryPoint) {
                     TypeStartingEntryPoint.Settings -> NamiSdkUiExtensionsEntryPoint().settingUrl
                     TypeStartingEntryPoint.StartingSetupASingleDevice -> NamiSdkUiExtensionsEntryPoint().startSetupASingleDeviceUrl
+                    TypeStartingEntryPoint.SystemTest -> NamiSdkUiExtensionsEntryPoint().systemTestUrl
                     else -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
                 }
                 val route = NamiSdkUiExtensions.presentTemplate(
