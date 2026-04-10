@@ -48,6 +48,8 @@ import kotlinx.coroutines.withContext
 enum class TypeStartingEntryPoint(val title: String) {
     StartingSetupAKit("Start set up a kit"),
     StartingSetupASingleDevice("Start setup a single device"),
+
+    SystemTest("System test"),
     Settings("Settings");
 }
 
@@ -85,7 +87,7 @@ fun HomeScreen(
     }
 
     var clientID by remember {
-        mutableStateOf("nami_dev")
+        mutableStateOf("alarm_com_security")
     }
 
     var appearance by remember {
@@ -95,7 +97,7 @@ fun HomeScreen(
     // https://mobile-screens.nami.surf/divkit/v0.2.0
     var baseUrl by remember {
 //        mutableStateOf("http://192.168.1.18:5001")
-        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.3.0/precompiled_layouts")
+        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.12.0/precompiled_layouts")
     }
 
     val isNeedASessionCode by remember {

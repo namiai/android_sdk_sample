@@ -2,10 +2,10 @@
 jetpackComposePermission = "0.30.0"
 jnav = "2.0.2"
 
-namiCoreSDK = "4.0.0.9-snapshots"
-namiSDKRouting = "6.0.0.5-snapshots"
-namiSDKUI = "6.0.0.5-snapshots"
-sdkUiExtensions = "2.0.0"
+namiCoreSDK = "4.4.0"
+namiSDKRouting = "6.4.0"
+namiSDKUI = "6.4.0"
+sdkUiExtensions = "2.5.0"
 
 androidXCamera = "1.4.2"
 googleBarcodeScanning = "17.3.0"
@@ -84,7 +84,7 @@ androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", ve
 [bundles]
 androidComposeLibs = [ "android-compose-ui-tooling", "android-compose-ui-tooling-preview",
     "android-compose-ui", "android-compose-material",
-"android-constraintlayout-compose", "android-navigation-compose",
+    "android-constraintlayout-compose", "android-navigation-compose",
     "android-navigation-compose-ktx", "android-lifecycle-runtime-compose", "android-activity-compose",
     "android-compose-material-icon-core"
 ]

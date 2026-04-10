@@ -27,7 +27,6 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -50,6 +49,8 @@ import kotlinx.coroutines.withContext
 enum class TypeStartingEntryPoint(val title: String) {
     StartingSetupAKit("Start set up a kit"),
     StartingSetupASingleDevice("Start setup a single device"),
+
+    SystemTest("System test"),
     Settings("Settings");
 }
 
@@ -88,7 +89,7 @@ fun HomeScreen(
     }
 
     var clientID by remember {
-        mutableStateOf("nami_dev")
+        mutableStateOf("alarm_com_security")
     }
 
     var appearance by remember {
@@ -97,8 +98,8 @@ fun HomeScreen(
 
     // https://mobile-screens.nami.surf/divkit/v0.2.0
     var baseUrl by remember {
-//        mutableStateOf("http://192.168.1.18:5001")
-        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.5.0/precompiled_layouts")
+//        mutableStateOf("http://192.168.1.223:5001")
+        mutableStateOf("https://mobile-screens.nami.surf/divkit/v0.12.0/precompiled_layouts")
     }
 
     val isNeedASessionCode by remember {
@@ -119,7 +120,7 @@ fun HomeScreen(
     }
 
     var selectedEntryPoint by remember {
-        mutableStateOf(TypeStartingEntryPoint.StartingSetupAKit)
+        mutableStateOf(TypeStartingEntryPoint.Settings)
     }
 
     var shouldCreateDefaultRoomForNewZone by remember {
@@ -155,6 +156,7 @@ fun HomeScreen(
                 language,
                 countryCode
             )
+            sendViewIntent(HomeViewIntent.OpenedSDK)
         }
     }
 
@@ -301,9 +303,9 @@ fun HomeScreen(
                 style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground)
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Switch(checked = shouldCreateDefaultRoomForNewZone, onCheckedChange = {
-                shouldCreateDefaultRoomForNewZone = it
-            })
+//            Switch(checked = shouldCreateDefaultRoomForNewZone, onCheckedChange = {
+//                shouldCreateDefaultRoomForNewZone = it
+//            })
 
             Spacer(modifier = Modifier.height(48.dp))
             Button(modifier = Modifier.fillMaxWidth(), onClick = {

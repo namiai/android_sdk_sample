@@ -4,6 +4,7 @@ import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.common.NamiLog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,10 +39,14 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun Flow<HomeViewIntent>.toPartialState(): Flow<HomePartialState> {
         return flatMapLatest {
             when (it) {
                 is HomeViewIntent.InitNamiSDK -> initSDK(it.sessionCode)
+                is HomeViewIntent.OpenedSDK -> flow {
+                    emit(HomePartialState.InitSuccess(false))
+                }
             }
         }
     }
