@@ -13,6 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+namisdkkeystore
 /.idea/misc.xml
 /.idea/**
 script/nami_log.sh
