@@ -52,13 +52,13 @@ class MainActivity: ComponentActivity() {
                         Button(onClick = {
                             openDemoUIActivity(DemoUIExtensionActivity::class.java)
                         }) {
-                            Text("Demo SDK-UI Extension")
+                            Text("Demo for Jetpack Compose-based UI")
                         }
                         Spacer(modifier = Modifier.height(24.dp))
                         Button(onClick = {
                             openDemoUIActivity(SdkActivity::class.java)
                         }) {
-                            Text("Demo SDK with Fragment")
+                            Text("Demo for XML Layout-based UI")
                         }
 
 //                        Spacer(modifier = Modifier.height(24.dp))

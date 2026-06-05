@@ -11,6 +11,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.Fragment
 import androidx.navigation.compose.rememberNavController
+import demo_shared.MainNavHost
 
 class TestingFragment : Fragment() {
 

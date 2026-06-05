@@ -1,10 +1,12 @@
-package ai.nami.demo.common
+package demo_shared
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -36,6 +38,17 @@ class NamiLocalStorage private constructor(private val context: Context) {
         val LIST_BSSID_WIFI_NETWORK =
             stringSetPreferencesKey("demo_nami_sdk_list_bssid_wifi_network")
 
+        val CUSTOMER_ACCESS_TOKEN =
+            stringPreferencesKey("demo_nami_sdk_customer_access_token")
+        val CUSTOMER_REFRESH_TOKEN =
+            stringPreferencesKey("demo_nami_sdk_customer_refresh_token")
+        val CUSTOMER_EXPIRES_AT =
+            stringPreferencesKey("demo_nami_sdk_customer_expires_at")
+        val CLIENT_ID =
+            stringPreferencesKey("demo_nami_sdk_client_id")
+        val CURRENT_PLACE_ID = intPreferencesKey("demo_nami_sdk_current_place_id")
+
+
 
         @SuppressLint("StaticFieldLeak")
         // just for demo purpose
@@ -45,7 +58,6 @@ class NamiLocalStorage private constructor(private val context: Context) {
         fun getInstance(context: Context): NamiLocalStorage {
 
             if (instance == null) {
-                Log.e("nami-widar-sample", "create new instance for namilocalstorage")
                 instance = NamiLocalStorage(context.applicationContext)
             }
             return instance!!
@@ -168,6 +180,99 @@ class NamiLocalStorage private constructor(private val context: Context) {
 
         return list?.firstOrNull { it.first == key }?.second
 
+    }
+
+    suspend fun clearCustomerAccessToken() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(CUSTOMER_ACCESS_TOKEN)
+            preferences.remove(CUSTOMER_REFRESH_TOKEN)
+            preferences.remove(CUSTOMER_EXPIRES_AT)
+        }
+    }
+
+    suspend fun saveCustomerAccessToken(
+        accessToken: String?,
+        refreshToken: String?,
+        expiresAt: String?
+    ) {
+        clearCustomerAccessToken()
+        if (accessToken.isNullOrBlank() || refreshToken.isNullOrBlank() || expiresAt.isNullOrBlank()) {
+            return
+        }
+
+        context.dataStore.edit { preferences ->
+            preferences[CUSTOMER_ACCESS_TOKEN] = accessToken
+            preferences[CUSTOMER_REFRESH_TOKEN] = refreshToken
+            preferences[CUSTOMER_EXPIRES_AT] = expiresAt
+        }
+    }
+
+    val customerAccessToken: Flow<CustomerAccessToken?> = context.dataStore.data.catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map { preferences ->
+        val accessToken = preferences[CUSTOMER_ACCESS_TOKEN]
+        val refreshToken = preferences[CUSTOMER_REFRESH_TOKEN]
+        val expiresAt = preferences[CUSTOMER_EXPIRES_AT]
+        if (accessToken.isNullOrBlank() || refreshToken.isNullOrBlank() || expiresAt.isNullOrBlank()) {
+            return@map null
+        }
+
+        CustomerAccessToken(
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            expiresAt = expiresAt
+        )
+    }
+
+    suspend fun clearCurrentPlaceId() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(CURRENT_PLACE_ID)
+        }
+    }
+
+    suspend fun saveClientId(clientId: String?) {
+        context.dataStore.edit { preferences ->
+            if (clientId.isNullOrEmpty()) {
+                preferences.remove(CLIENT_ID)
+            } else {
+                preferences[CLIENT_ID] = clientId
+            }
+        }
+    }
+
+    val clientId: Flow<String> = context.dataStore.data.catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map { preferences ->
+        preferences[CLIENT_ID] ?: ""
+    }
+
+    suspend fun saveCurrentPlaceId(placeId: Int?) {
+        if (placeId == null) {
+            clearCurrentPlaceId()
+            return
+        }
+
+        context.dataStore.edit { preferences ->
+            preferences[CURRENT_PLACE_ID] = placeId
+        }
+    }
+
+    val currentPlaceId: Flow<Int?> = context.dataStore.data.catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map { preferences ->
+        preferences[CURRENT_PLACE_ID]
     }
 
 }

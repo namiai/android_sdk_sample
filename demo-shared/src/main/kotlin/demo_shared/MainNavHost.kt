@@ -1,4 +1,4 @@
-package ai.nami.demo_sdk_ui_extension
+package demo_shared
 
 import ai.nami.sdk_ui_extensions.NamiSdkUiExtensions
 import ai.nami.sdk_ui_extensions.config.NamiMeasureSystem
@@ -16,6 +16,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -25,37 +26,47 @@ import androidx.navigation.compose.composable
 @Composable
 fun MainNavHost(navController: NavHostController) {
     val startDestination = "main_screen"
+    val context = LocalContext.current.applicationContext
 
     val viewModel = viewModel {
-        HomeViewModel()
+        val namiLocalStorage = NamiLocalStorage.getInstance(context)
+        HomeViewModel(namiLocalStorage = namiLocalStorage)
     }
 
     NavHost(navController, startDestination = startDestination) {
 
         composable(startDestination) {
-            HomeScreen(onPresentTemplate = { clientID, typeEntryPoint, shouldCreateDefaultRoomForNewZone, appearance, baseUrl, language, countryCode ->
+            HomeScreen(onPresentTemplate = { clientID, typeEntryPoint, shouldCreateDefaultRoomForNewZone, appearance, baseUrl, customRelativePath, language, countryCode ->
                 val currentState = mutableMapOf<String, String>()
                 currentState["should_show_pairing_success"] = "0"
+                val sdkConfig = SdkConfig(
+                    baseUrl = baseUrl,
+                    countryCode = countryCode,
+                    measureSystem = NamiMeasureSystem.METRIC,
+                    clientID = clientID.ifEmpty { "client_001" },
+                    language = language,
+                    appearance = appearance,
+                    topologyRoomsSupported = !shouldCreateDefaultRoomForNewZone,
+                    applyImePadding = true,
+                    applyStatusBarPadding = true
+                )
+
                 val entryPoint = when (typeEntryPoint) {
+                    TypeStartingEntryPoint.SettingsPin -> NamiSdkUiExtensionsEntryPoint().settingsPinsUrl
+                    TypeStartingEntryPoint.SettingsEntryExitDelays -> NamiSdkUiExtensionsEntryPoint().settingsEntryExitDelaysUrl
+                    TypeStartingEntryPoint.SettingsSensitivity -> NamiSdkUiExtensionsEntryPoint().settingsSensitivityUrl
                     TypeStartingEntryPoint.Settings -> NamiSdkUiExtensionsEntryPoint().settingUrl
                     TypeStartingEntryPoint.StartingSetupASingleDevice -> NamiSdkUiExtensionsEntryPoint().startSetupASingleDeviceUrl
+                    TypeStartingEntryPoint.StartingSetupAKit -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
                     TypeStartingEntryPoint.SystemTest -> NamiSdkUiExtensionsEntryPoint().systemTestUrl
                     else -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
                 }
+
+
                 val route = NamiSdkUiExtensions.presentTemplate(
-                    navController.context,
+                    context,
                     entryPoint,
-                    sdkConfig = SdkConfig(
-                        baseUrl = baseUrl,
-                        countryCode = countryCode,
-                        measureSystem = NamiMeasureSystem.METRIC,
-                        clientID = clientID.ifEmpty { "client_001" },
-                        language = language,
-                        appearance = appearance,
-                        topologyRoomsSupported = !shouldCreateDefaultRoomForNewZone,
-                        applyImePadding = true,
-                        applyStatusBarPadding = true,
-                    ),
+                    sdkConfig = sdkConfig,
                 )
                 navController.navigate(route)
             }, viewModel = viewModel)

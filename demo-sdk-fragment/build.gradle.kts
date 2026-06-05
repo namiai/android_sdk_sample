@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":demo-shared"))
     implementation(libs.android.core.ktx)
     implementation(libs.appcompat)
 

@@ -24,6 +24,6 @@ rootProject.name = "NamiSDKSample"
 include(":app")
 //include(":demo-sdk-ui")
 //include(":demo-core-sdk")
-include(":demo-common")
 include(":demo-sdk-ui-extension")
 include(":demo-sdk-fragment")
+include(":demo-shared")
