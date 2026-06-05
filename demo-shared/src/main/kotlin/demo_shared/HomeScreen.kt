@@ -130,7 +130,7 @@ fun HomeScreen(
     }
 
     // null represents the "Custom baseUrl" option
-    val sdUIVersions = listOf<String?>("0.13.0", "0.12.0", "0.11.0", null)
+    val sdUIVersions = listOf<String?>("0.14.0","0.13.0", "0.12.0", "0.11.0", null)
 
     var sdUIVersion by rememberSaveable {
         mutableStateOf<String?>(sdUIVersions.first())
