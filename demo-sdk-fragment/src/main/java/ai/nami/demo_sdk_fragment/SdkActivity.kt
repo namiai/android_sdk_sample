@@ -1,10 +1,13 @@
 package ai.nami.demo_sdk_fragment
 
+import ai.nami.sdk.NamiSDK
+import ai.nami.sdk.registerNamiSDKEvent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
@@ -13,11 +16,24 @@ import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import demo_shared.NamiLocalStorage
 
 class SdkActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        NamiSDK.enableReleaseLog()
+        registerNamiSDKEvent {
+            onAccessTokenChanged { accessToken, refreshToken, expiresAt ->
+                Log.e( "debug-session", "accessToken $accessToken refreshToken $refreshToken expiresAt: $expiresAt")
+                NamiLocalStorage.getInstance(applicationContext) .saveCustomerAccessToken(
+                    accessToken = accessToken,
+                    refreshToken = refreshToken,
+                    expiresAt = expiresAt
+                )
+            }
+        }
         setContentView(R.layout.activity_sdk)
         val root = findViewById<LinearLayout>(R.id.container)
 //        WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -53,7 +69,7 @@ class SdkActivity : AppCompatActivity() {
                 )
             }
 
-            windowInsets
+            WindowInsetsCompat.CONSUMED
         }
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)

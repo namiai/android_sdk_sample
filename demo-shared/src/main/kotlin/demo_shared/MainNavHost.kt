@@ -1,10 +1,15 @@
 package demo_shared
 
+import ai.nami.sdk.common.NamiLog
+import ai.nami.sdk.publicApisImpl.NamiApiModule
 import ai.nami.sdk_ui_extensions.NamiSdkUiExtensions
 import ai.nami.sdk_ui_extensions.config.NamiMeasureSystem
 import ai.nami.sdk_ui_extensions.config.SdkConfig
 import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsEntryPoint
+import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsUri
+import ai.nami.sdk_ui_extensions.entry_point.withEntityID
 import ai.nami.sdk_ui_extensions.ui.navigation.sdkUiExtensionsGraph
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,30 +20,64 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import demo_shared.home.HomeScreen
+import demo_shared.home.HomeViewModel
+import demo_shared.home.TypeStartingEntryPoint
+import demo_shared.session_code.SessionCodeScreen
+import demo_shared.session_code.SessionCodeViewModel
+import kotlin.sequences.ifEmpty
+
+
+data class CustomEntryPoint(val sdkConfig: SdkConfig, val relativePath: String) :
+    NamiSdkUiExtensionsUri {
+
+    override val uri: Uri
+        get() = "${sdkConfig.baseUrlWithPath}/$relativePath".toUri()
+
+}
 
 @Composable
 fun MainNavHost(navController: NavHostController) {
     val startDestination = "main_screen"
     val context = LocalContext.current.applicationContext
 
-    val viewModel = viewModel {
-        val namiLocalStorage = NamiLocalStorage.getInstance(context)
-        HomeViewModel(namiLocalStorage = namiLocalStorage)
+    val namiLocalStorage = remember(context) {
+        NamiLocalStorage.getInstance(context)
+    }
+
+    val homeViewModel = viewModel {
+        val namiSdkApi = NamiApiModule(context).namiSdkApi
+        HomeViewModel(namiLocalStorage = namiLocalStorage, namiSdkApi = namiSdkApi)
+    }
+
+    val sessionCodeViewModel = viewModel {
+        SessionCodeViewModel(namiLocalStorage = namiLocalStorage)
     }
 
     NavHost(navController, startDestination = startDestination) {
 
-        composable(startDestination) {
-            HomeScreen(onPresentTemplate = { clientID, typeEntryPoint, shouldCreateDefaultRoomForNewZone, appearance, baseUrl, customRelativePath, language, countryCode ->
+        composable(route = startDestination) {
+            SessionCodeScreen(viewModel = sessionCodeViewModel){
+                navController.navigate("home_screen"){
+                    popUpTo(startDestination) { inclusive = true }
+                }
+            }
+        }
+
+        composable("home_screen") {
+            HomeScreen(onPresentTemplate = { clientID, typeEntryPoint, shouldCreateDefaultRoomForNewZone, appearance, baseUrl, customRelativePath, language, countryCode, entityId ->
                 val currentState = mutableMapOf<String, String>()
                 currentState["should_show_pairing_success"] = "0"
+                NamiLog.e(tag = "sdkui", message = "MainNavHost start presenting template")
                 val sdkConfig = SdkConfig(
                     baseUrl = baseUrl,
                     countryCode = countryCode,
@@ -59,7 +98,15 @@ fun MainNavHost(navController: NavHostController) {
                     TypeStartingEntryPoint.StartingSetupASingleDevice -> NamiSdkUiExtensionsEntryPoint().startSetupASingleDeviceUrl
                     TypeStartingEntryPoint.StartingSetupAKit -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
                     TypeStartingEntryPoint.SystemTest -> NamiSdkUiExtensionsEntryPoint().systemTestUrl
-                    else -> NamiSdkUiExtensionsEntryPoint().startSetupAKitUrl
+                    TypeStartingEntryPoint.SettingsWithEntity -> {
+                        val base = NamiSdkUiExtensionsEntryPoint().settingUrl
+                        if (!entityId.isNullOrBlank()) base.withEntityID(entityId) else base
+                    }
+
+                    TypeStartingEntryPoint.Custom -> CustomEntryPoint(
+                        sdkConfig = sdkConfig,
+                        relativePath = customRelativePath ?: ""
+                    )
                 }
 
 
@@ -69,7 +116,11 @@ fun MainNavHost(navController: NavHostController) {
                     sdkConfig = sdkConfig,
                 )
                 navController.navigate(route)
-            }, viewModel = viewModel)
+            }, viewModel = homeViewModel, onNavigateSessionCodeScreen = {
+                navController.navigate(startDestination){
+                    popUpTo(startDestination) { inclusive = true }
+                }
+            })
         }
 
         sdkUiExtensionsGraph(navController = navController, onExit = {

@@ -1,17 +1,20 @@
-package demo_shared
+package demo_shared.home
 
+import ai.nami.sdk.model.Device
+import ai.nami.sdk.model.Place
 
 data class HomeUIState(
     val isLoading: Boolean = false,
     val initSDKSuccess: Boolean? = null,
     val errorMessage: String? = null,
     val isNeedASessionCode: Boolean? = null,
-    val placeID: Int? = null,
+    val place: Place? = null,
+    val listDevices: List<Device> = emptyList(),
     val clientID: String = ""
 )
 
 sealed interface HomeViewIntent {
-    data class InitNamiSDK(val sessionCode: String?, val clientID: String) : HomeViewIntent
+    data class InitNamiSDK(val clientID: String) : HomeViewIntent
 
     data object OpenedSDK : HomeViewIntent
 
@@ -28,7 +31,8 @@ sealed interface HomePartialState {
 
     data class LoadedSessionCode(
         val isNeedASessionCode: Boolean,
-        val placeID: Int?,
+        val place: Place?,
+        val listDevices: List<Device>,
         val clientID: String
     ) :
         HomePartialState
@@ -51,9 +55,10 @@ sealed interface HomePartialState {
 
             is LoadedSessionCode -> currentState.copy(
                 isNeedASessionCode = isNeedASessionCode,
-                placeID = placeID,
-                clientID = clientID,
-                isLoading = false
+                place = place,
+                listDevices = listDevices,
+                isLoading = false,
+                clientID = clientID
             )
 
             is SigningOut -> currentState.copy(isLoading = true)
@@ -61,7 +66,8 @@ sealed interface HomePartialState {
             is SignedOut -> currentState.copy(
                 isLoading = false,
                 isNeedASessionCode = true,
-                placeID = null
+                place = null,
+                listDevices = emptyList()
             )
         }
     }
