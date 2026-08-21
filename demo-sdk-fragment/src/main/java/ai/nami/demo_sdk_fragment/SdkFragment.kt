@@ -1,5 +1,6 @@
 package ai.nami.demo_sdk_fragment
 
+import ai.nami.shared_sample.MainNavHost
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,6 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.compose.rememberNavController
-import demo_shared.MainNavHost
 
 
 class SdkFragment : Fragment() {

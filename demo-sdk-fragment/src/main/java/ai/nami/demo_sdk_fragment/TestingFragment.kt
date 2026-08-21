@@ -1,6 +1,7 @@
 package ai.nami.demo_sdk_fragment
 
 import ai.nami.demo_sdk_fragment.databinding.FragmentTestingBinding
+import ai.nami.shared_sample.MainNavHost
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.Fragment
 import androidx.navigation.compose.rememberNavController
-import demo_shared.MainNavHost
+
 
 class TestingFragment : Fragment() {
 

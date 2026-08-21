@@ -3,14 +3,14 @@ package ai.nami.demo_sdk_ui_extension
 import ai.nami.demo_sdk_ui_extension.theme.DemoUIExtensionTheme
 import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.registerNamiSDKEvent
+import ai.nami.shared_sample.NamiLocalStorage
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
-import demo_shared.MainNavHost
-import demo_shared.NamiLocalStorage
+import ai.nami.shared_sample.MainNavHost
 
 class DemoUIExtensionActivity  : ComponentActivity(){
 

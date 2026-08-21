@@ -29,17 +29,16 @@ android {
 }
 
 dependencies {
-    implementation(libs.android.core.ktx)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    implementation(platform(libs.android.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidComposeLibs)
 
     implementation(libs.androidx.datastore)
 
-    implementation(libs.nami.sdk.ui.extensions)
 
 }

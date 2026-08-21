@@ -72,12 +72,13 @@ dependencies {
 //    implementation(project(":demo-common"))
     implementation(project(":demo-sdk-ui-extension"))
     implementation(project(":demo-sdk-fragment"))
+    implementation(project(":shared-sample"))
 
-    implementation(libs.android.core.ktx)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.android.lifecycle.runtime)
     implementation(libs.google.android.material)
 
-    implementation(platform(libs.android.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidComposeLibs)
 
 

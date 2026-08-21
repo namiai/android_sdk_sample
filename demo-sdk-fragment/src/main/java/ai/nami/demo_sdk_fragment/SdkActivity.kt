@@ -2,6 +2,7 @@ package ai.nami.demo_sdk_fragment
 
 import ai.nami.sdk.NamiSDK
 import ai.nami.sdk.registerNamiSDKEvent
+import ai.nami.shared_sample.NamiLocalStorage
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +17,7 @@ import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import demo_shared.NamiLocalStorage
+
 
 class SdkActivity : AppCompatActivity() {
 

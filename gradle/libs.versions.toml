@@ -44,7 +44,7 @@ nami-sdk-routing = { module = "ai.nami:sdk-routing", version.ref = "namiSDKRouti
 nami-core-sdk = { module = "ai.nami:core-sdk", version.ref = "namiCoreSDK" }
 nami-sdk-ui-extensions = {module = "ai.nami:sdk-ui-extensions", version.ref = "sdkUiExtensions" }
 
-android-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidXCoreKtx" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidXCoreKtx" }
 android-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycleRuntime" }
 
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "androidXDataStore" }
@@ -56,18 +56,18 @@ andorid-camera-view = { module = "androidx.camera:camera-view", version.ref = "a
 android-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "androidXCamera"}
 android-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "androidXCamera"}
 
-android-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
-android-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-android-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 android-compose-ui = { module = "androidx.compose.ui:ui" }
-android-compose-material = { module = "androidx.compose.material:material" }
+androidx-material = { module = "androidx.compose.material:material" }
 android-compose-material-icon-core = { module = "androidx.compose.material:material-icons-core" }
 
-android-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidXConstraintLayout" }
-android-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidXNavigation" }
-android-navigation-compose-ktx = { module = "androidx.navigation:navigation-common-ktx", version.ref = "androidXNavigation" }
+constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidXConstraintLayout" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidXNavigation" }
+navigation-common-compose = { module = "androidx.navigation:navigation-common-ktx", version.ref = "androidXNavigation" }
 android-lifecycle-runtime-compose = {module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycleRuntimeCompose"}
-android-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
@@ -82,10 +82,10 @@ androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", ve
 
 
 [bundles]
-androidComposeLibs = [ "android-compose-ui-tooling", "android-compose-ui-tooling-preview",
-    "android-compose-ui", "android-compose-material",
-    "android-constraintlayout-compose", "android-navigation-compose",
-    "android-navigation-compose-ktx", "android-lifecycle-runtime-compose", "android-activity-compose",
+androidComposeLibs = [ "androidx-ui-tooling", "androidx-ui-tooling-preview",
+    "android-compose-ui", "androidx-material",
+    "constraintlayout-compose", "navigation-compose",
+    "navigation-common-compose", "android-lifecycle-runtime-compose", "androidx-activity-compose",
     "android-compose-material-icon-core"
 ]
 
@@ -93,6 +93,10 @@ androidCameraLibs = ["andorid-camera-view", "android-camera-lifecycle", "android
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+# Consumed by the shared-sample module (authored against the internal catalog),
+# which needs the serialization plugin for @Serializable NavKeys. No pre-existing
+# external alias, so this is purely additive.
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinKsp" }

@@ -39,8 +39,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":demo-shared"))
-    implementation(libs.android.core.ktx)
+    implementation(project(":shared-sample"))
+    implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
 
     implementation(libs.androidx.activity)
@@ -52,12 +52,12 @@ dependencies {
 
     implementation(libs.google.android.material)
     implementation(libs.android.lifecycle.runtime)
-    implementation(platform(libs.android.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidComposeLibs)
 
     implementation(libs.androidx.datastore)
 
-    implementation(libs.nami.sdk.ui.extensions)
+
 //    implementation(libs.nami.sdk.ui)
 
 
@@ -68,7 +68,7 @@ dependencies {
     // google vision for scan qrcode
     // if you custom NamiQRScanView, you do not need to add this library
     implementation(libs.google.barcode.scanning)
-    implementation(libs.android.navigation.compose)
+    implementation(libs.navigation.compose)
 
 
     implementation(libs.androidx.fragment.ktx)

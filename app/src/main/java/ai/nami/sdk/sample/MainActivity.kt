@@ -42,12 +42,7 @@ class MainActivity: ComponentActivity() {
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.Start
                     ) {
-//                        Spacer(modifier = Modifier.height(48.dp))
-//                        Button(onClick = {
-//                            openDemoUIActivity(DemoUIMainActivity::class.java)
-//                        }) {
-//                            Text("Demo SDK-UI")
-//                        }
+
                         Spacer(modifier = Modifier.height(24.dp))
                         Button(onClick = {
                             openDemoUIActivity(DemoUIExtensionActivity::class.java)
@@ -61,12 +56,6 @@ class MainActivity: ComponentActivity() {
                             Text("Demo for XML Layout-based UI")
                         }
 
-//                        Spacer(modifier = Modifier.height(24.dp))
-//                        Button(onClick = {
-//                            openDemoUIActivity(DemoCoreSDKActivity::class.java)
-//                        }) {
-//                            Text("Demo Core-SDK")
-//                        }
                     }
                 }
             }

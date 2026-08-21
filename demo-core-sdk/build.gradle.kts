@@ -44,11 +44,11 @@ dependencies {
     implementation(project(":demo-common"))
 
     implementation(libs.appcompat)
-    implementation(libs.android.core.ktx)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.android.lifecycle.runtime)
     implementation(libs.google.android.material)
 
-    implementation(platform(libs.android.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidComposeLibs)
 
     implementation(libs.androidx.datastore)
