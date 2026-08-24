@@ -1,6 +1,5 @@
 package ai.nami.shared_sample
 
-import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk_ui_extensions.NamiSDUISDK
 import ai.nami.sdk_ui_extensions.SDKEvent
 import androidx.lifecycle.ViewModel
@@ -23,10 +22,8 @@ class NamiSDKViewModel(private val namiSDUISDK: NamiSDUISDK?) : ViewModel() {
     val effect: SharedFlow<NamiSDKUIEffect> = _effect.asSharedFlow()
 
     init {
-        NamiLog.e(tag = "debug-nav3", message = "NamiSDKViewModel init")
         viewModelScope.launch {
             namiSDUISDK?.sdkEvents?.collect {
-                NamiLog.e(tag = "debug-nav3", message = "NamiSdKViewModel collect $it")
                 when (it) {
                     is SDKEvent.OnExit -> {
                         _effect.emit(NamiSDKUIEffect.Back)

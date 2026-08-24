@@ -1,10 +1,5 @@
 package ai.nami.shared_sample
 
-import ai.nami.shared_sample.home.HomeScreen
-import ai.nami.shared_sample.home.HomeViewModel
-import ai.nami.shared_sample.home.TypeStartingEntryPoint
-import ai.nami.shared_sample.session_code.SessionCodeScreen
-import ai.nami.shared_sample.session_code.SessionCodeViewModel
 import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.publicApisImpl.NamiApiModule
 import ai.nami.sdk_ui_extensions.NamiSDUISDK
@@ -16,6 +11,11 @@ import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsUri
 import ai.nami.sdk_ui_extensions.entry_point.withEntityID
 import ai.nami.sdk_ui_extensions.models.NamiSdkUiExtensionsInput
 import ai.nami.sdk_ui_extensions.ui.navigation.sdkUiExtensionsGraph
+import ai.nami.shared_sample.home.HomeScreen
+import ai.nami.shared_sample.home.HomeViewModel
+import ai.nami.shared_sample.home.TypeStartingEntryPoint
+import ai.nami.shared_sample.session_code.SessionCodeScreen
+import ai.nami.shared_sample.session_code.SessionCodeViewModel
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +48,10 @@ data class CustomEntryPoint(val sdkConfig: SdkConfig, val relativePath: String) 
 
 }
 
+val SDK_ROUTE = "nami_sdk?clientID={clientID}&typeEntryPoint={typeEntryPoint}" +
+        "&shouldCreateDefaultRoomForNewZone={shouldCreateDefaultRoomForNewZone}" +
+        "&appearance={appearance}&baseUrl={baseUrl}&customRelativePath={customRelativePath}" +
+        "&language={language}&countryCode={countryCode}&entityId={entityId}&placeId={placeId}"
 @Composable
 fun MainNavHost(navController: NavHostController) {
 
@@ -69,8 +73,8 @@ fun MainNavHost(navController: NavHostController) {
     NavHost(navController, startDestination = startDestination) {
 
         composable(route = startDestination) {
-            SessionCodeScreen(viewModel = sessionCodeViewModel){
-                navController.navigate("home_screen"){
+            SessionCodeScreen(viewModel = sessionCodeViewModel) {
+                navController.navigate("home_screen") {
                     popUpTo(startDestination) { inclusive = true }
                 }
             }
@@ -102,10 +106,7 @@ fun MainNavHost(navController: NavHostController) {
 
 
         composable(
-            route = "nami_sdk?clientID={clientID}&typeEntryPoint={typeEntryPoint}" +
-                    "&shouldCreateDefaultRoomForNewZone={shouldCreateDefaultRoomForNewZone}" +
-                    "&appearance={appearance}&baseUrl={baseUrl}&customRelativePath={customRelativePath}" +
-                    "&language={language}&countryCode={countryCode}&entityId={entityId}&placeId={placeId}",
+            route = SDK_ROUTE,
             arguments = listOf(
                 navArgument("clientID") { type = NavType.StringType; defaultValue = "" },
                 navArgument("typeEntryPoint") {
@@ -148,7 +149,6 @@ fun MainNavHost(navController: NavHostController) {
             val countryCode = args?.getString("countryCode") ?: "us"
             val entityId = args?.getString("entityId")
             val placeId = args?.getString("placeId")
-            NamiLog.e(tag = "debug-nav3", message = "MainNavHost Recomposition sdkScreen $baseUrl")
 
 
             val sdkConfig = SdkConfig(
@@ -162,7 +162,6 @@ fun MainNavHost(navController: NavHostController) {
                 applyImePadding = true,
                 applyStatusBarPadding = true
             )
-            NamiLog.e(tag = "debug-nav3", message = "MainNavHost sdkScreen $sdkConfig")
             val entryPoint = when (typeEntryPoint) {
                 TypeStartingEntryPoint.SettingsPin -> NamiSdkUiExtensionsEntryPoint().settingsPinsUrl
                 TypeStartingEntryPoint.SettingsEntryExitDelays -> NamiSdkUiExtensionsEntryPoint().settingsEntryExitDelaysUrl
@@ -199,30 +198,36 @@ fun MainNavHost(navController: NavHostController) {
                         }
 
                         is NamiSDKUIEffect.NavigateToError -> {
-                            navController.navigate("error_screen")
+                            navController.navigate("error_screen") {
+                                popUpTo(SDK_ROUTE) {
+                                    inclusive = true
+                                }
+                            }
                         }
 
                         is NamiSDKUIEffect.NavigateToSuccessScreen -> {
-                            navController.navigate("fake_pairing_screen")
+                            navController.navigate("fake_pairing_screen") {
+                                popUpTo(SDK_ROUTE) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     }
 
                 }
             }
-
-            if (placeId != null) {
-                namiSDUISDK?.PresentTemplate(
-                    templateUrl = entryPoint,
-                    sdkConfig = sdkConfig,
-                    input = NamiSdkUiExtensionsInput(placeID = placeId.toIntOrNull())
-                )
-            } else {
-                namiSDUISDK?.PresentTemplate(
-                    templateUrl = entryPoint,
-                    sdkConfig = sdkConfig,
-                )
-            }
-
+                if (placeId != null) {
+                    namiSDUISDK?.PresentTemplate(
+                        templateUrl = entryPoint,
+                        sdkConfig = sdkConfig,
+                        input = NamiSdkUiExtensionsInput(placeID = placeId.toIntOrNull())
+                    )
+                } else {
+                    namiSDUISDK?.PresentTemplate(
+                        templateUrl = entryPoint,
+                        sdkConfig = sdkConfig,
+                    )
+                }
         }
 
         sdkUiExtensionsGraph(navController = navController, onExit = {
@@ -232,10 +237,6 @@ fun MainNavHost(navController: NavHostController) {
             )
             navController.navigate("error_screen")
         }, onFinish = { output ->
-            NamiLog.e(
-                tag = "sdkui",
-                message = "MainNavHost onFinish in consumer app ${output.parameters}"
-            )
             if (output.parameters.get("should_show_pairing_success") == "1") {
                 navController.navigate("fake_pairing_screen")
             }

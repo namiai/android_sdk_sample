@@ -2,7 +2,6 @@ package ai.nami.shared_sample.home
 
 import ai.nami.shared_sample.AppModuleDI
 import ai.nami.shared_sample.NamiLocalStorage
-import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.model.NamiAccessToken
 import ai.nami.sdk.model.device.PlaceDevicesQuery
 import ai.nami.sdk.publicApis.NamiSdkApi
@@ -38,7 +37,6 @@ class HomeViewModel(
     val uiState: StateFlow<HomeUIState>
 
     init {
-        NamiLog.e(tag = "debug-nav3", message = "HomeViewModel init")
         val initialState = HomeUIState()
         uiState =
             merge(
@@ -77,10 +75,6 @@ class HomeViewModel(
                         )
                         return@flow
                     }
-                    NamiLog.e(
-                        tag = "debug-nav3",
-                        message = "HomeViewModel fetch and create SDK again"
-                    )
                     val  accessToken = NamiAccessToken(
                     accessToken = token.accessToken,
                     refreshToken = token.refreshToken,
@@ -102,10 +96,6 @@ class HomeViewModel(
                         )
                     )
                 }.catch { e ->
-                    NamiLog.e(
-                        tag = "debug-session",
-                        message = "fetchSavedSession error: ${e.message}"
-                    )
                     emit(
                         HomePartialState.LoadedSessionCode(
                             isNeedASessionCode = true,
@@ -115,10 +105,6 @@ class HomeViewModel(
                     )
                 }
             }.catch { e ->
-                NamiLog.e(
-                    tag = "debug-session",
-                    message = "fetchSavedSession upstream error: ${e.message}"
-                )
                 emit(
                     HomePartialState.LoadedSessionCode(
                         isNeedASessionCode = true,
@@ -157,7 +143,6 @@ class HomeViewModel(
         }.onStart {
             emit(HomePartialState.SigningOut)
         }.catch { e ->
-            NamiLog.e(tag = "debug-session", message = "signOut error: ${e.message}")
             emit(HomePartialState.SignedOut)
         }
 

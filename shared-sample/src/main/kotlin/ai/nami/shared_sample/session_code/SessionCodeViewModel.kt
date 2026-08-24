@@ -4,7 +4,6 @@ import ai.nami.shared_sample.AppModuleDI
 import ai.nami.shared_sample.NamiLocalStorage
 import ai.nami.shared_sample.home.isValid
 import ai.nami.sdk.NamiSDK
-import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk_ui_extensions.NamiSDUISDK
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -64,7 +63,6 @@ class SessionCodeViewModel(private val namiLocalStorage: NamiLocalStorage) : Vie
             AppModuleDI.addNew(namiSDK)
             val currentPlaceID = NamiSDK.placeId()
             if (currentPlaceID != null) {
-                NamiLog.e(message = "currentPlaceID $currentPlaceID", tag = "debug-session")
                 namiLocalStorage.saveCurrentPlaceId(currentPlaceID)
                 emit(SessionCodePartialState.InitSuccess)
             } else {
@@ -87,10 +85,6 @@ class SessionCodeViewModel(private val namiLocalStorage: NamiLocalStorage) : Vie
                 isNeedASessionCode = isNeedASessionCode,
             ) as SessionCodePartialState
         }.catch { e ->
-            NamiLog.e(
-                tag = "debug-session",
-                message = "fetchSavedSession upstream error: ${e.message}"
-            )
             emit(
                 SessionCodePartialState.LoadedSessionCode(
                     isNeedASessionCode = true,

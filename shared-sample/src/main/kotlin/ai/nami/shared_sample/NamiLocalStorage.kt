@@ -1,6 +1,5 @@
 package ai.nami.shared_sample
 
-import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.model.NamiAccessToken
 import android.annotation.SuppressLint
 import android.content.Context
@@ -113,7 +112,6 @@ class NamiLocalStorage private constructor(private val context: Context) {
                 val json = JSONObject(it)
                 val key = json.optInt("key")
                 val credentials = json.optString("data")
-                NamiLog.e(tag = "debug_sample_nami", message = "NamiLocalStorage key: $key")
                 Pair(key, credentials)
             }.toSet()
         }
@@ -240,7 +238,6 @@ class NamiLocalStorage private constructor(private val context: Context) {
         }.map { preferences ->
             preferences[LIST_BSSID_WIFI_NETWORK] ?: emptySet()
         }.firstOrNull()?.map {
-            NamiLog.e(tag = "debug_nami_sample", message = "bssid-key: $it")
             val json = JSONObject(it)
             val bssidInString = json.optString("bssid")
             val savedKey = json.optInt("key")

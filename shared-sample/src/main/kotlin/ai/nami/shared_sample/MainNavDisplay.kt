@@ -1,12 +1,6 @@
 package ai.nami.shared_sample
 
 
-import ai.nami.shared_sample.home.HomeScreen
-import ai.nami.shared_sample.home.HomeViewModel
-import ai.nami.shared_sample.home.TypeStartingEntryPoint
-import ai.nami.shared_sample.session_code.SessionCodeScreen
-import ai.nami.shared_sample.session_code.SessionCodeViewModel
-import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.publicApisImpl.NamiApiModule
 import ai.nami.sdk_ui_extensions.NamiSDUISDK
 import ai.nami.sdk_ui_extensions.config.NamiAppearance
@@ -15,6 +9,11 @@ import ai.nami.sdk_ui_extensions.config.SdkConfig
 import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsEntryPoint
 import ai.nami.sdk_ui_extensions.entry_point.withEntityID
 import ai.nami.sdk_ui_extensions.models.NamiSdkUiExtensionsInput
+import ai.nami.shared_sample.home.HomeScreen
+import ai.nami.shared_sample.home.HomeViewModel
+import ai.nami.shared_sample.home.TypeStartingEntryPoint
+import ai.nami.shared_sample.session_code.SessionCodeScreen
+import ai.nami.shared_sample.session_code.SessionCodeViewModel
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -163,7 +162,6 @@ fun MainNavDisplay(modifier: Modifier = Modifier) {
                     applyImePadding = true,
                     applyStatusBarPadding = true,
                 )
-                NamiLog.e(tag = "debug-nav3", message = "MainNavDisplay sdkScreen $sdkConfig")
 
                 val entryPoint = when (typeEntryPoint) {
                     TypeStartingEntryPoint.SettingsPin -> NamiSdkUiExtensionsEntryPoint().settingsPinsUrl
@@ -194,10 +192,6 @@ fun MainNavDisplay(modifier: Modifier = Modifier) {
 
                 LaunchedEffect(Unit) {
                     namiSDKViewModel.effect.collect { event ->
-                        NamiLog.e(
-                            tag = "debug-nav3",
-                            message = "Sample collect $event -- size ${backStack.size}"
-                        )
                         when (event) {
                             is NamiSDKUIEffect.Back -> {
                                 backStack.removeLastOrNull()
@@ -223,7 +217,6 @@ fun MainNavDisplay(modifier: Modifier = Modifier) {
 
                     }
                 }
-
                 if (key.placeId != null) {
                     namiSDUISDK?.PresentTemplate(
                         templateUrl = entryPoint,

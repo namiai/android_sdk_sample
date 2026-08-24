@@ -49,7 +49,7 @@ dependencies {
     if (isInternalSample) {
         api(project(":sdk-ui-extensions"))
     } else {
-        api("ai.nami:sdk-ui-extensions:3.0.0.6-snapshot")
+        api("ai.nami:sdk-ui-extensions:2.8.0.2-snapshot")
     }
 
 
