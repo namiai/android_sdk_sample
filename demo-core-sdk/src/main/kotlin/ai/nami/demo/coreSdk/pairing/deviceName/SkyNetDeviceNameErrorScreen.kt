@@ -98,7 +98,7 @@ private fun SkyNetDeviceNameErrorScreen(
     isLoading: Boolean
 ) {
     val isAllowTryAgain by remember(pairingErrorCode) {
-        derivedStateOf { (pairingErrorCode == PairingErrorCode.TooFarYourPlace) }
+        derivedStateOf { (pairingErrorCode == PairingErrorCode.ThreadNetworkNotFound) }
     }
 
 
@@ -134,7 +134,7 @@ private fun PairingErrorCode.toErrorMessage(
 ): List<String> {
     val defaultErrorMessage = "Pairing device error"
     return when (this) {
-        PairingErrorCode.TooFarYourPlace, PairingErrorCode.NoThreadNetworkAvailable, PairingErrorCode.NoBorderRouterForContactSensor -> {
+        PairingErrorCode.ThreadNetworkNotFound, PairingErrorCode.NoThreadNetworkAvailable, PairingErrorCode.NoThreadBorderRouterForAccessory -> {
             if (isContactSensor) {
                 listOf(
                     "Move one of your mesh sensors in $zoneName closer to the contact sensor.",
@@ -167,7 +167,7 @@ private fun PairingErrorCode.toErrorMessage(
 private fun PairingErrorCode.toErrorHeader(): String {
     val defaultErrorHeader = "Unexpected pairing state."
     return when (this) {
-        PairingErrorCode.TooFarYourPlace, PairingErrorCode.NoThreadNetworkAvailable, PairingErrorCode.NoBorderRouterForContactSensor -> {
+        PairingErrorCode.ThreadNetworkNotFound, PairingErrorCode.NoThreadNetworkAvailable, PairingErrorCode.NoThreadBorderRouterForAccessory -> {
             "No Thread network found"
         }
 

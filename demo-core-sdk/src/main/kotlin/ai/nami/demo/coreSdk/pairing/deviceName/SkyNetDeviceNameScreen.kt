@@ -111,7 +111,7 @@ fun SkyNetDeviceNameRoute(
         key3 = uiState.pairingError
     ) {
         if (!uiState.isLoading && (!uiState.errorMessage.isNullOrBlank() || uiState.pairingError != null)) {
-            if (uiState.pairingError?.code != PairingErrorCode.TooFarYourPlace) {
+            if (uiState.pairingError?.code != PairingErrorCode.ThreadNetworkNotFound) {
                 onNavigateToErrorScreen(
                     false,
                     uiState.pairingError?.code ?: PairingErrorCode.Unknown,
