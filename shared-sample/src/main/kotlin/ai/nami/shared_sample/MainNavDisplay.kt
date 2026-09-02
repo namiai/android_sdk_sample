@@ -177,7 +177,6 @@ fun MainNavDisplay(modifier: Modifier = Modifier) {
                     }
 
                     TypeStartingEntryPoint.Custom -> CustomEntryPoint(
-                        sdkConfig = sdkConfig,
                         relativePath = key.customRelativePath ?: "",
                     )
                 }

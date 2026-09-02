@@ -40,11 +40,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
-data class CustomEntryPoint(val sdkConfig: SdkConfig, val relativePath: String) :
-    NamiSdkUiExtensionsUri {
+/** SDK entrypoint backed by a caller-provided relative template path. */
+data class CustomEntryPoint(val relativePath: String) : NamiSdkUiExtensionsUri {
 
     override val uri: Uri
-        get() = "${sdkConfig.baseUrlWithPath}/$relativePath".toUri()
+        get() = relativePath.toUri()
 
 }
 
@@ -176,7 +176,6 @@ fun MainNavHost(navController: NavHostController) {
                 }
 
                 TypeStartingEntryPoint.Custom -> CustomEntryPoint(
-                    sdkConfig = sdkConfig,
                     relativePath = customRelativePath ?: ""
                 )
             }
