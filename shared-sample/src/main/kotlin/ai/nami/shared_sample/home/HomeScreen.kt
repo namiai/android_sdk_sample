@@ -1,9 +1,9 @@
 package ai.nami.shared_sample.home
 
-import ai.nami.shared_sample.common.BaseScreen
 import ai.nami.sdk.model.Device
 import ai.nami.sdk.model.Zone
 import ai.nami.sdk_ui_extensions.config.NamiAppearance
+import ai.nami.shared_sample.common.BaseScreen
 import android.content.ClipData
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
