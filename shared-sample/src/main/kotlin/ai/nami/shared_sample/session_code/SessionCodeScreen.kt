@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
+/** Displays session-code entry and consumes one-shot navigation effects from its view model. */
 @Composable
 fun SessionCodeScreen(
     modifier: Modifier = Modifier,
@@ -55,9 +56,11 @@ fun SessionCodeScreen(
         }
     }
 
-    LaunchedEffect(uiState) {
-        if (uiState.initSDKSuccess == true || uiState.isNeedASessionCode == false) {
-            onNavigateToHomeScreen()
+    LaunchedEffect(viewModel) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is SessionCodeEffect.NavigateHome -> onNavigateToHomeScreen()
+            }
         }
     }
 

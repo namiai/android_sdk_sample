@@ -141,6 +141,7 @@ fun MainNavDisplay(modifier: Modifier = Modifier) {
                     },
                     viewModel = homeViewModel,
                     onNavigateSessionCodeScreen = {
+                        backStack.clear()
                         backStack.add(SessionCode)
                     },
                 )

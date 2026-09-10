@@ -52,8 +52,10 @@ val SDK_ROUTE = "nami_sdk?clientID={clientID}&typeEntryPoint={typeEntryPoint}" +
         "&shouldCreateDefaultRoomForNewZone={shouldCreateDefaultRoomForNewZone}" +
         "&appearance={appearance}&baseUrl={baseUrl}&customRelativePath={customRelativePath}" +
         "&language={language}&countryCode={countryCode}&entityId={entityId}&placeId={placeId}"
+
+/** Displays the Navigation 2 sample graph using destination-scoped screen view models. */
 @Composable
-fun MainNavHost(navController: NavHostController) {
+fun MainNavHost(navController: NavHostController): Unit {
 
     val startDestination = "main_screen"
     val context = LocalContext.current.applicationContext
@@ -61,18 +63,13 @@ fun MainNavHost(navController: NavHostController) {
     val namiLocalStorage = remember(context) {
         NamiLocalStorage.getInstance(context)
     }
-    val homeViewModel = viewModel {
-        val namiSdkApi = NamiApiModule(context).namiSdkApi
-        HomeViewModel(namiLocalStorage = namiLocalStorage, namiSdkApi = namiSdkApi)
-    }
-
-    val sessionCodeViewModel = viewModel {
-        SessionCodeViewModel(namiLocalStorage = namiLocalStorage)
-    }
 
     NavHost(navController, startDestination = startDestination) {
 
         composable(route = startDestination) {
+            val sessionCodeViewModel = viewModel {
+                SessionCodeViewModel(namiLocalStorage = namiLocalStorage)
+            }
             SessionCodeScreen(viewModel = sessionCodeViewModel) {
                 navController.navigate("home_screen") {
                     popUpTo(startDestination) { inclusive = true }
@@ -81,6 +78,11 @@ fun MainNavHost(navController: NavHostController) {
         }
 
         composable("home_screen") {
+            val homeViewModel = viewModel {
+                val namiSdkApi = NamiApiModule(context).namiSdkApi
+                HomeViewModel(namiLocalStorage = namiLocalStorage, namiSdkApi = namiSdkApi)
+            }
+
             HomeScreen(onPresentTemplate = { clientID, typeEntryPoint, shouldCreateDefaultRoomForNewZone, appearance, baseUrl, customRelativePath, language, countryCode, entityId, placeID ->
                 val query = listOf(
                     "clientID" to clientID,
@@ -99,7 +101,7 @@ fun MainNavHost(navController: NavHostController) {
                 navController.navigate("nami_sdk?$query")
             }, viewModel = homeViewModel, onNavigateSessionCodeScreen = {
                 navController.navigate(startDestination) {
-                    popUpTo(startDestination) { inclusive = true }
+                    popUpTo("home_screen") { inclusive = true }
                 }
             })
         }
