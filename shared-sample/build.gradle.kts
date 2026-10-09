@@ -86,7 +86,7 @@ dependencies {
     // Provides classes to display content, including NavDisplay and Scene.
     implementation("androidx.navigation3:navigation3-ui:1.1.4")
     // Allows ViewModels to be scoped to entries in the back stack.
-    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:2.9.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:2.10.0")
 
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test:runner:1.6.2")
