@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "ai.nami.sdk.sample"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "ai.nami.sdk.sample"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = System.getenv("VERSION_CODE")?.toInt() ?: 1
         versionName = System.getenv("VERSION_NAME") ?: "1.0"
 
