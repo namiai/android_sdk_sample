@@ -1,6 +1,5 @@
 package ai.nami.shared_sample
 
-import ai.nami.sdk.common.NamiLog
 import ai.nami.sdk.publicApisImpl.NamiApiModule
 import ai.nami.sdk_ui_extensions.NamiSDUISDK
 import ai.nami.sdk_ui_extensions.config.NamiAppearance
@@ -10,7 +9,6 @@ import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsEntryPoint
 import ai.nami.sdk_ui_extensions.entry_point.NamiSdkUiExtensionsUri
 import ai.nami.sdk_ui_extensions.entry_point.withEntityID
 import ai.nami.sdk_ui_extensions.models.NamiSdkUiExtensionsInput
-import ai.nami.sdk_ui_extensions.ui.navigation.sdkUiExtensionsGraph
 import ai.nami.shared_sample.home.HomeScreen
 import ai.nami.shared_sample.home.HomeViewModel
 import ai.nami.shared_sample.home.TypeStartingEntryPoint
@@ -230,18 +228,6 @@ fun MainNavHost(navController: NavHostController): Unit {
                     )
                 }
         }
-
-        sdkUiExtensionsGraph(navController = navController, onExit = {
-            NamiLog.e(
-                tag = "sdkui",
-                message = "MainNavHost onExit pop all screens of SdkUiExtensions"
-            )
-            navController.navigate("error_screen")
-        }, onFinish = { output ->
-            if (output.parameters.get("should_show_pairing_success") == "1") {
-                navController.navigate("fake_pairing_screen")
-            }
-        })
 
         composable(
             route = "fake_pairing_screen"

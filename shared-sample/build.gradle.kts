@@ -9,9 +9,11 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+val isInternalSample = providers.gradleProperty("is_internal_sample").orNull == "true"
+
 android {
     namespace = "ai.nami.shared_sample"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 26
@@ -33,23 +35,25 @@ android {
         dataBinding = true
         viewBinding = true
     }
-    packaging {
-        resources {
-            excludes += "META-INF/**/*"
-        }
-    }
+    packaging.resources.excludes += setOf(
+        "META-INF/legal/**",
+        "META-INF/LICENSE*",
+        "META-INF/NOTICE*",
+    )
 }
 
-val isInternalSample = providers.gradleProperty("is_internal_sample").orNull == "true"
-
 dependencies {
-
-    // Nami SDK UI extensions: project dependency for the internal sample,
-    // published artifact for the external sample.
+    // This sample explicitly uses Navigation 3. Replace sdk-ui-navigation3 with
+    // sdk-ui-navigation2 for Navigation 2, or sdk-ui-navigation when supplying
+    // an application-owned NamiNavigationProvider.
     if (isInternalSample) {
+        api(platform(project(":sdk-ui-bom")))
         api(project(":sdk-ui-extensions"))
+        api(project(":sdk-ui-navigation3"))
     } else {
-        api("ai.nami:sdk-ui-extensions:2.9.0.0-snapshot")
+        api(platform("ai.nami:sdk-ui-bom:2.9.0"))
+        api("ai.nami:sdk-ui-extensions")
+        api("ai.nami:sdk-ui-navigation3")
     }
 
 
@@ -64,8 +68,14 @@ dependencies {
     implementation(libs.constraintlayout.compose)
     implementation(libs.navigation.common.compose)
     implementation(libs.navigation.compose)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
     api("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
+    // The sample application's own host uses Navigation 3 independently of the SDK adapter.
+    api("androidx.navigation3:navigation3-runtime:1.1.4")
+    implementation("androidx.navigation3:navigation3-ui:1.1.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:2.10.0")
 
     // libraries for camera preview scan qr code
     // if you custom NamiQRScanView, you do not need to add these libraries
@@ -81,13 +91,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.9.5")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 
-    // Core Navigation 3 API. Includes NavEntry, EntryProvider and the associated DSL.
-    api("androidx.navigation3:navigation3-runtime:1.1.4")
-    // Provides classes to display content, including NavDisplay and Scene.
-    implementation("androidx.navigation3:navigation3-ui:1.1.4")
-    // Allows ViewModels to be scoped to entries in the back stack.
-    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:2.10.0")
-
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test:runner:1.6.2")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("com.google.truth:truth:1.1.3")
 }

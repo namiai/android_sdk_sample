@@ -58,9 +58,11 @@ android {
         buildConfig = true
     }
 
-    packaging {
-        resources.excludes.add("META-INF/**/*")
-    }
+    packaging.resources.excludes += setOf(
+        "META-INF/legal/**",
+        "META-INF/LICENSE*",
+        "META-INF/NOTICE*",
+    )
 }
 
 dependencies {
