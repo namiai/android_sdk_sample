@@ -51,7 +51,7 @@ dependencies {
         api(project(":sdk-ui-extensions"))
         api(project(":sdk-ui-navigation3"))
     } else {
-        api(platform("ai.nami:sdk-ui-bom:2.9.0"))
+        api(platform("ai.nami:sdk-ui-bom:2.10.0"))
         api("ai.nami:sdk-ui-extensions")
         api("ai.nami:sdk-ui-navigation3")
     }
